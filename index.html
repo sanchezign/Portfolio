@@ -632,7 +632,13 @@
     .hero-left > *:nth-child(4) { animation-delay: 0.4s; }
     .hero-left > *:nth-child(5) { animation-delay: 0.5s; }
     .hero-img-col { animation: fadeInUp 0.9s ease 0.3s both; }
-  </style>
+  
+    /* ── LANG TOGGLE ── */
+    .lang-toggle { display: flex; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-right: 0.25rem; }
+    .lang-btn { padding: 0.28rem 0.7rem; font-size: 0.75rem; font-weight: 700; cursor: pointer; border: none; background: transparent; color: var(--text3); transition: all 0.2s; font-family: inherit; letter-spacing: 0.03em; }
+    .lang-btn.active { background: var(--accent); color: #fff; }
+    .lang-btn:hover:not(.active) { color: var(--text2); }
+</style>
 </head>
 <body>
 
@@ -644,11 +650,11 @@
   <nav class="main-nav">
     <a href="#" class="nav-logo">ISG</a>
     <ul class="nav-links">
-      <li><a href="#about">Sobre mí</a></li>
-      <li><a href="#experience">Experiencia</a></li>
-      <li><a href="#projects">Proyectos</a></li>
-      <li><a href="#certs">Certificaciones</a></li>
-      <li><a href="#contact">Contacto</a></li>
+      <li><a href="#about" data-en="About" data-es="Sobre mí">Sobre mí</a></li>
+      <li><a href="#experience" data-en="Experience" data-es="Experiencia">Experiencia</a></li>
+      <li><a href="#projects" data-en="Projects" data-es="Proyectos">Proyectos</a></li>
+      <li><a href="#certs" data-en="Certifications" data-es="Certificaciones">Certificaciones</a></li>
+      <li><a href="#contact" data-en="Contact" data-es="Contacto">Contacto</a></li>
     </ul>
     <div class="nav-right">
       <div class="nav-socials">
@@ -662,7 +668,7 @@
           <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
         </a>
       </div>
-      <a href="#contact" class="nav-cta">Contáctame</a>
+      <div class="lang-toggle"><button class="lang-btn" onclick="setLang('en')">EN</button><button class="lang-btn active" onclick="setLang('es')">ES</button></div><a href="#contact" class="nav-cta" data-en="Contact me" data-es="Contáctame">Contáctame</a>
     </div>
   </nav>
 
@@ -670,7 +676,7 @@
   <section id="home">
     <div id="hero">
       <div class="hero-left">
-        <div class="hero-badge">Disponible para proyectos</div>
+        <div class="hero-badge" data-en="Available for projects" data-es="Disponible para proyectos">Disponible para proyectos</div>
         <h1 class="hero-title">
           Hola, soy<br>
           <span class="name-highlight">Ignacio<br>Sánchez</span>
@@ -710,7 +716,7 @@
 
   <!-- TECH MARQUEE -->
   <section id="tech">
-    <p class="marquee-label">Stack tecnológico</p>
+    <p class="marquee-label" data-en="Tech stack" data-es="Stack tecnológico">Stack tecnológico</p>
     <div class="marquee-track">
       <div class="marquee-row" id="row1"></div>
       <div class="marquee-row" id="row1-clone"></div>
@@ -733,17 +739,17 @@
           <div class="about-stats">
             <div class="stat-card">
               <div class="stat-num">3+</div>
-              <div class="stat-label">Años exp.</div>
+              <div class="stat-label" data-en="Years exp." data-es="Años exp.">Años exp.</div>
             </div>
             <div class="stat-card">
               <div class="stat-num">3</div>
-              <div class="stat-label">Clientes</div>
+              <div class="stat-label" data-en="Clients" data-es="Clientes">Clientes</div>
             </div>
           </div>
         </div>
         <div>
-          <div class="section-label">Sobre mí</div>
-          <h2 class="section-title">Desarrollo con propósito y precisión</h2>
+          <div class="section-label" data-en="About me" data-es="Sobre mí">Sobre mí</div>
+          <h2 class="section-title" data-en="I build with purpose and precision" data-es="Desarrollo con propósito y precisión">Desarrollo con propósito y precisión</h2>
           <p class="about-text">
             Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo. Diseño y desarrollo productos web completos — del diseño al deploy — adaptando las tecnologías al proyecto.
           </p>
@@ -759,7 +765,7 @@
             <span class="tag">Freelance</span>
           </div>
           <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap;">
-            <a href="#contact" class="btn-primary">Trabajemos juntos</a>
+            <a href="#contact" class="btn-primary" data-en="Let's work together" data-es="Trabajemos juntos">Trabajemos juntos</a>
             <a href="https://drive.google.com/file/d/17VqBGN00RRuZKF0-kIu3sQxTBcY543s2/view?usp=sharing" class="btn-outline" id="cv-btn" target="_blank">
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               Descargar CV
@@ -774,8 +780,8 @@
   <section id="experience">
     <div class="container">
       <div class="reveal">
-        <div class="section-label">Trayectoria</div>
-        <h2 class="section-title">Experiencia profesional</h2>
+        <div class="section-label" data-en="Career" data-es="Trayectoria">Trayectoria</div>
+        <h2 class="section-title" data-en="Professional experience" data-es="Experiencia profesional">Experiencia profesional</h2>
       </div>
       <div class="exp-list reveal">
 
@@ -784,7 +790,7 @@
           <div>
             <div class="exp-company">Pura Vida Huertas <span style="font-size:0.7rem;color:var(--accent2);font-weight:400;">(rebranding de Pura Vida)</span></div>
             <div class="exp-role">Full Stack Developer</div>
-            <div class="exp-desc">Entregué el sitio completo end-to-end: diseño, desarrollo frontend y backend, y deploy en producción. Catálogo de productos, formulario de contacto y gestión de contenido integrados.</div>
+            <div class="exp-desc" data-en="Delivered the complete site end-to-end: design, frontend and backend development, and production deployment. Product catalog, contact form and content management integrated." data-es="Entregué el sitio completo end-to-end: diseño, desarrollo frontend y backend, y deploy en producción. Catálogo de productos, formulario de contacto y gestión de contenido integrados.">Entregué el sitio completo end-to-end: diseño, desarrollo frontend y backend, y deploy en producción. Catálogo de productos, formulario de contacto y gestión de contenido integrados.</div>
             <div class="exp-tech" style="margin-top:0.75rem">
               <span>React</span><span>Node.js</span><span>CSS</span><span>MongoDB</span>
             </div>
@@ -797,7 +803,7 @@
           <div>
             <div class="exp-company">Pura Vida</div>
             <div class="exp-role">Full Stack Developer</div>
-            <div class="exp-desc">Lideré el proyecto de inicio a fin: diseño UI, maquetación, desarrollo y deploy. Entrega completa al cliente con foco en identidad de marca y experiencia de usuario.</div>
+            <div class="exp-desc" data-en="Led the project from start to finish: UI design, layout, development and deployment. Full delivery to the client with focus on brand identity and user experience." data-es="Lideré el proyecto de inicio a fin: diseño UI, maquetación, desarrollo y deploy. Entrega completa al cliente con foco en identidad de marca y experiencia de usuario.">Lideré el proyecto de inicio a fin: diseño UI, maquetación, desarrollo y deploy. Entrega completa al cliente con foco en identidad de marca y experiencia de usuario.</div>
             <div class="exp-tech" style="margin-top:0.75rem">
               <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Node.js</span>
             </div>
@@ -810,7 +816,7 @@
           <div>
             <div class="exp-company">Golden Pets</div>
             <div class="exp-role">Web Developer</div>
-            <div class="exp-desc">Primer proyecto con cliente real — sitio responsivo entregado en producción. Catálogo de productos e integración con redes sociales adaptados a la identidad de la marca.</div>
+            <div class="exp-desc" data-en="First project with a real client — responsive site delivered in production. Product catalog and social media integration adapted to the brand identity." data-es="Primer proyecto con cliente real — sitio responsivo entregado en producción. Catálogo de productos e integración con redes sociales adaptados a la identidad de la marca.">Primer proyecto con cliente real — sitio responsivo entregado en producción. Catálogo de productos e integración con redes sociales adaptados a la identidad de la marca.</div>
             <div class="exp-tech" style="margin-top:0.75rem">
               <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span>
             </div>
@@ -827,19 +833,18 @@
     <div class="container">
       <div class="projects-header reveal">
         <div>
-          <div class="section-label">Porfolio</div>
-          <h2 class="section-title">Proyectos destacados</h2>
+          <div class="section-label" data-en="Portfolio" data-es="Porfolio">Porfolio</div>
+          <h2 class="section-title" data-en="Featured projects" data-es="Proyectos destacados">Proyectos destacados</h2>
         </div>
         <a href="https://github.com/sanchezign" target="_blank" class="btn-outline" style="font-size:0.85rem">
-          Ver todos en GitHub
+          <span data-en="View all on GitHub" data-es="Ver todos en GitHub">Ver todos en GitHub</span>
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
       <div class="project-filters reveal">
         <button class="filter-btn active" data-filter="all">
           <span class="filter-dot" style="background:var(--accent2)"></span>
-          Todos
-        </button>
+          Todos        </button>
         <button class="filter-btn" data-filter="fullstack">
           <span class="filter-dot" style="background:#22c55e"></span>
           Full Stack
@@ -862,7 +867,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Feria Artesanal</div>
-            <div class="project-desc">Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.</div>
+            <div class="project-desc" data-en="Complete MERN marketplace. Artisan product catalog, JWT authentication, shopping cart and admin panel." data-es="Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.">Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.</div>
             <div class="project-stack"><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>JWT</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Feria-Artesanal" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -877,7 +882,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Account Tracker</div>
-            <div class="project-desc">App de finanzas personales. Registro de ingresos y gastos, balance automático y gráfico de torta.</div>
+            <div class="project-desc" data-en="Personal finance app. Income and expense tracking, automatic balance and pie chart." data-es="App de finanzas personales. Registro de ingresos y gastos, balance automático y gráfico de torta.">App de finanzas personales. Registro de ingresos y gastos, balance automático y gráfico de torta.</div>
             <div class="project-stack"><span>React</span><span>Vite</span><span>Context API</span><span>CSS</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Account-Tracker" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -892,7 +897,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Organization App</div>
-            <div class="project-desc">App de organización con login/registro. Gestión de notas, tableros personalizados y calendario integrado.</div>
+            <div class="project-desc" data-en="Organization app with login/register. Notes management, custom boards and integrated calendar." data-es="App de organización con login/registro. Gestión de notas, tableros personalizados y calendario integrado.">App de organización con login/registro. Gestión de notas, tableros personalizados y calendario integrado.</div>
             <div class="project-stack"><span>React</span><span>Vite</span><span>Tailwind</span><span>DaisyUI</span><span>Axios</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Organization-App" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -907,7 +912,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Calculator JS</div>
-            <div class="project-desc">Calculadora moderna y responsive con operaciones encadenadas y prevención de errores. Vanilla JS puro.</div>
+            <div class="project-desc" data-en="Modern responsive calculator with chained operations and error prevention. Pure Vanilla JS." data-es="Calculadora moderna y responsive con operaciones encadenadas y prevención de errores. Vanilla JS puro.">Calculadora moderna y responsive con operaciones encadenadas y prevención de errores. Vanilla JS puro.</div>
             <div class="project-stack"><span>JavaScript</span><span>HTML</span><span>CSS</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/CalculatorJs" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -922,7 +927,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Medi-Health</div>
-            <div class="project-desc">Web de salud con Astro y Tailwind. Servicios, beneficios, blog y cobertura médica. Diseño responsivo.</div>
+            <div class="project-desc" data-en="Health website with Astro and Tailwind. Services, benefits, blog and medical coverage. Responsive design." data-es="Web de salud con Astro y Tailwind. Servicios, beneficios, blog y cobertura médica. Diseño responsivo.">Web de salud con Astro y Tailwind. Servicios, beneficios, blog y cobertura médica. Diseño responsivo.</div>
             <div class="project-stack"><span>Astro</span><span>Tailwind</span><span>DaisyUI</span><span>JavaScript</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Medi-Health" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -937,7 +942,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Law Staff</div>
-            <div class="project-desc">Sitio web para estudio jurídico. Secciones de inicio, sobre nosotros y blog. Diseño profesional con Astro.</div>
+            <div class="project-desc" data-en="Website for a law firm. Home, about us and blog sections. Professional design with Astro." data-es="Sitio web para estudio jurídico. Secciones de inicio, sobre nosotros y blog. Diseño profesional con Astro.">Sitio web para estudio jurídico. Secciones de inicio, sobre nosotros y blog. Diseño profesional con Astro.</div>
             <div class="project-stack"><span>Astro</span><span>Tailwind</span><span>JavaScript</span><span>Markdown</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/law-staff" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -952,7 +957,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Weather App</div>
-            <div class="project-desc">App del clima en tiempo real. Consulta por ciudad con temperatura, condición y pronóstico semanal.</div>
+            <div class="project-desc" data-en="Real-time weather app. City lookup with temperature, condition and weekly forecast." data-es="App del clima en tiempo real. Consulta por ciudad con temperatura, condición y pronóstico semanal.">App del clima en tiempo real. Consulta por ciudad con temperatura, condición y pronóstico semanal.</div>
             <div class="project-stack"><span>React</span><span>Tailwind</span><span>OpenWeatherMap API</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Weather-App" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -967,7 +972,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Pura Vida</div>
-            <div class="project-desc">Sitio web de jardinería y paisajismo. Servicios, trabajos, impronta y contacto. Diseño responsivo y visual con identidad de marca propia.</div>
+            <div class="project-desc" data-en="Gardening and landscaping website. Services, portfolio, brand and contact. Responsive visual design with own brand identity." data-es="Sitio web de jardinería y paisajismo. Servicios, trabajos, impronta y contacto. Diseño responsivo y visual con identidad de marca propia.">Sitio web de jardinería y paisajismo. Servicios, trabajos, impronta y contacto. Diseño responsivo y visual con identidad de marca propia.</div>
             <div class="project-stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Pura-Vida" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -993,7 +998,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">BE3 Testing & Docker</div>
-            <div class="project-desc">API REST con JWT, tests funcionales exhaustivos (Mocha+Chai+Supertest) e imagen Docker optimizada en alpine.</div>
+            <div class="project-desc" data-en="REST API with JWT, comprehensive functional tests (Mocha+Chai+Supertest) and Docker image optimized in alpine." data-es="API REST con JWT, tests funcionales exhaustivos (Mocha+Chai+Supertest) e imagen Docker optimizada en alpine.">API REST con JWT, tests funcionales exhaustivos (Mocha+Chai+Supertest) e imagen Docker optimizada en alpine.</div>
             <div class="project-stack"><span>Node.js</span><span>Express</span><span>JWT</span><span>Mocha</span><span>Docker</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/be3-testing-docker" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -1019,7 +1024,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Backend II — Entrega Final</div>
-            <div class="project-desc">Proyecto final de Backend II. Arquitectura en capas, patrones de diseño y API REST escalable con buenas prácticas.</div>
+            <div class="project-desc" data-en="Backend II final project. Layered architecture, design patterns and scalable REST API with best practices." data-es="Proyecto final de Backend II. Arquitectura en capas, patrones de diseño y API REST escalable con buenas prácticas.">Proyecto final de Backend II. Arquitectura en capas, patrones de diseño y API REST escalable con buenas prácticas.</div>
             <div class="project-stack"><span>Node.js</span><span>Express</span><span>MongoDB</span><span>Arquitectura</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Backend2-EntregaFinal" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -1045,7 +1050,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Backend — Proyecto Final</div>
-            <div class="project-desc">Proyecto final de Backend I. API completa con autenticación JWT, manejo de errores y estructura profesional.</div>
+            <div class="project-desc" data-en="Backend I final project. Complete API with JWT authentication, error handling and professional structure." data-es="Proyecto final de Backend I. API completa con autenticación JWT, manejo de errores y estructura profesional.">Proyecto final de Backend I. API completa con autenticación JWT, manejo de errores y estructura profesional.</div>
             <div class="project-stack"><span>Node.js</span><span>Express</span><span>MongoDB</span><span>JWT</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Backend.Proyecto.Final" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -1071,7 +1076,7 @@
           </div>
           <div class="project-body">
             <div class="project-name">Productos Realtime WebSocket</div>
-            <div class="project-desc">Gestión de productos con actualizaciones instantáneas vía WebSockets. Sin recarga de página. Socket.io.</div>
+            <div class="project-desc" data-en="Product management with instant updates via WebSockets. No page reload. Socket.io." data-es="Gestión de productos con actualizaciones instantáneas vía WebSockets. Sin recarga de página. Socket.io.">Gestión de productos con actualizaciones instantáneas vía WebSockets. Sin recarga de página. Socket.io.</div>
             <div class="project-stack"><span>Node.js</span><span>WebSocket</span><span>Express</span><span>MongoDB</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Productos-Realtime-Con-Websocket" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
@@ -1147,9 +1152,9 @@
   <section id="certs">
     <div class="container">
       <div class="reveal">
-        <div class="section-label">Formación</div>
-        <h2 class="section-title">Certificaciones</h2>
-        <p style="color:var(--text2); margin-top:0.5rem; font-size:0.95rem;">Certificaciones en la Carrera de Full Stack en Coderhouse.</p>
+        <div class="section-label" data-en="Education" data-es="Formación">Formación</div>
+        <h2 class="section-title" data-en="Certifications" data-es="Certificaciones">Certificaciones</h2>
+        <p style="color:var(--text2); margin-top:0.5rem; font-size:0.95rem;"><span data-en="Certifications from the Full Stack Career at Coderhouse." data-es="Certificaciones en la Carrera de Full Stack en Coderhouse.">Certificaciones en la Carrera de Full Stack en Coderhouse.</span></p>
       </div>
       <div class="certs-grid reveal">
 
@@ -1288,9 +1293,9 @@
   <section id="contact">
     <div class="container">
       <div class="contact-inner reveal">
-        <div class="section-label" style="justify-content:center">Contacto</div>
-        <h2 class="contact-title">¿Trabajamos<br>juntos?</h2>
-        <p class="contact-sub">Estoy disponible para nuevas oportunidades, proyectos freelance o simplemente para charlar sobre tecnología. ¡Escribime!</p>
+        <div class="section-label" style="justify-content:center" data-en="Contact" data-es="Contacto">Contacto</div>
+        <h2 class="contact-title" data-en="Shall we work together?" data-es="¿Trabajamos juntos?">¿Trabajamos<br>juntos?</h2>
+        <p class="contact-sub" data-en="I'm available for new opportunities, freelance projects or just to chat about technology. Write to me!" data-es="Estoy disponible para nuevas oportunidades, proyectos freelance o simplemente para charlar sobre tecnología. ¡Escribime!">Estoy disponible para nuevas oportunidades, proyectos freelance o simplemente para charlar sobre tecnología. ¡Escribime!</p>
         <a href="mailto:isanchez.workmail@gmail.com" class="contact-email">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           isanchez.workmail@gmail.com
@@ -1316,10 +1321,10 @@
     <span class="logo-isg">ISG</span>
   </div>
     <nav class="footer-nav">
-      <a href="#about">Sobre mí</a>
-      <a href="#projects">Proyectos</a>
-      <a href="#certs">Certificaciones</a>
-      <a href="#contact">Contacto</a>
+      <a href="#about" data-en="About" data-es="Sobre mí">Sobre mí</a>
+      <a href="#projects" data-en="Projects" data-es="Proyectos">Proyectos</a>
+      <a href="#certs" data-en="Certifications" data-es="Certificaciones">Certificaciones</a>
+      <a href="#contact" data-en="Contact" data-es="Contacto">Contacto</a>
     </nav>
     <p class="footer-copy">© 2026 Ignacio Sánchez Greppi</p>
   </footer>
@@ -1435,6 +1440,36 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  </script>
+  
+  // ── LANGUAGE TOGGLE ──
+  function setLang(lang) {
+    // Toggle button states
+    document.querySelectorAll('.lang-btn').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && lang === 'en') || (i === 1 && lang === 'es'));
+    });
+    // Swap all translatable elements
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (!text) return;
+      // If element has only text children (no element children), use textContent
+      const hasElementChildren = Array.from(el.childNodes).some(n => n.nodeType === 1);
+      if (hasElementChildren) {
+        el.innerHTML = text;
+      } else {
+        el.textContent = text;
+      }
+    });
+    // Handle contact title with <br>
+    const ctitle = document.querySelector('.contact-title');
+    if (ctitle) ctitle.innerHTML = lang === 'en' ? 'Shall we work<br>together?' : '¿Trabajamos<br>juntos?';
+    // Store preference
+    localStorage.setItem('lang', lang);
+  }
+  // Load saved language on start — default EN
+  (function() {
+    const saved = localStorage.getItem('lang') || 'en';
+    setLang(saved);
+  })();
+</script>
 </body>
 </html>
