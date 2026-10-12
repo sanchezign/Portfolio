@@ -599,13 +599,13 @@
       .faq-item.open .faq-q { color: var(--text); border-color: rgba(124,106,247,0.45); background: var(--glow); }
       .faq-icon { display: none; }
       .faq-a, .faq-item.open .faq-a {
-        grid-column: 2; grid-row: 1 / 7;
+        grid-column: 2; grid-row: 1 / 7; align-self: center;
         max-height: none; display: none;
         background: var(--card); border: 1px solid var(--border); border-radius: 16px;
         padding: 2rem 2.25rem; font-size: 0.95rem;
       }
       .faq-item.open .faq-a { display: block; animation: faqFade 0.3s ease; }
-      .faq-item.open .faq-a::before {
+      .faq-a::before {
         content: attr(data-title); display: block;
         font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 700;
         color: var(--text); line-height: 1.3; margin-bottom: 1rem;
@@ -1580,12 +1580,28 @@
     }
     syncFaqTitles();
     const setLangBase = setLang;
-    window.setLang = function (lang) { setLangBase(lang); syncFaqTitles(); };
+    function sizeFaqPanels() {
+      const panels = faqItems.map(i => i.querySelector('.faq-a'));
+      panels.forEach(p => { p.style.minHeight = ''; });
+      if (!faqDesktop.matches) return;
+      let tallest = 0;
+      panels.forEach(p => {
+        const wasHidden = getComputedStyle(p).display === 'none';
+        if (wasHidden) { p.style.display = 'block'; p.style.visibility = 'hidden'; }
+        tallest = Math.max(tallest, p.getBoundingClientRect().height);
+        if (wasHidden) { p.style.display = ''; p.style.visibility = ''; }
+      });
+      panels.forEach(p => { p.style.minHeight = Math.ceil(tallest) + 'px'; });
+    }
+    window.setLang = function (lang) { setLangBase(lang); syncFaqTitles(); sizeFaqPanels(); };
     function ensureFaqTab() {
       if (faqDesktop.matches && !faqItems.some(i => i.classList.contains('open'))) openFaq(faqItems[0]);
     }
     ensureFaqTab();
-    faqDesktop.addEventListener('change', ensureFaqTab);
+    faqDesktop.addEventListener('change', () => { ensureFaqTab(); sizeFaqPanels(); });
+    sizeFaqPanels();
+    window.addEventListener('resize', sizeFaqPanels);
+    if (document.fonts) document.fonts.ready.then(sizeFaqPanels);
 
 
 
