@@ -525,12 +525,15 @@
     .project-highlights .hl strong { font-family: 'Syne', sans-serif; color: var(--accent3); font-size: 0.85rem; }
     .project-highlights .hl em { font-style: normal; }
     @media (min-width: 769px) {
-      .projects-grid.featured-mode { grid-template-columns: 1fr 1fr; }
+      .projects-grid.featured-mode { grid-template-columns: 1fr; }
     }
     @media (min-width: 1000px) {
-      .projects-grid.featured-mode { grid-template-columns: 2fr 1fr; }
+      .projects-grid.featured-mode { grid-template-columns: 1fr; }
       .featured-mode .project-card.featured-main { flex-direction: row; }
-      .featured-mode .featured-main .project-img { width: 46%; height: auto; min-height: 100%; flex-shrink: 0; }
+      .featured-mode .featured-main .project-img { width: 40%; height: auto; min-height: 340px; flex-shrink: 0; }
+      .featured-mode .featured-main .project-img img { position: absolute; inset: 0; }
+      .featured-mode .featured-main .project-body { justify-content: center; }
+      .featured-mode .featured-main .project-desc { flex: none; }
       .featured-mode .featured-main .project-body { padding: 2rem; }
       .featured-mode .featured-main .project-name { font-size: 1.4rem; }
       .featured-mode .featured-main .project-desc { font-size: 0.92rem; }
@@ -741,6 +744,8 @@
       background: var(--accent); border-color: var(--accent);
       color: #fff;
     }
+    .filter-featured { padding: 0.55rem 1.35rem; font-size: 0.88rem; font-weight: 600; gap: 0.45rem; }
+    .filter-star { width: 15px; height: 15px; fill: #facc15; filter: drop-shadow(0 0 4px rgba(250,204,21,0.45)); }
     .filter-dot {
       width: 6px; height: 6px; border-radius: 50%;
     }
@@ -1011,9 +1016,10 @@
         </a>
       </div>
       <div class="project-filters reveal">
-        <button class="filter-btn active" data-filter="destacados" data-en="Featured" data-es="Destacados">
-          <span class="filter-dot" style="background:var(--accent2)"></span>
-          Destacados        </button>
+        <button class="filter-btn filter-featured active" data-filter="destacados">
+          <svg class="filter-star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.94 5.96 6.58.96-4.76 4.64 1.12 6.55L12 17.52l-5.88 3.09 1.12-6.55L2.48 9.42l6.58-.96z"/></svg>
+          <span data-en="Featured" data-es="Destacados">Destacados</span>
+        </button>
         <button class="filter-btn" data-filter="fullstack">
           <span class="filter-dot" style="background:#22c55e"></span>
           Full Stack
@@ -1056,7 +1062,7 @@
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
           </div>
           <div class="project-body">
-            <div class="project-name" data-featured="true" data-order="2">Feria Artesanal</div>
+            <div class="project-name">Feria Artesanal</div>
             <div class="project-desc" data-en="Complete MERN marketplace. Artisan product catalog, JWT authentication, shopping cart and admin panel." data-es="Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.">Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.</div>
             <div class="project-stack"><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>JWT</span></div>
             <div class="project-links">
