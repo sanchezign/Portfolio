@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sanchezign.dev/sitemap.xml
+Sitemap: https://www.sanchezign.dev/sitemap.xml
