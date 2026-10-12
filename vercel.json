@@ -1,9 +1,9 @@
 {
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/:path(.*)",
       "has": [{ "type": "host", "value": "ignaciosanchez.vercel.app" }],
-      "destination": "https://www.sanchezign.dev/:path*",
+      "destination": "https://www.sanchezign.dev/:path",
       "permanent": true
     }
   ],
