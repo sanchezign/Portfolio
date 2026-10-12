@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ignaciosanchez.vercel.app/sitemap.xml
+Sitemap: https://sanchezign.dev/sitemap.xml
