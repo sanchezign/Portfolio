@@ -81,6 +81,8 @@
       transition: opacity 0.2s;
     }
     .nav-logo:hover { opacity: 0.75; }
+    .nav-logo, .footer-logo { display: inline-flex; align-items: center; }
+    .logo-mark { display: block; height: 28px; width: auto; fill: currentColor; }
 
     /* ── NOISE OVERLAY ── */
     body::before {
@@ -858,6 +860,7 @@
   </script>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo-is" viewBox="0 0 393 291"><path fill-rule="evenodd" d="M234 6.5C166.5 12.6 129.3 46.1 132.5 97.9C133.5 115 139.7 134.3 143.8 133.2C144.7 133 169.7 126.7 199.3 119.4C228.8 112 253 105.7 253 105.4C253 105.1 249.2 103.9 244.6 102.6C215.4 94.5 215.3 71.9 244.5 66.5C270.8 61.7 291.2 70.9 293.7 88.8C294 91.2 294.6 93.7 295 94.4C295.6 95.3 339.4 85.1 372.2 76.4L375.9 75.4 373.9 68.2C361.9 24.9 305.5 0 234 6.5M0 89.4C0 152 0.3 168.4 1.3 168.5C2 168.5 22 163.7 45.8 157.7L89 147 89 78.7L89 10.4 44.5 10.4L0 10.4 0 89.4M241 138.6C201.7 148.4 168.9 156.7 168 157C166.3 157.6 173.6 162.5 180.9 165.6C193.1 170.8 215.1 177.1 240.3 182.5C259.3 186.5 276.1 191 282.1 193.6C292.5 198 296.5 206.6 292.6 215.9C289.3 223.9 270.1 228.5 248.5 226.5C221.6 224.1 214.3 218.3 211.5 197.2L210.9 192.4 169.5 192.4L128 192.4 128 199.2C128 213.8 132.3 230.7 139.2 243.2C155.9 273.5 196.9 289.5 259 289.8C326.2 290.2 368.1 267.9 380.4 225.2C392.7 182.4 379.3 148.4 343 130C334.1 125.5 319.5 120.4 315.7 120.5C313.9 120.6 280.3 128.7 241 138.6M44.5 187.8L0.5 198.9 0.3 242.2L0 285.4 44.5 285.4L89 285.4 89 230.9C89 201 88.9 176.5 88.8 176.5C88.6 176.6 68.7 181.6 44.5 187.8"/></symbol></svg>
   <a href="#home" class="skip-link" data-en="Skip to content" data-es="Saltar al contenido">Saltar al contenido</a>
 
   <!-- Ambient orbs -->
@@ -866,7 +869,7 @@
 
   <!-- NAV -->
   <nav class="main-nav">
-    <a href="#" class="nav-logo">ISG</a>
+    <a href="#" class="nav-logo" aria-label="Ignacio Sánchez — inicio" data-aria-en="Ignacio Sánchez — home" data-aria-es="Ignacio Sánchez — inicio"><svg class="logo-mark" viewBox="0 0 393 291" aria-hidden="true"><use href="#logo-is"/></svg></a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#about" data-en="About" data-es="Sobre mí">Sobre mí</a></li>
       <li><a href="#experience" data-en="Experience" data-es="Experiencia">Experiencia</a></li>
@@ -1615,8 +1618,8 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo">
-    <span class="logo-isg">ISG</span>
-  </div>
+      <svg class="logo-mark" viewBox="0 0 393 291" role="img" aria-label="Ignacio Sánchez"><use href="#logo-is"/></svg>
+    </div>
     <nav class="footer-nav">
       <a href="#about" data-en="About" data-es="Sobre mí">Sobre mí</a>
       <a href="#experience" data-en="Experience" data-es="Experiencia">Experiencia</a>
