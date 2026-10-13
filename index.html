@@ -735,8 +735,8 @@
     .orb-2 { width: 400px; height: 400px; background: #e879f9; bottom: 10%; left: -150px; }
 
     /* Scroll reveal */
-    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .js .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .js .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* Mobile */
     @media (max-width: 768px) {
@@ -802,6 +802,17 @@
       cursor: pointer; transition: all 0.25s;
       width: fit-content;
     }
+    .projects-cta {
+      margin-top: 3rem; padding: 1.75rem 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    }
+    .projects-cta-text { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--text); line-height: 1.4; }
+    .projects-cta-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    @media (max-width: 900px) {
+      .projects-cta { flex-direction: column; text-align: center; padding: 1.5rem; }
+      .projects-cta-actions { justify-content: center; }
+    }
     .ver-mas-btn:hover { border-color: var(--accent); color: var(--accent3); }
     .ver-mas-btn svg { transition: transform 0.3s; }
     .ver-mas-btn.expanded svg { transform: rotate(180deg); }
@@ -835,6 +846,16 @@
     .lang-btn.active { background: var(--accent-strong); color: #fff; }
     .lang-btn:hover:not(.active) { color: var(--text2); }
 </style>
+  <script>
+    // Scroll reveals only hide content when JS runs; if they never get wired up, show everything
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('js');
+      window.addEventListener('load', function () {
+        setTimeout(function () { if (!window.__revealReady) root.classList.remove('js'); }, 3000);
+      });
+    })();
+  </script>
 </head>
 <body>
   <a href="#home" class="skip-link" data-en="Skip to content" data-es="Saltar al contenido">Saltar al contenido</a>
@@ -1364,6 +1385,13 @@
           Ver más proyectos
         </button>
       </div>
+      <div class="projects-cta reveal">
+        <p class="projects-cta-text" data-en="Interested in something like this for your team or project?" data-es="¿Te interesa algo así para tu equipo o proyecto?">¿Te interesa algo así para tu equipo o proyecto?</p>
+        <div class="projects-cta-actions">
+          <a href="#contact" class="btn-primary"><span data-en="Let's talk" data-es="Hablemos">Hablemos</span><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-outline" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1814,10 +1842,16 @@
     });
 
     // ── SCROLL REVEAL ──
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+      revealEls.forEach(el => observer.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('visible'));
+    }
+    window.__revealReady = true;
   
   // ── LANGUAGE TOGGLE ──
   function setTextNode(el, text) {
