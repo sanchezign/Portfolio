@@ -58,6 +58,9 @@
       --glow: rgba(124,106,247,0.15);
       --accent-strong: #6a56e8;
       --accent-strong-hover: #5a46d6;
+      --violet-1: #6a56e8;
+      --violet-2: #171328;
+      --violet-3: #120f1f;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -260,6 +263,10 @@
       transition: all 0.25s; border: none; cursor: pointer;
     }
     .btn-primary:hover { background: var(--accent-strong-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,106,247,0.35); }
+    .btn-primary.btn-violet-2 { background: var(--violet-2); box-shadow: inset 0 0 0 1px rgba(124,106,247,0.22); }
+    .btn-primary.btn-violet-2:hover { background: #201a38; box-shadow: inset 0 0 0 1px rgba(124,106,247,0.4); }
+    .btn-primary.btn-violet-3 { background: var(--violet-3); box-shadow: inset 0 0 0 1px rgba(124,106,247,0.16); }
+    .btn-primary.btn-violet-3:hover { background: #1a1630; box-shadow: inset 0 0 0 1px rgba(124,106,247,0.35); }
     .btn-outline {
       display: inline-flex; align-items: center; gap: 0.5rem;
       border: 1px solid var(--border);
@@ -536,14 +543,10 @@
     }
     .project-links .link-demo:hover { background: var(--accent-strong-hover); }
     .project-links .link-code {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: var(--text);
+      background: var(--violet-2); color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(124,106,247,0.22);
     }
-    .project-links .link-code:hover {
-      border-color: var(--accent);
-      color: var(--accent3);
-    }
+    .project-links .link-code:hover { background: #201a38; box-shadow: inset 0 0 0 1px rgba(124,106,247,0.4); }
     .project-links svg { width: 14px; height: 14px; }
     .project-highlights { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: -0.25rem 0 1.25rem; }
     .project-highlights .hl {
@@ -758,6 +761,7 @@
     @media (max-width: 480px) {
       .hero-btns { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 0.75rem; }
       .hero-btns .btn-primary { grid-column: 1 / -1; }
+      .hero-btns .btn-violet-2, .hero-btns .btn-violet-3 { grid-column: auto; }
       .hero-btns a { justify-content: center; padding-left: 0.75rem; padding-right: 0.75rem; }
     }
 
@@ -909,11 +913,11 @@
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
             Ver proyectos
           </a>
-          <a href="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-cv" target="_blank">
+          <a href="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-primary btn-violet-2" target="_blank">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg>
             Descargar CV
           </a>
-          <a href="#contact" class="btn-outline">
+          <a href="#contact" class="btn-primary btn-violet-3">
             Contactar
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
@@ -967,7 +971,7 @@
             <span data-en="I'm Ignacio Sánchez Greppi, a Full Stack Developer in Montevideo specialized in web development and AI automation. I work with Node.js, TypeScript, React and Next.js, choosing the tools that best fit each project." data-es="Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.">Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.</span>
           </p>
           <p class="about-text">
-            <span data-en="Since 2023 I have built for clients like Golden Pets and Pura Vida Huertas, and today I develop WhatsApp and n8n automations through Workana. My most complete project is SmartOps Agent, an AI agent backed by more than 1,900 automated tests and CI/CD." data-es="Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Huertas, y hoy construyo automatizaciones con WhatsApp y n8n a través de Workana. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 1.900 tests automatizados y CI/CD.">Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Huertas, y hoy construyo automatizaciones con WhatsApp y n8n a través de Workana. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 1.900 tests automatizados y CI/CD.</span>
+            <span data-en="Since 2023 I have built for clients like Golden Pets and Pura Vida Huertas, and today I develop WhatsApp and n8n automations through Workana. My most complete project is SmartOps Agent, an AI agent backed by more than 2,100 automated tests and CI/CD." data-es="Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Huertas, y hoy construyo automatizaciones con WhatsApp y n8n a través de Workana. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 2.100 tests automatizados y CI/CD.">Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Huertas, y hoy construyo automatizaciones con WhatsApp y n8n a través de Workana. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 2.100 tests automatizados y CI/CD.</span>
           </p>
           <div class="about-tags">
             <span class="tag">Full Stack</span>
@@ -979,7 +983,7 @@
           </div>
           <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap;">
             <a href="#contact" class="btn-primary" data-en="Let's work together" data-es="Trabajemos juntos">Trabajemos juntos</a>
-            <a href="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-outline" id="cv-btn" target="_blank">
+            <a href="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-primary btn-violet-2" id="cv-btn" target="_blank">
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               Descargar CV
             </a>
@@ -1107,16 +1111,16 @@
           </div>
           <div class="project-body">
             <h3 class="project-name" data-featured="true" data-order="1">SmartOps Agent</h3>
-            <div class="project-desc" data-en="AI operations agent for businesses on WhatsApp. Reads price lists, orders and voice notes in any format, keeps the catalog up to date and routes doubts to a person." data-es="Agente de operaciones con IA para negocios en WhatsApp. Lee listas de precios, pedidos y notas de voz en cualquier formato, mantiene el catálogo actualizado y deriva dudas a una persona.">Agente de operaciones con IA para negocios en WhatsApp. Lee listas de precios, pedidos y notas de voz en cualquier formato, mantiene el catálogo actualizado y deriva dudas a una persona.</div>
+            <div class="project-desc" data-en="AI operations agent for businesses on WhatsApp. Reads price lists, orders and voice notes in any format, keeps the catalog up to date and routes doubts to a person. Includes a bilingual panel with one-click decisions and chats marked when they wait for a reply, plus a live public demo." data-es="Agente de operaciones con IA para negocios en WhatsApp. Lee listas de precios, pedidos y notas de voz en cualquier formato, mantiene el catálogo actualizado y deriva dudas a una persona. Incluye un panel bilingüe con decisiones de un clic y chats marcados cuando esperan respuesta, y una demo pública en vivo.">Agente de operaciones con IA para negocios en WhatsApp. Lee listas de precios, pedidos y notas de voz en cualquier formato, mantiene el catálogo actualizado y deriva dudas a una persona. Incluye un panel bilingüe con decisiones de un clic y chats marcados cuando esperan respuesta, y una demo pública en vivo.</div>
             <div class="project-highlights">
-              <span class="hl"><strong data-en="2,000+" data-es="2.000+">2.000+</strong> <em data-en="automated tests" data-es="tests automatizados">tests automatizados</em></span>
+              <span class="hl"><strong data-en="2,100+" data-es="2.100+">2.100+</strong> <em data-en="automated tests" data-es="tests automatizados">tests automatizados</em></span>
               <span class="hl"><strong>8/8</strong> <em data-en="AI security evals" data-es="pruebas de seguridad IA">pruebas de seguridad IA</em></span>
-              <span class="hl"><strong>80%</strong> <em data-en="mutation score" data-es="mutation score">mutation score</em></span>
+              <span class="hl"><strong>E2E</strong> <em data-en="desktop, Android and iPhone" data-es="desktop, Android y iPhone">desktop, Android y iPhone</em></span>
             </div>
-            <div class="project-stack"><span>Node.js</span><span>TypeScript</span><span>Express</span><span>Next.js 15</span><span>PostgreSQL</span><span>Claude AI</span><span>n8n</span><span>WhatsApp API</span></div>
+            <div class="project-stack"><span>Node.js</span><span>TypeScript</span><span>Express</span><span>Next.js 15</span><span>PostgreSQL</span><span>Claude AI</span><span>n8n</span><span>WhatsApp API</span><span>Docker</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/smartops-agent" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver c&#243;digo</a>
-              <a href="https://smartops-demo.duckdns.org" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://smartops-demo.duckdns.org" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1137,7 +1141,7 @@
             <div class="project-stack"><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>JWT</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Feria-Artesanal" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://feria-artesanal.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://feria-artesanal.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1157,7 +1161,7 @@
             <div class="project-stack"><span>Next.js 15</span><span>TypeScript</span><span>Tailwind CSS</span><span>shadcn/ui</span><span>Zod</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/automation-landing" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://automation-landing-two.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://automation-landing-two.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1177,7 +1181,7 @@
             <div class="project-stack"><span>React</span><span>Vite</span><span>Context API</span><span>CSS</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Account-Tracker" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://account-tracker-tau.vercel.app" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://account-tracker-tau.vercel.app" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1197,7 +1201,7 @@
             <div class="project-stack"><span>React</span><span>Vite</span><span>Tailwind</span><span>DaisyUI</span><span>Axios</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Organization-App" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://organization-app-k7nm.onrender.com/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://organization-app-k7nm.onrender.com/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1217,7 +1221,7 @@
             <div class="project-stack"><span>React</span><span>Tailwind</span><span>OpenWeatherMap API</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Weather-App" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://weather-app-pi-three-57.vercel.app" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://weather-app-pi-three-57.vercel.app" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1237,7 +1241,7 @@
             <div class="project-stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Pura-Vida" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://pura-vida-eight.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://pura-vida-eight.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1257,7 +1261,7 @@
             <div class="project-stack"><span>JavaScript</span><span>HTML</span><span>CSS</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/CalculatorJs" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://sanchezign.github.io/CalculatorJs/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://sanchezign.github.io/CalculatorJs/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1277,7 +1281,7 @@
             <div class="project-stack"><span>Astro</span><span>Tailwind</span><span>DaisyUI</span><span>JavaScript</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Medi-Health" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://medi-health-ivory.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://medi-health-ivory.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1297,7 +1301,7 @@
             <div class="project-stack"><span>Astro</span><span>Tailwind</span><span>JavaScript</span><span>Markdown</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/law-staff" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://law-staff.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> Demo</a>
+              <a href="https://law-staff.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1392,7 +1396,7 @@
         <p class="projects-cta-text" data-en="Interested in something like this for your team or project?" data-es="¿Te interesa algo así para tu equipo o proyecto?">¿Te interesa algo así para tu equipo o proyecto?</p>
         <div class="projects-cta-actions">
           <a href="#contact" class="btn-primary"><span data-en="Let's talk" data-es="Hablemos">Hablemos</span><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-          <a href="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-outline" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
+          <a href="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-primary btn-violet-2" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
         </div>
       </div>
     </div>
@@ -1599,8 +1603,8 @@
         <p class="contact-sub" data-en="I'm available for new opportunities, freelance projects or just to chat about technology. Write to me!" data-es="Estoy disponible para nuevas oportunidades, proyectos freelance o simplemente para charlar sobre tecnología. ¡Escribime!">Estoy disponible para nuevas oportunidades, proyectos freelance o simplemente para charlar sobre tecnología. ¡Escribime!</p>
         <div class="contact-actions">
           <a href="mailto:isanchez.workmail@gmail.com" class="btn-primary"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span data-en="Send an email" data-es="Enviar un email">Enviar un email</span></a>
-          <button type="button" class="btn-outline" id="copy-email"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span id="copy-email-label" data-en="Copy email" data-es="Copiar email">Copiar email</span></button>
-          <a href="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-outline" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
+          <button type="button" class="btn-primary btn-violet-2" id="copy-email"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span id="copy-email-label" data-en="Copy email" data-es="Copiar email">Copiar email</span></button>
+          <a href="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-primary btn-violet-3" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
         </div>
         <p class="contact-meta">isanchez.workmail@gmail.com · <span data-en="Montevideo, Uruguay (GMT-3) · Remote" data-es="Montevideo, Uruguay (GMT-3) · Remoto">Montevideo, Uruguay (GMT-3) · Remoto</span></p>
         <div class="contact-socials">
