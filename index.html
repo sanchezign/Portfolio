@@ -86,6 +86,10 @@
     .nav-logo:hover { opacity: 0.75; }
     .nav-logo, .footer-logo { display: inline-flex; align-items: center; }
     .logo-mark { display: block; height: 28px; width: auto; fill: currentColor; }
+    .nav-id { display: none; flex-direction: column; margin-left: 0.85rem; padding-left: 0.85rem; border-left: 1px solid var(--border); line-height: 1.2; }
+    .nav-id-name { font-size: 0.95rem; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+    .nav-id-role { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--text2); letter-spacing: 0.04em; }
+    @media (min-width: 1280px) { .nav-id { display: flex; } }
 
     /* ── NOISE OVERLAY ── */
     body::before {
@@ -920,7 +924,7 @@
 
   <!-- NAV -->
   <nav class="main-nav">
-    <a href="#" class="nav-logo" aria-label="Ignacio Sánchez — inicio" data-aria-en="Ignacio Sánchez — home" data-aria-es="Ignacio Sánchez — inicio"><svg class="logo-mark" viewBox="0 0 393 291" aria-hidden="true"><use href="#logo-is"/></svg></a>
+    <a href="#" class="nav-logo" aria-label="Ignacio Sánchez — inicio" data-aria-en="Ignacio Sánchez — home" data-aria-es="Ignacio Sánchez — inicio"><svg class="logo-mark" viewBox="0 0 393 291" aria-hidden="true"><use href="#logo-is"/></svg><span class="nav-id" aria-hidden="true"><span class="nav-id-name">Ignacio Sánchez</span><span class="nav-id-role">Full Stack Developer</span></span></a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#projects" data-en="Projects" data-es="Proyectos">Proyectos</a></li>
       <li><a href="#about" data-en="About" data-es="Sobre mí">Sobre mí</a></li>
