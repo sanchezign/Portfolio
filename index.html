@@ -108,6 +108,9 @@
     }
 
     .nav-links { display: flex; gap: 0.25rem; list-style: none; }
+    @media (min-width: 1280px) {
+      .nav-links { position: absolute; left: 50%; transform: translateX(-50%); }
+    }
     .nav-links a {
       position: relative;
       color: var(--text);
