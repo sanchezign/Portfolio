@@ -59,8 +59,8 @@
       --accent-strong: #6a56e8;
       --accent-strong-hover: #5a46d6;
       --violet-1: #6a56e8;
-      --violet-2: #31267f;
-      --violet-3: #171328;
+      --violet-2: #171328;
+      --violet-3: #0d0b16;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -263,10 +263,10 @@
       transition: all 0.25s; border: none; cursor: pointer;
     }
     .btn-primary:hover { background: var(--accent-strong-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,106,247,0.35); }
-    .btn-primary.btn-violet-2 { background: var(--violet-2); }
-    .btn-primary.btn-violet-2:hover { background: #3a2e94; }
-    .btn-primary.btn-violet-3 { background: var(--violet-3); box-shadow: inset 0 0 0 1px rgba(124,106,247,0.22); }
-    .btn-primary.btn-violet-3:hover { background: #201a38; box-shadow: inset 0 0 0 1px rgba(124,106,247,0.4); }
+    .btn-primary.btn-violet-2 { background: var(--violet-2); box-shadow: inset 0 0 0 1px rgba(124,106,247,0.22); }
+    .btn-primary.btn-violet-2:hover { background: #201a38; box-shadow: inset 0 0 0 1px rgba(124,106,247,0.4); }
+    .btn-primary.btn-violet-3 { background: var(--violet-3); box-shadow: inset 0 0 0 1px rgba(124,106,247,0.16); }
+    .btn-primary.btn-violet-3:hover { background: #15121f; box-shadow: inset 0 0 0 1px rgba(124,106,247,0.35); }
     .btn-outline {
       display: inline-flex; align-items: center; gap: 0.5rem;
       border: 1px solid var(--border);
@@ -544,8 +544,9 @@
     .project-links .link-demo:hover { background: var(--accent-strong-hover); }
     .project-links .link-code {
       background: var(--violet-2); color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(124,106,247,0.22);
     }
-    .project-links .link-code:hover { background: #3a2e94; }
+    .project-links .link-code:hover { background: #201a38; box-shadow: inset 0 0 0 1px rgba(124,106,247,0.4); }
     .project-links svg { width: 14px; height: 14px; }
     .project-highlights { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: -0.25rem 0 1.25rem; }
     .project-highlights .hl {
