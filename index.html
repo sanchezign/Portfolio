@@ -253,19 +253,6 @@
       font-weight: 300; line-height: 1.7;
     }
     .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-    .hero-proof {
-      list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
-      margin-top: 1.5rem; font-size: 0.8rem; color: var(--text2);
-    }
-    .hero-proof li {
-      display: inline-flex; align-items: baseline; gap: 0.4rem;
-      background: rgba(124,106,247,0.1); border: 1px solid rgba(124,106,247,0.25);
-      border-radius: 8px; padding: 0.35rem 0.75rem;
-    }
-    .hero-proof strong { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent3); }
-    .hero-proof a { color: inherit; text-decoration: none; display: inline-flex; align-items: baseline; gap: 0.4rem; }
-    .hero-proof li:has(a):hover { border-color: rgba(124,106,247,0.5); }
-    .hero-proof a:hover span { color: var(--accent3); }
 
     .btn-primary {
       display: inline-flex; align-items: center; gap: 0.5rem;
@@ -682,14 +669,25 @@
     .cert-group { margin-top: 2.5rem; }
     .cert-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
     .cert-chip {
-      display: inline-flex; align-items: baseline; gap: 0.55rem;
+      display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.55rem;
       background: var(--card); border: 1px solid var(--border); border-radius: 10px;
       padding: 0.55rem 0.9rem; text-decoration: none; transition: border-color 0.2s, background 0.2s;
     }
     .cert-chip:hover { border-color: rgba(124,106,247,0.4); background: var(--card-hover); }
     .cert-chip-name { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); }
-    .cert-chip-meta { font-size: 0.75rem; color: var(--text); }
+    .cert-chip-meta { font-size: 0.75rem; color: var(--text3); white-space: nowrap; }
     .cert-chip-arrow { font-size: 0.75rem; color: var(--accent2); }
+    .cert-more-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem; margin-left: 1rem;
+      padding: 0.45rem 1rem; border-radius: 8px; cursor: pointer;
+      background: var(--violet-2); color: #fff; border: none;
+      box-shadow: inset 0 0 0 1px rgba(124,106,247,0.35);
+      font: 500 0.82rem 'DM Sans', sans-serif; white-space: nowrap; transition: background 0.2s;
+    }
+    .cert-chips[hidden] { display: none; }
+    .cert-more-btn::after { content: '▾'; font-size: 0.75rem; transition: transform 0.2s; }
+    .cert-more-btn[aria-expanded="true"]::after { transform: rotate(180deg); }
+    .cert-more-btn:hover { background: #201a38; }
     .cert-group-head { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1rem; }
     .cert-group-icon {
       width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
@@ -885,7 +883,6 @@
     .hero-left > *:nth-child(4) { animation-delay: 0.4s; }
     .hero-left > *:nth-child(5) { animation-delay: 0.5s; }
     .hero-left > *:nth-child(6) { animation-delay: 0.6s; }
-    .hero-left > *:nth-child(7) { animation-delay: 0.7s; }
     .hero-img-col { animation: fadeInUp 0.9s ease 0.3s both; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -946,7 +943,7 @@
   <section id="home">
     <div id="hero">
       <div class="hero-left">
-        <div class="hero-badge" data-en="Open to full-time or freelance · Remote" data-es="Disponible: full-time o freelance · Remoto">Disponible: full-time o freelance · Remoto</div>
+        <div class="hero-badge" data-en="Open to full-time or freelance" data-es="Disponible: full-time o freelance">Disponible: full-time o freelance</div>
         <h1 class="hero-title">
           <span data-en="Hi, I'm" data-es="Hola, soy">Hola, soy</span><br>
           <span class="name-highlight">Ignacio<br>Sánchez</span>
@@ -969,11 +966,6 @@
             <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
-        <ul class="hero-proof">
-          <li><strong data-en="2,100+" data-es="2.100+">2.100+</strong> <span data-en="automated tests" data-es="tests automatizados">tests automatizados</span></li>
-          <li><strong>8/8</strong> <span data-en="AI security evals" data-es="pruebas de seguridad IA">pruebas de seguridad IA</span></li>
-          <li><a href="https://smartops-demo.duckdns.org" target="_blank" rel="noopener"><strong>Demo</strong> <span data-en="live, no sign-up" data-es="en vivo, sin registro">en vivo, sin registro</span></a></li>
-        </ul>
         <div class="hero-socials">
           <a href="https://www.linkedin.com/in/sanchezign/" target="_blank" aria-label="LinkedIn">
             <svg fill="currentColor" viewBox="0 0 24 24" width="17" height="17"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
@@ -984,6 +976,20 @@
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- TECH MARQUEE -->
+  <section id="tech">
+    <p class="marquee-label" data-en="Tech stack" data-es="Stack tecnológico">Stack tecnológico</p>
+    <div class="marquee-track" aria-hidden="true">
+      <div class="marquee-row" id="row1"></div>
+      <div class="marquee-row" id="row1-clone"></div>
+    </div>
+    <br>
+    <div class="marquee-track" aria-hidden="true" style="margin-top:0.75rem">
+      <div class="marquee-row reverse" id="row2"></div>
+      <div class="marquee-row reverse" id="row2-clone"></div>
     </div>
   </section>
 
@@ -1368,20 +1374,6 @@
     </div>
   </section>
 
-  <!-- TECH MARQUEE -->
-  <section id="tech">
-    <p class="marquee-label" data-en="Tech stack" data-es="Stack tecnológico">Stack tecnológico</p>
-    <div class="marquee-track" aria-hidden="true">
-      <div class="marquee-row" id="row1"></div>
-      <div class="marquee-row" id="row1-clone"></div>
-    </div>
-    <br>
-    <div class="marquee-track" aria-hidden="true" style="margin-top:0.75rem">
-      <div class="marquee-row reverse" id="row2"></div>
-      <div class="marquee-row reverse" id="row2-clone"></div>
-    </div>
-  </section>
-
   <!-- EXPERIENCE -->
   <section id="experience">
     <div class="container">
@@ -1544,15 +1536,16 @@
           </div>
         </div>
       </div>
-      <div class="cert-group reveal">
+      <div class="cert-group cert-more reveal">
         <div class="cert-group-head">
           <span class="cert-group-icon"><svg fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></span>
           <div>
             <h3 class="cert-group-title" data-en="Other courses" data-es="Otros cursos">Otros cursos</h3>
             <p class="cert-group-sub" data-en="Coderhouse · Agesic" data-es="Coderhouse · Agesic">Coderhouse · Agesic</p>
           </div>
+          <button type="button" class="cert-more-btn" aria-expanded="false" aria-controls="other-courses"><span data-en="Show 6 courses" data-es="Ver los 6 cursos">Ver los 6 cursos</span></button>
         </div>
-        <div class="cert-chips">
+        <div class="cert-chips" id="other-courses" hidden>
           <a class="cert-chip" href="https://drive.google.com/file/d/1v8Ep-yLWDcpamKWJG2W0lyk2a2GuSlfP/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Software Development Cycle and Test Planning" data-es="Ciclo de Desarrollo de Software y Planificación de Pruebas">Ciclo de Desarrollo de Software y Planificación de Pruebas</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
           <a class="cert-chip" href="https://drive.google.com/file/d/1DbbX37TmWRVvWlWsczClgL3KU3h_5CA-/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Unleash the Potential of Agile Methodology: Intensive Course" data-es="Desata el Potencial de la Metodología Ágil: Curso Intensivo">Desata el Potencial de la Metodología Ágil: Curso Intensivo</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
           <a class="cert-chip" href="https://drive.google.com/file/d/1wDzz8PFDUUtunn7bC_G2sRbeYLZ5KaKJ/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Mastery in Data Migrations and Queries with Entity Framework" data-es="Maestría en Migraciones y Consulta de Datos con Entity Framework">Maestría en Migraciones y Consulta de Datos con Entity Framework</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
@@ -1751,6 +1744,20 @@
         .then(() => { label.textContent = en ? 'Copied!' : '¡Copiado!'; })
         .catch(() => { label.textContent = email; })
         .finally(() => setTimeout(restore, 2500));
+    });
+
+    // ── OTHER COURSES ──
+    document.querySelectorAll('.cert-more-btn').forEach(btn => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      const label = btn.querySelector('span');
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', String(open));
+        panel.hidden = !open;
+        label.setAttribute('data-en', open ? 'Hide courses' : 'Show 6 courses');
+        label.setAttribute('data-es', open ? 'Ocultar cursos' : 'Ver los 6 cursos');
+        label.textContent = label.getAttribute('data-' + (document.documentElement.lang === 'es' ? 'es' : 'en'));
+      });
     });
 
     // ── DEMO VIDEO ──
