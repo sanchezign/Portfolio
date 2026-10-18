@@ -86,6 +86,10 @@
     .nav-logo:hover { opacity: 0.75; }
     .nav-logo, .footer-logo { display: inline-flex; align-items: center; }
     .logo-mark { display: block; height: 28px; width: auto; fill: currentColor; }
+    .nav-id { display: none; flex-direction: column; margin-left: 0.85rem; padding-left: 0.85rem; border-left: 1px solid var(--border); line-height: 1.2; }
+    .nav-id-name { font-size: 0.95rem; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+    .nav-id-role { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--text2); letter-spacing: 0.04em; }
+    @media (min-width: 1280px) { .nav-id { display: flex; } }
 
     /* ── NOISE OVERLAY ── */
     body::before {
@@ -108,9 +112,12 @@
     }
 
     .nav-links { display: flex; gap: 0.25rem; list-style: none; }
+    @media (min-width: 1280px) {
+      .nav-links { position: absolute; left: 50%; transform: translateX(-50%); }
+    }
     .nav-links a {
       position: relative;
-      color: var(--text2);
+      color: var(--text);
       text-decoration: none;
       font-size: 0.9rem;
       font-weight: 500;
@@ -120,7 +127,7 @@
       transition: color 0.2s, background 0.2s;
     }
     .nav-links a:hover {
-      color: var(--text);
+      color: #fff;
       background: rgba(255,255,255,0.05);
     }
     .nav-links a::after {
@@ -249,10 +256,11 @@
     }
     .hero-sub {
       font-size: 1.05rem; color: var(--text2);
-      max-width: 460px; margin-bottom: 2.5rem;
+      max-width: 560px; margin: 0 auto 2.5rem;
       font-weight: 300; line-height: 1.7;
     }
     .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
     .btn-primary {
       display: inline-flex; align-items: center; gap: 0.5rem;
       background: var(--accent-strong);
@@ -455,7 +463,7 @@
 
     /* ── EXPERIENCE ── */
     #experience { padding: 6rem 0; border-top: 1px solid var(--border); }
-    .exp-list { display: flex; flex-direction: column; gap: 1rem; margin-top: 3rem; position: relative; padding-left: 2rem; }
+    .exp-list { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 2.5rem; position: relative; padding-left: 2rem; }
     .exp-list::before {
       content: ''; position: absolute; left: 9px; top: 1.5rem; bottom: 1.5rem; width: 2px;
       background: linear-gradient(180deg, var(--accent) 0%, rgba(124,106,247,0.15) 100%);
@@ -470,9 +478,9 @@
     .exp-card:first-child::before { background: var(--accent2); }
     .exp-card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 1.4rem 1.75rem;
-      display: grid; grid-template-columns: 7.75rem 1fr auto;
-      gap: 1.5rem; align-items: start;
+      border-radius: 14px; padding: 0.9rem 1.4rem;
+      display: grid; grid-template-columns: 7.25rem 1fr minmax(0, 15rem);
+      gap: 1.25rem; align-items: center;
       transition: all 0.25s;
     }
     .exp-card:hover { border-color: rgba(124,106,247,0.3); background: var(--card-hover); }
@@ -486,10 +494,11 @@
       white-space: nowrap; height: fit-content;
       text-align: center; align-self: center;
     }
-    .exp-company { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
-    .exp-role { font-size: 0.85rem; color: var(--accent2); margin-bottom: 0.5rem; }
-    .exp-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.6; }
-    .exp-tech { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .exp-company { display: inline; font-family: 'Syne', sans-serif; font-size: 1.02rem; font-weight: 700; color: var(--text); }
+    .exp-role { display: inline; font-size: 0.85rem; color: var(--accent2); margin-left: 0.4rem; }
+    .exp-role::before { content: '·'; color: var(--text3); margin-right: 0.4rem; }
+    .exp-desc { font-size: 0.86rem; color: var(--text2); line-height: 1.55; margin-top: 0.3rem; }
+    .exp-tech { display: flex; gap: 0.35rem; flex-wrap: wrap; justify-content: flex-end; }
     .exp-tech span {
       background: rgba(124,106,247,0.08);
       border: 1px solid rgba(124,106,247,0.15);
@@ -530,7 +539,27 @@
       border-radius: 6px; padding: 0.2rem 0.55rem;
       font-size: 0.72rem; color: var(--text2);
     }
-    .project-links { display: flex; gap: 0.75rem; }
+    .project-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .video-play {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.7rem 1.2rem; border-radius: 100px; border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(10,10,15,0.82); color: #fff; backdrop-filter: blur(8px);
+      font: 600 0.85rem 'DM Sans', sans-serif; cursor: pointer; white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45); transition: background 0.2s, transform 0.2s;
+    }
+    .video-play:hover { background: var(--accent-strong); transform: translate(-50%, -50%) scale(1.04); }
+    .video-dialog {
+      margin: auto; border: 1px solid var(--border); border-radius: 16px; padding: 0; background: var(--bg2);
+      width: min(960px, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); color: var(--text);
+    }
+    .video-dialog::backdrop { background: rgba(5,5,10,0.8); backdrop-filter: blur(4px); }
+    .video-dialog video { display: block; width: 100%; height: auto; background: #000; }
+    .video-dialog-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 1rem; font-size: 0.85rem; color: var(--text2); }
+    .video-dialog-close {
+      background: var(--card); border: 1px solid var(--border); color: var(--text); border-radius: 8px;
+      padding: 0.35rem 0.8rem; font: 500 0.8rem 'DM Sans', sans-serif; cursor: pointer;
+    }
     .project-links a {
       flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
       padding: 0.5rem;
@@ -557,10 +586,10 @@
     .project-highlights .hl strong { font-family: 'Syne', sans-serif; color: var(--accent3); font-size: 0.85rem; }
     .project-highlights .hl em { font-style: normal; }
     @media (min-width: 769px) {
-      .projects-grid.featured-mode { grid-template-columns: 1fr; }
+      .projects-grid.featured-mode { grid-template-columns: 1fr 1fr; }
+      .featured-mode .project-card.featured-main { grid-column: 1 / -1; }
     }
     @media (min-width: 1000px) {
-      .projects-grid.featured-mode { grid-template-columns: 1fr; }
       .featured-mode .project-card.featured-main { flex-direction: row; }
       .featured-mode .featured-main .project-img { width: 40%; height: auto; min-height: 340px; flex-shrink: 0; }
       .featured-mode .featured-main .project-img img { position: absolute; inset: 0; }
@@ -613,7 +642,7 @@
     @media (min-width: 769px) {
       .faq-grid {
         grid-template-columns: minmax(220px, 300px) 1fr;
-        grid-template-rows: repeat(6, auto);
+        grid-template-rows: repeat(3, auto);
         gap: 0.6rem 1.5rem;
       }
       .faq-item { display: contents; }
@@ -627,7 +656,7 @@
       .faq-item.open .faq-q { color: var(--text); border-color: rgba(124,106,247,0.45); background: var(--glow); }
       .faq-icon { display: none; }
       .faq-a, .faq-item.open .faq-a {
-        grid-column: 2; grid-row: 1 / 7; align-self: center;
+        grid-column: 2; grid-row: 1 / 4; align-self: center;
         max-height: none; display: none;
         background: var(--card); border: 1px solid var(--border); border-radius: 16px;
         padding: 2rem 2.25rem; font-size: 0.95rem;
@@ -645,6 +674,27 @@
     #certs { padding: 6rem 0; border-top: 1px solid var(--border); }
     .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
     .cert-group { margin-top: 2.5rem; }
+    .cert-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .cert-chip {
+      display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.55rem;
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 0.55rem 0.9rem; text-decoration: none; transition: border-color 0.2s, background 0.2s;
+    }
+    .cert-chip:hover { border-color: rgba(124,106,247,0.4); background: var(--card-hover); }
+    .cert-chip-name { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); }
+    .cert-chip-meta { font-size: 0.75rem; color: var(--text3); white-space: nowrap; }
+    .cert-chip-arrow { font-size: 0.75rem; color: var(--accent2); }
+    .cert-more-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem; margin-left: 1rem;
+      padding: 0.45rem 1rem; border-radius: 8px; cursor: pointer;
+      background: var(--violet-2); color: #fff; border: none;
+      box-shadow: inset 0 0 0 1px rgba(124,106,247,0.35);
+      font: 500 0.82rem 'DM Sans', sans-serif; white-space: nowrap; transition: background 0.2s;
+    }
+    .cert-chips[hidden] { display: none; }
+    .cert-more-btn::after { content: '▾'; font-size: 0.75rem; transition: transform 0.2s; }
+    .cert-more-btn[aria-expanded="true"]::after { transform: rotate(180deg); }
+    .cert-more-btn:hover { background: #201a38; }
     .cert-group-head { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1rem; }
     .cert-group-icon {
       width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
@@ -655,7 +705,7 @@
     .cert-group-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text); line-height: 1.2; }
     .cert-group-sub { font-size: 0.8rem; color: var(--text3); }
     .cert-badge {
-      margin-left: auto; white-space: nowrap;
+      white-space: nowrap;
       font-size: 0.75rem; font-weight: 600; color: #fde68a;
       background: rgba(250,204,21,0.1); border: 1px solid rgba(250,204,21,0.3);
       border-radius: 100px; padding: 0.3rem 0.8rem;
@@ -727,8 +777,8 @@
     }
     .footer-logo { font-family: 'Syne', sans-serif; font-size: 1.45rem; font-weight: 800; letter-spacing: 0.01em; color: #ffffff; }
     .footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 1.5rem; }
-    .footer-nav a { color: var(--text3); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
-    .footer-nav a:hover { color: var(--text); }
+    .footer-nav a { color: var(--text); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+    .footer-nav a:hover { color: #fff; }
     .footer-copy { color: var(--text3); font-size: 0.8rem; }
 
     /* Gradient orbs */
@@ -753,7 +803,8 @@
       .projects-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
       .faq-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
-      .exp-card { grid-template-columns: 1fr; gap: 0.75rem; }
+      .exp-card { grid-template-columns: 1fr; gap: 0.6rem; }
+      .exp-tech { justify-content: flex-start; }
       .exp-list { padding-left: 1.5rem; }
       .exp-card::before { left: calc(-1.5rem + 4px); top: 2rem; }
       .exp-year { justify-self: start; }
@@ -873,12 +924,12 @@
 
   <!-- NAV -->
   <nav class="main-nav">
-    <a href="#" class="nav-logo" aria-label="Ignacio Sánchez — inicio" data-aria-en="Ignacio Sánchez — home" data-aria-es="Ignacio Sánchez — inicio"><svg class="logo-mark" viewBox="0 0 393 291" aria-hidden="true"><use href="#logo-is"/></svg></a>
+    <a href="#" class="nav-logo" aria-label="Ignacio Sánchez — inicio" data-aria-en="Ignacio Sánchez — home" data-aria-es="Ignacio Sánchez — inicio"><svg class="logo-mark" viewBox="0 0 393 291" aria-hidden="true"><use href="#logo-is"/></svg><span class="nav-id" aria-hidden="true"><span class="nav-id-name">Ignacio Sánchez</span><span class="nav-id-role">Full Stack Developer</span></span></a>
     <ul class="nav-links" id="nav-links">
+      <li><a href="#projects" data-en="Projects" data-es="Proyectos">Proyectos</a></li>
       <li><a href="#about" data-en="About" data-es="Sobre mí">Sobre mí</a></li>
       <li><a href="#experience" data-en="Experience" data-es="Experiencia">Experiencia</a></li>
-      <li><a href="#projects" data-en="Projects" data-es="Proyectos">Proyectos</a></li>
-      <li><a href="#certs" data-en="Certifications" data-es="Certificaciones">Certificaciones</a></li>
+      <li><a href="#certs" data-en="Education" data-es="Formación">Formación</a></li>
       <li><a href="#contact" data-en="Contact" data-es="Contacto">Contacto</a></li>
     </ul>
     <div class="nav-right">
@@ -899,21 +950,21 @@
   <section id="home">
     <div id="hero">
       <div class="hero-left">
-        <div class="hero-badge" data-en="Available for projects" data-es="Disponible para proyectos">Disponible para proyectos</div>
+        <div class="hero-badge" data-en="Open to work" data-es="Open to work">Open to work</div>
         <h1 class="hero-title">
           <span data-en="Hi, I'm" data-es="Hola, soy">Hola, soy</span><br>
           <span class="name-highlight">Ignacio<br>Sánchez</span>
         </h1>
         <p class="hero-role">Full Stack Developer · AI Automation</p>
-        <p class="hero-sub" data-en="Based in Montevideo, I build web applications and AI-powered automations, from frontend to backend, ready for production." data-es="Desde Montevideo construyo aplicaciones web y automatizaciones con IA, del frontend al backend, listas para producción.">
-          Desde Montevideo construyo aplicaciones web y automatizaciones con IA, del frontend al backend, listas para producción.
+        <p class="hero-sub" data-en="I build AI agents and web apps that ship to production with tests. My latest, SmartOps Agent, has 2,100+ automated tests and a live public demo." data-es="Construyo agentes de IA y aplicaciones web que llegan a producción con tests. Mi último proyecto, SmartOps Agent, tiene más de 2.100 tests automatizados y una demo pública.">
+          Construyo agentes de IA y aplicaciones web que llegan a producción con tests. Mi último proyecto, SmartOps Agent, tiene más de 2.100 tests automatizados y una demo pública.
         </p>
         <div class="hero-btns">
           <a href="#projects" class="btn-primary">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
             Ver proyectos
           </a>
-          <a href="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-primary btn-violet-2" target="_blank">
+          <a href="/cv/ignacio-sanchez-cv-en.pdf" data-href-en="/cv/ignacio-sanchez-cv-en.pdf" data-href-es="/cv/ignacio-sanchez-cv-es.pdf" class="btn-primary btn-violet-2" target="_blank">
             <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg>
             Descargar CV
           </a>
@@ -949,128 +1000,6 @@
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="container">
-      <div class="about-grid reveal">
-        <div class="about-img-col">
-          <div class="about-photo">
-            <img src="img/profile.webp" width="800" height="840" loading="lazy" decoding="async" alt="Foto de Ignacio Sánchez Greppi" data-alt-en="Photo of Ignacio Sánchez Greppi" data-alt-es="Foto de Ignacio Sánchez Greppi" style="object-position:center 20%;">
-          </div>
-          <div class="about-stats">
-            <div class="stat-card">
-              <div class="stat-num">3+</div>
-              <div class="stat-label" data-en="Years exp." data-es="Años exp.">Años exp.</div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="section-label" data-en="About me" data-es="Sobre mí">Sobre mí</div>
-          <h2 class="section-title" data-en="I build with purpose and precision" data-es="Desarrollo con propósito y precisión">Desarrollo con propósito y precisión</h2>
-          <p class="about-text">
-            <span data-en="I'm Ignacio Sánchez Greppi, a Full Stack Developer in Montevideo specialized in web development and AI automation. I work with Node.js, TypeScript, React and Next.js, choosing the tools that best fit each project." data-es="Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.">Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.</span>
-          </p>
-          <p class="about-text">
-            <span data-en="Since 2023 I have built for clients like Golden Pets and Pura Vida Huertas, and today I develop WhatsApp and n8n automations through Workana. My most complete project is SmartOps Agent, an AI agent backed by more than 2,100 automated tests and CI/CD." data-es="Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Huertas, y hoy construyo automatizaciones con WhatsApp y n8n a través de Workana. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 2.100 tests automatizados y CI/CD.">Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Huertas, y hoy construyo automatizaciones con WhatsApp y n8n a través de Workana. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 2.100 tests automatizados y CI/CD.</span>
-          </p>
-          <div class="about-tags">
-            <span class="tag">Full Stack</span>
-            <span class="tag">Frontend</span>
-            <span class="tag">Backend</span>
-            <span class="tag">AI Automation</span>
-            <span class="tag">Montevideo, UY</span>
-            <span class="tag">Freelance</span>
-          </div>
-          <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap;">
-            <a href="#contact" class="btn-primary" data-en="Let's work together" data-es="Trabajemos juntos">Trabajemos juntos</a>
-            <a href="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-primary btn-violet-2" id="cv-btn" target="_blank">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-              Descargar CV
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section id="experience">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-label" data-en="Career" data-es="Trayectoria">Trayectoria</div>
-        <h2 class="section-title" data-en="Professional experience" data-es="Experiencia profesional">Experiencia profesional</h2>
-      </div>
-      <div class="exp-list reveal">
-
-        <div class="exp-card">
-          <span class="exp-year">2026</span>
-          <div>
-            <h3 class="exp-company">Workana <span style="font-size:0.7rem;color:var(--accent2);font-weight:400;">(freelance)</span></h3>
-            <div class="exp-role">AI Automation Developer</div>
-            <div class="exp-desc" data-en="Built an automation project for a company with the WhatsApp Business API and n8n, following an approach similar to SmartOps Agent." data-es="Desarrollé para una empresa un proyecto de automatización con WhatsApp Business API y n8n, con un enfoque similar al de SmartOps Agent.">Desarrollé para una empresa un proyecto de automatización con WhatsApp Business API y n8n, con un enfoque similar al de SmartOps Agent.</div>
-            <div class="exp-tech" style="margin-top:0.75rem">
-              <span>WhatsApp API</span><span>n8n</span><span>Node.js</span>
-            </div>
-          </div>
-          <div></div>
-        </div>
-
-        <div class="exp-card">
-          <span class="exp-year">2025</span>
-          <div>
-            <h3 class="exp-company">Pura Vida Huertas <span style="font-size:0.7rem;color:var(--accent2);font-weight:400;">(rebranding)</span></h3>
-            <div class="exp-role">Full Stack Developer</div>
-            <div class="exp-desc" data-en="Delivered the brand rebranding as an end-to-end full stack site: design, frontend, backend and production deployment, with product catalog, contact form and content management." data-es="Entregué el rebranding de la marca como sitio full stack de punta a punta: diseño, frontend, backend y deploy en producción, con catálogo de productos, formulario de contacto y gestión de contenidos.">Entregué el rebranding de la marca como sitio full stack de punta a punta: diseño, frontend, backend y deploy en producción, con catálogo de productos, formulario de contacto y gestión de contenidos.</div>
-            <div class="exp-tech" style="margin-top:0.75rem">
-              <span>React</span><span>Node.js</span><span>MongoDB</span><span>Tailwind CSS</span>
-            </div>
-          </div>
-          <div></div>
-        </div>
-
-        <div class="exp-card">
-          <span class="exp-year">2024</span>
-          <div>
-            <h3 class="exp-company">Pura Vida</h3>
-            <div class="exp-role">Full Stack Developer</div>
-            <div class="exp-desc" data-en="Led the project from start to finish: UI design, layout, development and deployment. Full delivery to the client with focus on brand identity and user experience." data-es="Lideré el proyecto de inicio a fin: diseño UI, maquetación, desarrollo y deploy. Entrega completa al cliente con foco en identidad de marca y experiencia de usuario.">Lideré el proyecto de inicio a fin: diseño UI, maquetación, desarrollo y deploy. Entrega completa al cliente con foco en identidad de marca y experiencia de usuario.</div>
-            <div class="exp-tech" style="margin-top:0.75rem">
-              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Node.js</span>
-            </div>
-          </div>
-          <div></div>
-        </div>
-
-        <div class="exp-card">
-          <span class="exp-year">2023</span>
-          <div>
-            <h3 class="exp-company">Golden Pets</h3>
-            <div class="exp-role">Web Developer</div>
-            <div class="exp-desc" data-en="First project with a real client — responsive site delivered in production. Product catalog and social media integration adapted to the brand identity." data-es="Primer proyecto con cliente real — sitio responsivo entregado en producción. Catálogo de productos e integración con redes sociales adaptados a la identidad de la marca.">Primer proyecto con cliente real — sitio responsivo entregado en producción. Catálogo de productos e integración con redes sociales adaptados a la identidad de la marca.</div>
-            <div class="exp-tech" style="margin-top:0.75rem">
-              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span>
-            </div>
-          </div>
-          <div></div>
-        </div>
-
-        <div class="exp-card">
-          <span class="exp-year" data-en="Before 2023" data-es="Antes de 2023">Antes de 2023</span>
-          <div>
-            <h3 class="exp-company" data-en="Multimedia Designer" data-es="Diseñador Multimedia">Diseñador Multimedia</h3>
-            <div class="exp-role" data-en="Brand identity" data-es="Identidad de marca">Identidad de marca</div>
-            <div class="exp-desc" data-en="Logo and visual identity design for brands. That design foundation is what I now apply to every interface I build." data-es="Diseño de logos e identidad visual para marcas. Esa base de diseño es la que hoy aplico en cada interfaz que desarrollo.">Diseño de logos e identidad visual para marcas. Esa base de diseño es la que hoy aplico en cada interfaz que desarrollo.</div>
-            <div class="exp-tech" style="margin-top:0.75rem">
-              <span>Figma</span><span>Branding</span>
-            </div>
-          </div>
-          <div></div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- PROJECTS -->
   <section id="projects">
     <div class="container">
@@ -1097,9 +1026,9 @@
           <span class="filter-dot" style="background:#38bdf8"></span>
           Frontend
         </button>
-        <button type="button" aria-pressed="false" class="filter-btn" data-filter="backend">
-          <span class="filter-dot" style="background:#fb923c"></span>
-          Backend
+        <button type="button" aria-pressed="false" class="filter-btn" data-filter="academic">
+          <span class="filter-dot" style="background:#a1a1aa"></span>
+          <span data-en="Academic" data-es="Académicos">Académicos</span>
         </button>
 
       </div>
@@ -1107,7 +1036,11 @@
         <div class="project-card featured-main" data-category="fullstack">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/smartops-agent.webp" width="600" height="960" loading="lazy" decoding="async" alt="Conversación en SmartOps Agent: lista de precios de un proveedor y respuesta del bot" data-alt-en="SmartOps Agent conversation: a supplier price list and the bot reply" data-alt-es="Conversación en SmartOps Agent: lista de precios de un proveedor y respuesta del bot" style="width:100%;height:100%;object-fit:cover;object-position:center 35%;transition:transform 0.4s;">
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
+            <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
+            <button type="button" class="video-play" data-open-video="smartops-video">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+              <span data-en="Watch demo (50 s)" data-es="Ver demo (50 s)">Ver demo (50 s)</span>
+            </button>
           </div>
           <div class="project-body">
             <h3 class="project-name" data-featured="true" data-order="1">SmartOps Agent</h3>
@@ -1121,6 +1054,7 @@
             <div class="project-links">
               <a href="https://github.com/sanchezign/smartops-agent" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver c&#243;digo</a>
               <a href="https://smartops-demo.duckdns.org" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="/smartops/" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <span data-en="Case study" data-es="Caso de estudio">Caso de estudio</span></a>
             </div>
           </div>
         </div>
@@ -1131,7 +1065,7 @@
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">Feria Artesanal</h3>
+            <h3 class="project-name" data-featured="true" data-order="2">Feria Artesanal</h3>
             <div class="project-desc" data-en="Complete MERN marketplace. Artisan product catalog, JWT authentication, shopping cart and admin panel." data-es="Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.">Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.</div>
             <div class="project-highlights">
               <span class="hl"><strong>3</strong> <em data-en="user roles" data-es="roles de usuario">roles de usuario</em></span>
@@ -1151,7 +1085,7 @@
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">AI Automation Landing</h3>
+            <h3 class="project-name" data-featured="true" data-order="3">AI Automation Landing</h3>
             <div class="project-desc" data-en="Landing page for AI agent and automation services (n8n, Copilot Studio, WhatsApp bots). Bilingual, with validated environment variables and GitHub Actions CI." data-es="Landing de servicios de agentes de IA y automatización (n8n, Copilot Studio, bots de WhatsApp). Bilingüe, con validación de variables de entorno y CI en GitHub Actions.">Landing de servicios de agentes de IA y automatización (n8n, Copilot Studio, bots de WhatsApp). Bilingüe, con validación de variables de entorno y CI en GitHub Actions.</div>
             <div class="project-highlights">
               <span class="hl"><strong data-en="EN/ES" data-es="ES/EN">ES/EN</strong> <em data-en="bilingual" data-es="bilingüe">bilingüe</em></span>
@@ -1205,10 +1139,10 @@
             </div>
           </div>
         </div>
-        <div class="project-card" data-category="frontend">
+        <div class="project-card" data-category="academic">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/weather-app.webp" width="640" height="348" loading="lazy" decoding="async" alt="Captura de Weather App" data-alt-en="Screenshot of Weather App" data-alt-es="Captura de Weather App" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
+            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#a1a1aa;backdrop-filter:blur(8px);" data-en="Frontend · Academic" data-es="Frontend · Académico">Frontend · Académico</span>
           </div>
           <div class="project-body">
             <h3 class="project-name">Weather App</h3>
@@ -1245,10 +1179,10 @@
             </div>
           </div>
         </div>
-        <div class="project-card" data-category="frontend">
+        <div class="project-card" data-category="academic">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/calculator-js.webp" width="452" height="602" loading="lazy" decoding="async" alt="Captura de Calculator JS" data-alt-en="Screenshot of Calculator JS" data-alt-es="Captura de Calculator JS" style="width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 0.4s;">
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
+            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#a1a1aa;backdrop-filter:blur(8px);" data-en="Frontend · Academic" data-es="Frontend · Académico">Frontend · Académico</span>
           </div>
           <div class="project-body">
             <h3 class="project-name">Calculator JS</h3>
@@ -1305,10 +1239,10 @@
             </div>
           </div>
         </div>
-        <div class="project-card" data-category="backend">
+        <div class="project-card" data-category="academic">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <svg viewBox="0 0 400 200" role="img" aria-label="Ilustración: 32 tests pasando y build de Docker" data-aria-en="Illustration: 32 passing tests and a Docker build" data-aria-es="Ilustración: 32 tests pasando y build de Docker" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;"><rect width="400" height="200" fill="#0d0d14"/><g font-family="monospace"><text x="32" y="70" fill="#94a3b8" font-size="10">$ npm test</text><rect x="32" y="82" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="52" y="82" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="72" y="82" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="92" y="82" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="112" y="82" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="132" y="82" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="152" y="82" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="172" y="82" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="32" y="102" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="52" y="102" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="72" y="102" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="92" y="102" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="112" y="102" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="132" y="102" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="152" y="102" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="172" y="102" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="32" y="122" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="52" y="122" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="72" y="122" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="92" y="122" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="112" y="122" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="132" y="122" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="152" y="122" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="172" y="122" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="32" y="142" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="52" y="142" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="72" y="142" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="92" y="142" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="112" y="142" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><rect x="132" y="142" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.8500000000000001"/><rect x="152" y="142" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.55"/><rect x="172" y="142" width="14" height="14" rx="3" fill="#22c55e" fill-opacity="0.7000000000000001"/><text x="32" y="176" fill="#4ade80" font-size="11">✓ 32 passing</text><line x1="226" y1="56" x2="226" y2="168" stroke="#1f1f2e"/><text x="252" y="70" fill="#94a3b8" font-size="10">$ docker build</text><rect x="252" y="84" width="30" height="20" rx="3" fill="#fb923c" fill-opacity="0.18" stroke="#fb923c" stroke-opacity="0.7"/><rect x="288" y="84" width="30" height="20" rx="3" fill="#fb923c" fill-opacity="0.18" stroke="#fb923c" stroke-opacity="0.7"/><rect x="324" y="84" width="30" height="20" rx="3" fill="#fb923c" fill-opacity="0.18" stroke="#fb923c" stroke-opacity="0.7"/><rect x="252" y="110" width="30" height="20" rx="3" fill="#fb923c" fill-opacity="0.18" stroke="#fb923c" stroke-opacity="0.7"/><rect x="288" y="110" width="30" height="20" rx="3" fill="#fb923c" fill-opacity="0.18" stroke="#fb923c" stroke-opacity="0.7"/><rect x="324" y="110" width="30" height="20" rx="3" fill="#fb923c" fill-opacity="0.18" stroke="#fb923c" stroke-opacity="0.7"/><text x="252" y="152" fill="#fb923c" font-size="11">node:alpine</text><text x="252" y="168" fill="#64748b" font-size="9">Swagger · /api-docs</text></g></svg>
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#fb923c;backdrop-filter:blur(8px);">Backend</span>
+            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#a1a1aa;backdrop-filter:blur(8px);" data-en="Backend · Academic" data-es="Backend · Académico">Backend · Académico</span>
           </div>
           <div class="project-body">
             <h3 class="project-name">BE3 Testing & Docker</h3>
@@ -1325,10 +1259,10 @@
             </div>
           </div>
         </div>
-        <div class="project-card" data-category="backend">
+        <div class="project-card" data-category="academic">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <svg viewBox="0 0 400 200" role="img" aria-label="Ilustración: arquitectura en capas sobre MongoDB" data-aria-en="Illustration: layered architecture over MongoDB" data-aria-es="Ilustración: arquitectura en capas sobre MongoDB" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;"><rect width="400" height="200" fill="#0d0d14"/><g font-family="monospace"><rect x="110" y="30" width="180" height="22" rx="6" fill="#f97316" fill-opacity="0.3" stroke="#f97316" stroke-opacity="0.6"/><text x="200" y="45" text-anchor="middle" fill="#fed7aa" font-size="10">routes/</text><rect x="110" y="58" width="180" height="22" rx="6" fill="#f97316" fill-opacity="0.24" stroke="#f97316" stroke-opacity="0.6"/><text x="200" y="73" text-anchor="middle" fill="#fed7aa" font-size="10">controllers/</text><rect x="110" y="86" width="180" height="22" rx="6" fill="#f97316" fill-opacity="0.18" stroke="#f97316" stroke-opacity="0.6"/><text x="200" y="101" text-anchor="middle" fill="#fed7aa" font-size="10">services/</text><rect x="110" y="114" width="180" height="22" rx="6" fill="#f97316" fill-opacity="0.12" stroke="#f97316" stroke-opacity="0.6"/><text x="200" y="129" text-anchor="middle" fill="#fed7aa" font-size="10">repositories/</text><ellipse cx="200" cy="152" rx="42" ry="7" fill="#4ade80" fill-opacity="0.15" stroke="#4ade80" stroke-opacity="0.7"/><path d="M158 152v22c0 4 19 7 42 7s42-3 42-7v-22" fill="#4ade80" fill-opacity="0.08" stroke="#4ade80" stroke-opacity="0.7"/><text x="200" y="172" text-anchor="middle" fill="#4ade80" font-size="10">MongoDB</text></g></svg>
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#fb923c;backdrop-filter:blur(8px);">Backend</span>
+            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#a1a1aa;backdrop-filter:blur(8px);" data-en="Backend · Academic" data-es="Backend · Académico">Backend · Académico</span>
           </div>
           <div class="project-body">
             <h3 class="project-name" data-en="Backend II — Final Project" data-es="Backend II — Entrega Final">Backend II — Entrega Final</h3>
@@ -1345,10 +1279,10 @@
             </div>
           </div>
         </div>
-        <div class="project-card" data-category="backend">
+        <div class="project-card" data-category="academic">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <svg viewBox="0 0 400 200" role="img" aria-label="Ilustración: flujo de login con JWT" data-aria-en="Illustration: JWT login flow" data-aria-es="Ilustración: flujo de login con JWT" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;"><rect width="400" height="200" fill="#0d0d14"/><defs><marker id="arJwt" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#64748b"/></marker></defs><g font-family="monospace"><rect x="22" y="76" width="96" height="48" rx="8" fill="#111827" stroke="#334155"/><text x="70" y="96" text-anchor="middle" fill="#ea580c" font-size="11">POST</text><text x="70" y="112" text-anchor="middle" fill="#cbd5e1" font-size="10">/login</text><line x1="120" y1="100" x2="146" y2="100" stroke="#64748b" stroke-width="1.5" marker-end="url(#arJwt)"/><rect x="150" y="68" width="110" height="64" rx="8" fill="#ea580c" fill-opacity="0.12" stroke="#ea580c" stroke-opacity="0.8"/><text x="205" y="92" text-anchor="middle" fill="#ea580c" font-size="13" font-weight="700">JWT</text><text x="205" y="108" text-anchor="middle" fill="#94a3b8" font-size="9">eyJhbGciOi…</text><text x="205" y="122" text-anchor="middle" fill="#64748b" font-size="9">Bearer token</text><line x1="262" y1="100" x2="288" y2="100" stroke="#64748b" stroke-width="1.5" marker-end="url(#arJwt)"/><rect x="292" y="76" width="88" height="48" rx="8" fill="#111827" stroke="#4ade80" stroke-opacity="0.7"/><text x="336" y="96" text-anchor="middle" fill="#4ade80" font-size="11">200 OK</text><text x="336" y="112" text-anchor="middle" fill="#94a3b8" font-size="9">protected</text><text x="200" y="168" text-anchor="middle" fill="#64748b" font-size="9">JWT auth · error handling</text></g></svg>
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#fb923c;backdrop-filter:blur(8px);">Backend</span>
+            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#a1a1aa;backdrop-filter:blur(8px);" data-en="Backend · Academic" data-es="Backend · Académico">Backend · Académico</span>
           </div>
           <div class="project-body">
             <h3 class="project-name" data-en="Backend I — Final Project" data-es="Backend I — Proyecto Final">Backend I — Proyecto Final</h3>
@@ -1365,10 +1299,10 @@
             </div>
           </div>
         </div>
-        <div class="project-card" data-category="backend">
+        <div class="project-card" data-category="academic">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <svg viewBox="0 0 400 200" role="img" aria-label="Ilustración: dos clientes sincronizados por un servidor WebSocket" data-aria-en="Illustration: two clients synced through a WebSocket server" data-aria-es="Ilustración: dos clientes sincronizados por un servidor WebSocket" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;"><rect width="400" height="200" fill="#0d0d14"/><g font-family="monospace"><rect x="22" y="52" width="110" height="96" rx="8" fill="#111827" stroke="#334155"/><circle cx="32" cy="62" r="2.5" fill="#475569"/><circle cx="40" cy="62" r="2.5" fill="#475569"/><rect x="32" y="76" width="90" height="12" rx="3" fill="#1e293b"/><rect x="32" y="94" width="90" height="12" rx="3" fill="#c2410c" fill-opacity="0.55"/><rect x="32" y="112" width="90" height="12" rx="3" fill="#1e293b"/><rect x="32" y="130" width="60" height="8" rx="3" fill="#1e293b"/><rect x="268" y="52" width="110" height="96" rx="8" fill="#111827" stroke="#334155"/><circle cx="278" cy="62" r="2.5" fill="#475569"/><circle cx="286" cy="62" r="2.5" fill="#475569"/><rect x="278" y="76" width="90" height="12" rx="3" fill="#1e293b"/><rect x="278" y="94" width="90" height="12" rx="3" fill="#c2410c" fill-opacity="0.55"/><rect x="278" y="112" width="90" height="12" rx="3" fill="#1e293b"/><rect x="278" y="130" width="60" height="8" rx="3" fill="#1e293b"/><line x1="134" y1="100" x2="172" y2="100" stroke="#c2410c" stroke-dasharray="4 4"/><line x1="228" y1="100" x2="266" y2="100" stroke="#c2410c" stroke-dasharray="4 4"/><text x="153" y="90" text-anchor="middle" fill="#94a3b8" font-size="9">emit</text><text x="247" y="90" text-anchor="middle" fill="#94a3b8" font-size="9">on</text><circle cx="200" cy="100" r="27" fill="#c2410c" fill-opacity="0.15" stroke="#c2410c"/><text x="200" y="104" text-anchor="middle" fill="#fed7aa" font-size="10">server</text><text x="200" y="172" text-anchor="middle" fill="#64748b" font-size="9">Socket.io · no reload</text></g></svg>
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#fb923c;backdrop-filter:blur(8px);">Backend</span>
+            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#a1a1aa;backdrop-filter:blur(8px);" data-en="Backend · Academic" data-es="Backend · Académico">Backend · Académico</span>
           </div>
           <div class="project-body">
             <h3 class="project-name" data-en="Realtime Products WebSocket" data-es="Productos Realtime WebSocket">Productos Realtime WebSocket</h3>
@@ -1396,8 +1330,131 @@
         <p class="projects-cta-text" data-en="Interested in something like this for your team or project?" data-es="¿Te interesa algo así para tu equipo o proyecto?">¿Te interesa algo así para tu equipo o proyecto?</p>
         <div class="projects-cta-actions">
           <a href="#contact" class="btn-primary"><span data-en="Let's talk" data-es="Hablemos">Hablemos</span><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-          <a href="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-primary btn-violet-2" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
+          <a href="/cv/ignacio-sanchez-cv-es.pdf" data-href-en="/cv/ignacio-sanchez-cv-en.pdf" data-href-es="/cv/ignacio-sanchez-cv-es.pdf" class="btn-primary btn-violet-2" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid reveal">
+        <div class="about-img-col">
+          <div class="about-photo">
+            <img src="img/profile.webp" width="800" height="840" loading="lazy" decoding="async" alt="Foto de Ignacio Sánchez Greppi" data-alt-en="Photo of Ignacio Sánchez Greppi" data-alt-es="Foto de Ignacio Sánchez Greppi" style="object-position:center 20%;">
+          </div>
+          <div class="about-stats">
+            <div class="stat-card">
+              <div class="stat-num">3+</div>
+              <div class="stat-label" data-en="Years exp." data-es="Años exp.">Años exp.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-label" data-en="About me" data-es="Sobre mí">Sobre mí</div>
+          <h2 class="section-title" data-en="I build with purpose and precision" data-es="Desarrollo con propósito y precisión">Desarrollo con propósito y precisión</h2>
+          <p class="about-text">
+            <span data-en="I'm Ignacio Sánchez Greppi, a Full Stack Developer in Montevideo specialized in web development and AI automation. I work with Node.js, TypeScript, React and Next.js, choosing the tools that best fit each project." data-es="Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.">Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.</span>
+          </p>
+          <p class="about-text">
+            <span data-en="Since 2023 I have built for clients like Golden Pets and Pura Vida Huertas, and today I develop WhatsApp and n8n automations through Workana. My most complete project is SmartOps Agent, an AI agent backed by more than 2,100 automated tests and CI/CD." data-es="Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Huertas, y hoy construyo automatizaciones con WhatsApp y n8n a través de Workana. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 2.100 tests automatizados y CI/CD.">Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Huertas, y hoy construyo automatizaciones con WhatsApp y n8n a través de Workana. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 2.100 tests automatizados y CI/CD.</span>
+          </p>
+          <div class="about-tags">
+            <span class="tag">Full Stack</span>
+            <span class="tag">Frontend</span>
+            <span class="tag">Backend</span>
+            <span class="tag">AI Automation</span>
+            <span class="tag" data-en="English B2" data-es="Inglés B2">Inglés B2</span>
+            <span class="tag">Montevideo, UY</span>
+            <span class="tag" data-en="On-site or remote" data-es="Presencial o remoto">Presencial o remoto</span>
+          </div>
+          <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap;">
+            <a href="#contact" class="btn-primary" data-en="Let's work together" data-es="Trabajemos juntos">Trabajemos juntos</a>
+            <a href="/cv/ignacio-sanchez-cv-en.pdf" data-href-en="/cv/ignacio-sanchez-cv-en.pdf" data-href-es="/cv/ignacio-sanchez-cv-es.pdf" class="btn-primary btn-violet-2" id="cv-btn" target="_blank">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Descargar CV
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label" data-en="Career" data-es="Trayectoria">Trayectoria</div>
+        <h2 class="section-title" data-en="Professional experience" data-es="Experiencia profesional">Experiencia profesional</h2>
+      </div>
+      <div class="exp-list reveal">
+
+        <div class="exp-card">
+          <span class="exp-year">2026</span>
+          <div>
+            <h3 class="exp-company">Workana <span style="font-size:0.7rem;color:var(--accent2);font-weight:400;">(freelance)</span></h3>
+            <div class="exp-role">AI Automation Developer</div>
+            <div class="exp-desc" data-en="Built an automation project for a company with the WhatsApp Business API and n8n, following an approach similar to SmartOps Agent." data-es="Desarrollé para una empresa un proyecto de automatización con WhatsApp Business API y n8n, con un enfoque similar al de SmartOps Agent.">Desarrollé para una empresa un proyecto de automatización con WhatsApp Business API y n8n, con un enfoque similar al de SmartOps Agent.</div>
+          </div>
+          <div class="exp-tech">
+              <span>WhatsApp API</span><span>n8n</span><span>Node.js</span>
+            </div>
+
+        </div>
+
+        <div class="exp-card">
+          <span class="exp-year">2025</span>
+          <div>
+            <h3 class="exp-company">Pura Vida Huertas <span style="font-size:0.7rem;color:var(--accent2);font-weight:400;">(rebranding)</span></h3>
+            <div class="exp-role">Full Stack Developer</div>
+            <div class="exp-desc" data-en="Rebuilt the brand as an end-to-end full stack site: design, frontend, backend and production deployment. Product catalog and content on a MongoDB database, contact form and responsive design." data-es="Rehice la marca como sitio full stack de punta a punta: diseño, frontend, backend y deploy en producción. Catálogo de productos y contenidos sobre una base MongoDB, formulario de contacto y diseño responsive.">Rehice la marca como sitio full stack de punta a punta: diseño, frontend, backend y deploy en producción. Catálogo de productos y contenidos sobre una base MongoDB, formulario de contacto y diseño responsive.</div>
+          </div>
+          <div class="exp-tech">
+              <span>React</span><span>Node.js</span><span>MongoDB</span><span>Tailwind CSS</span>
+            </div>
+
+        </div>
+
+        <div class="exp-card">
+          <span class="exp-year">2024</span>
+          <div>
+            <h3 class="exp-company">Pura Vida</h3>
+            <div class="exp-role">Full Stack Developer</div>
+            <div class="exp-desc" data-en="Led the project from start to finish: UI design, layout, development and deployment. Full delivery to the client with focus on brand identity and user experience." data-es="Lideré el proyecto de inicio a fin: diseño UI, maquetación, desarrollo y deploy. Entrega completa al cliente con foco en identidad de marca y experiencia de usuario.">Lideré el proyecto de inicio a fin: diseño UI, maquetación, desarrollo y deploy. Entrega completa al cliente con foco en identidad de marca y experiencia de usuario.</div>
+          </div>
+          <div class="exp-tech">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Node.js</span>
+            </div>
+
+        </div>
+
+        <div class="exp-card">
+          <span class="exp-year">2023</span>
+          <div>
+            <h3 class="exp-company">Golden Pets</h3>
+            <div class="exp-role">Web Developer</div>
+            <div class="exp-desc" data-en="First project with a real client — responsive site delivered in production. Product catalog and social media integration adapted to the brand identity." data-es="Primer proyecto con cliente real — sitio responsivo entregado en producción. Catálogo de productos e integración con redes sociales adaptados a la identidad de la marca.">Primer proyecto con cliente real — sitio responsivo entregado en producción. Catálogo de productos e integración con redes sociales adaptados a la identidad de la marca.</div>
+          </div>
+          <div class="exp-tech">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span>
+            </div>
+
+        </div>
+
+        <div class="exp-card">
+          <span class="exp-year" data-en="Before 2023" data-es="Antes de 2023">Antes de 2023</span>
+          <div>
+            <h3 class="exp-company" data-en="Multimedia Designer" data-es="Diseñador Multimedia">Diseñador Multimedia</h3>
+            <div class="exp-role" data-en="Brand identity" data-es="Identidad de marca">Identidad de marca</div>
+            <div class="exp-desc" data-en="Logo and visual identity design for brands. That design foundation is what I now apply to every interface I build." data-es="Diseño de logos e identidad visual para marcas. Esa base de diseño es la que hoy aplico en cada interfaz que desarrollo.">Diseño de logos e identidad visual para marcas. Esa base de diseño es la que hoy aplico en cada interfaz que desarrollo.</div>
+          </div>
+          <div class="exp-tech">
+              <span>Figma</span><span>Branding</span>
+            </div>
+
+        </div>
+
       </div>
     </div>
   </section>
@@ -1419,38 +1476,17 @@
         </div>
         <div class="faq-item">
           <div class="faq-q">
-            <span data-en="My experience" data-es="Mi experiencia">Mi experiencia</span>
-            <svg class="faq-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </div>
-          <div class="faq-a" data-en="Since 2023 I have worked as a freelancer with direct clients — Golden Pets, Pura Vida and Pura Vida Huertas — and through Workana, where I build WhatsApp and n8n automations. Every delivery is a real product in production, and I provide support after launch." data-es="Desde 2023 trabajo como freelance con clientes directos — Golden Pets, Pura Vida y Pura Vida Huertas — y a través de Workana, donde desarrollo automatizaciones con WhatsApp y n8n. Todas las entregas son productos reales en producción, y doy soporte después del lanzamiento.">Desde 2023 trabajo como freelance con clientes directos — Golden Pets, Pura Vida y Pura Vida Huertas — y a través de Workana, donde desarrollo automatizaciones con WhatsApp y n8n. Todas las entregas son productos reales en producción, y doy soporte después del lanzamiento.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">
-            <span data-en="My education" data-es="Mi formación">Mi formación</span>
-            <svg class="faq-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </div>
-          <div class="faq-a" data-en="I completed the Full Stack Developer career at Coderhouse with a Top 10 distinction, among the 10 best students: 6 courses ranging from web development to testing and scalability with Docker. I also studied 2 years at Universidad ORT: Systems Engineering and a Multimedia degree." data-es="Completé la carrera Full Stack Developer en Coderhouse con distinción Top 10, entre los 10 mejores estudiantes: 6 cursos que van del desarrollo web hasta testing y escalabilidad con Docker. También cursé 2 años en la Universidad ORT: Ingeniería en Sistemas y Licenciatura en Multimedia.">Completé la carrera Full Stack Developer en Coderhouse con distinción Top 10, entre los 10 mejores estudiantes: 6 cursos que van del desarrollo web hasta testing y escalabilidad con Docker. También cursé 2 años en la Universidad ORT: Ingeniería en Sistemas y Licenciatura en Multimedia.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">
             <span data-en="How do you work in a team?" data-es="¿Cómo trabajás en equipo?">¿Cómo trabajás en equipo?</span>
             <svg class="faq-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
           </div>
-          <div class="faq-a" data-en="I adapt well to teams and also work autonomously — something I learned managing projects for real clients. I use Scrum and Kanban depending on context, Git and GitHub for version control, and Trello or Jira to organize work." data-es="Me adapto bien a equipos y también trabajo de forma autónoma — algo que aprendí gestionando proyectos para clientes reales. Uso Scrum y Kanban según el contexto, Git y GitHub para el control de versiones, y Trello o Jira para organizar el trabajo.">Me adapto bien a equipos y también trabajo de forma autónoma — algo que aprendí gestionando proyectos para clientes reales. Uso Scrum y Kanban según el contexto, Git y GitHub para el control de versiones, y Trello o Jira para organizar el trabajo.</div>
+          <div class="faq-a" data-en="I adapt well to teams and also work autonomously, something I learned managing projects for real clients. I have worked with Scrum (sprints, periodic reviews and pull requests before merging to production) and Kanban (boards and dailies to report progress). I use Git and GitHub for version control, and Trello or Jira to organize work." data-es="Me adapto bien a equipos y también trabajo de forma autónoma, algo que aprendí gestionando proyectos para clientes reales. Trabajé con Scrum (sprints, revisiones periódicas y pull requests antes de mergear a producción) y con Kanban (tableros y dailies para reportar avances). Uso Git y GitHub para el control de versiones, y Trello o Jira para organizar el trabajo.">Me adapto bien a equipos y también trabajo de forma autónoma, algo que aprendí gestionando proyectos para clientes reales. Trabajé con Scrum (sprints, revisiones periódicas y pull requests antes de mergear a producción) y con Kanban (tableros y dailies para reportar avances). Uso Git y GitHub para el control de versiones, y Trello o Jira para organizar el trabajo.</div>
         </div>
         <div class="faq-item">
           <div class="faq-q">
-            <span data-en="Available for freelance?" data-es="¿Disponible para freelance?">¿Disponible para freelance?</span>
+            <span data-en="What kind of role are you looking for?" data-es="¿Qué modalidad buscás?">¿Qué modalidad buscás?</span>
             <svg class="faq-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
           </div>
-          <div class="faq-a" data-en="Yes, I'm available for freelance projects and also open to full-time job opportunities. If you have a project in mind, write to me!" data-es="Sí, estoy disponible para proyectos freelance y también abierto a oportunidades de trabajo en relación de dependencia. Si tenés un proyecto en mente, ¡escribime!">Sí, estoy disponible para proyectos freelance y también abierto a oportunidades de trabajo en relación de dependencia. Si tenés un proyecto en mente, ¡escribime!</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">
-            <span data-en="Agile methodologies" data-es="Metodologías ágiles">Metodologías ágiles</span>
-            <svg class="faq-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </div>
-          <div class="faq-a"><span data-en="I have worked with Scrum and Kanban. In Scrum I participated in sprints with periodic reviews and pull requests before merging to production. With Kanban I used boards to manage task flow and participated in dailies to report progress." data-es="He trabajado con Scrum y Kanban. En Scrum participé de sprints con revisiones periódicas y pull requests antes de mergear a producción. Con Kanban usé tableros para gestionar el flujo de tareas y participé de dailies para reportar avances.">He trabajado con Scrum y Kanban. En Scrum participé de sprints con revisiones periódicas y pull requests antes de mergear a producción. Con Kanban usé tableros para gestionar el flujo de tareas y participé de dailies para reportar avances.</span></div>
+          <div class="faq-a" data-en="I'm looking for a full-time role, on-site in Montevideo or remote: I'm open to both. I also take on freelance projects. I'm in GMT-3, with working hours that overlap with the US, and I work in Spanish and English (B2)." data-es="Busco un rol full-time, presencial en Montevideo o remoto: estoy abierto a las dos opciones. También tomo proyectos freelance. Estoy en GMT-3, con horario compatible con Estados Unidos, y trabajo en español e inglés (B2).">Busco un rol full-time, presencial en Montevideo o remoto: estoy abierto a las dos opciones. También tomo proyectos freelance. Estoy en GMT-3, con horario compatible con Estados Unidos, y trabajo en español e inglés (B2).</div>
         </div>
       </div>
     </div>
@@ -1461,8 +1497,8 @@
     <div class="container">
       <div class="reveal">
         <div class="section-label" data-en="Education" data-es="Formación">Formación</div>
-        <h2 class="section-title" data-en="Certifications" data-es="Certificaciones">Certificaciones</h2>
-        <p style="color:var(--text2); margin-top:0.5rem; font-size:0.95rem;"><span data-en="Technical training at Coderhouse, Anthropic and Agesic." data-es="Formación técnica en Coderhouse, Anthropic y Agesic.">Formación técnica en Coderhouse, Anthropic y Agesic.</span></p>
+        <h2 class="section-title" data-en="Education and certifications" data-es="Formación y certificaciones">Formación y certificaciones</h2>
+        <p style="color:var(--text2); margin-top:0.5rem; font-size:0.95rem;"><span data-en="Full Stack career with a Top 10 distinction, AI training at Anthropic and 2 years at Universidad ORT." data-es="Carrera Full Stack con distinción Top 10, formación en IA con Anthropic y 2 años en la Universidad ORT.">Carrera Full Stack con distinción Top 10, formación en IA con Anthropic y 2 años en la Universidad ORT.</span></p>
       </div>
 
       <div class="cert-group reveal">
@@ -1474,43 +1510,13 @@
           </div>
           <span class="cert-badge" data-en="Top 10 distinction" data-es="Distinción Top 10">Distinción Top 10</span>
         </div>
-        <div class="certs-grid">
-          <div class="cert-card">
-            <div class="cert-name" data-en="Web Development" data-es="Desarrollo Web">Desarrollo Web</div>
-            <div class="cert-meta"><span class="cert-year">2023</span> · 38 h</div>
-            <div class="cert-note">HTML5, CSS3, Responsive Design</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1N2Zbz2-nYTFt31sow40XhPmFPnJkFMBS/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name">Javascript</div>
-            <div class="cert-meta"><span class="cert-year">2026</span> · 20 h</div>
-            <div class="cert-note">ES6+, DOM, Async/Await</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1X7Zul3gEeWQ-e-hsXWy1vvAfR22GUEM3/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name">React JS</div>
-            <div class="cert-meta"><span class="cert-year">2026</span> · 16 h</div>
-            <div class="cert-note">Hooks, Context, Router</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1WfC4OtXT4XeiXQZwvRt8M1s3qhLq7dnf/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name" data-en="Backend I: Advanced Development" data-es="Backend I: Desarrollo Avanzado">Backend I: Desarrollo Avanzado</div>
-            <div class="cert-meta"><span class="cert-year">2026</span> · 18 h</div>
-            <div class="cert-note">Node.js, Express, MongoDB</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1x6ageiLR1b1IQNFz5LDQbsQL2D13idfO/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name" data-en="Backend II: Design and Architecture" data-es="Backend II: Diseño y Arquitectura">Backend II: Diseño y Arquitectura</div>
-            <div class="cert-meta"><span class="cert-year">2026</span> · 16 h</div>
-            <div class="cert-note" data-en="Software architecture, REST APIs" data-es="Arquitectura de software, APIs REST">Arquitectura de software, APIs REST</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/16Mf4iRQoTYaSciPoo-n38jTA7vwYwFHd/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name" data-en="Backend III: Testing and Scalability" data-es="Backend III: Testing y Escalabilidad">Backend III: Testing y Escalabilidad</div>
-            <div class="cert-meta"><span class="cert-year">2026</span> · 16 h</div>
-            <div class="cert-note" data-en="Testing, scalability, best practices" data-es="Testing, escalabilidad, buenas prácticas">Testing, escalabilidad, buenas prácticas</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/12YXLugpFw7MWfJ-SBfYNZHZi8gEP_G8h/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
+        <div class="cert-chips">
+          <a class="cert-chip" href="https://drive.google.com/file/d/1N2Zbz2-nYTFt31sow40XhPmFPnJkFMBS/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Web Development" data-es="Desarrollo Web">Desarrollo Web</span><span class="cert-chip-meta">2023 · 38 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1X7Zul3gEeWQ-e-hsXWy1vvAfR22GUEM3/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name">Javascript</span><span class="cert-chip-meta">2026 · 20 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1WfC4OtXT4XeiXQZwvRt8M1s3qhLq7dnf/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name">React JS</span><span class="cert-chip-meta">2026 · 16 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1x6ageiLR1b1IQNFz5LDQbsQL2D13idfO/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Backend I: Advanced Development" data-es="Backend I: Desarrollo Avanzado">Backend I: Desarrollo Avanzado</span><span class="cert-chip-meta">2026 · 18 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/16Mf4iRQoTYaSciPoo-n38jTA7vwYwFHd/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Backend II: Design and Architecture" data-es="Backend II: Diseño y Arquitectura">Backend II: Diseño y Arquitectura</span><span class="cert-chip-meta">2026 · 16 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/12YXLugpFw7MWfJ-SBfYNZHZi8gEP_G8h/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Backend III: Testing and Scalability" data-es="Backend III: Testing y Escalabilidad">Backend III: Testing y Escalabilidad</span><span class="cert-chip-meta">2026 · 16 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
         </div>
       </div>
       <div class="cert-group reveal">
@@ -1522,73 +1528,37 @@
           </div>
           
         </div>
-        <div class="certs-grid">
-          <div class="cert-card">
-            <div class="cert-name">Claude Code 101</div>
-            <div class="cert-meta"><span class="cert-year">2026</span></div>
-            <div class="cert-note" data-en="Claude Code, AI-assisted development" data-es="Claude Code, desarrollo asistido por IA">Claude Code, desarrollo asistido por IA</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1L8hp5GMjc2gZbehxI0r_pVZDhskDku-f/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name">Claude Code in Action</div>
-            <div class="cert-meta"><span class="cert-year">2026</span></div>
-            <div class="cert-note" data-en="Claude Code, Agentic workflows" data-es="Claude Code, flujos agénticos">Claude Code, flujos agénticos</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/12EhCpHywTu9Ya3tw3juKe-Ht9h5BWkcw/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name">Model Context Protocol: Advanced Topics</div>
-            <div class="cert-meta"><span class="cert-year">2026</span></div>
-            <div class="cert-note" data-en="MCP, AI integrations" data-es="MCP, integraciones con IA">MCP, integraciones con IA</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1pTXYsfMRlXeaWWsXkENuG6ABKHP5NRLh/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
+        <div class="cert-chips">
+          <a class="cert-chip" href="https://drive.google.com/file/d/1L8hp5GMjc2gZbehxI0r_pVZDhskDku-f/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name">Claude Code 101</span><span class="cert-chip-meta">2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/12EhCpHywTu9Ya3tw3juKe-Ht9h5BWkcw/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name">Claude Code in Action</span><span class="cert-chip-meta">2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1pTXYsfMRlXeaWWsXkENuG6ABKHP5NRLh/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name">Model Context Protocol: Advanced Topics</span><span class="cert-chip-meta">2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
         </div>
       </div>
       <div class="cert-group reveal">
+        <div class="cert-group-head">
+          <span class="cert-group-icon"><svg fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/><path d="M22 10v6"/></svg></span>
+          <div>
+            <h3 class="cert-group-title">Universidad ORT Uruguay</h3>
+            <p class="cert-group-sub" data-en="2 years · Systems Engineering and Multimedia degree" data-es="2 años · Ingeniería en Sistemas y Licenciatura en Multimedia">2 años · Ingeniería en Sistemas y Licenciatura en Multimedia</p>
+          </div>
+        </div>
+      </div>
+      <div class="cert-group cert-more reveal">
         <div class="cert-group-head">
           <span class="cert-group-icon"><svg fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></span>
           <div>
             <h3 class="cert-group-title" data-en="Other courses" data-es="Otros cursos">Otros cursos</h3>
             <p class="cert-group-sub" data-en="Coderhouse · Agesic" data-es="Coderhouse · Agesic">Coderhouse · Agesic</p>
           </div>
-          
+          <button type="button" class="cert-more-btn" aria-expanded="false" aria-controls="other-courses"><span data-en="Show 6 courses" data-es="Ver los 6 cursos">Ver los 6 cursos</span></button>
         </div>
-        <div class="certs-grid">
-          <div class="cert-card">
-            <div class="cert-name" data-en="Software Development Cycle and Test Planning" data-es="Ciclo de Desarrollo de Software y Planificación de Pruebas">Ciclo de Desarrollo de Software y Planificación de Pruebas</div>
-            <div class="cert-meta"><span class="cert-issuer">Coderhouse</span> · <span class="cert-year">2026</span></div>
-            <div class="cert-note" data-en="SDLC, Testing, Planning" data-es="SDLC, Testing, Planificación">SDLC, Testing, Planificación</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1v8Ep-yLWDcpamKWJG2W0lyk2a2GuSlfP/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name" data-en="Unleash the Potential of Agile Methodology: Intensive Course" data-es="Desata el Potencial de la Metodología Ágil: Curso Intensivo">Desata el Potencial de la Metodología Ágil: Curso Intensivo</div>
-            <div class="cert-meta"><span class="cert-issuer">Coderhouse</span> · <span class="cert-year">2026</span></div>
-            <div class="cert-note">Scrum, Kanban, Agile</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1DbbX37TmWRVvWlWsczClgL3KU3h_5CA-/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name" data-en="Mastery in Data Migrations and Queries with Entity Framework" data-es="Maestría en Migraciones y Consulta de Datos con Entity Framework">Maestría en Migraciones y Consulta de Datos con Entity Framework</div>
-            <div class="cert-meta"><span class="cert-issuer">Coderhouse</span> · <span class="cert-year">2026</span></div>
-            <div class="cert-note" data-en="Entity Framework, SQL, Migrations" data-es="Entity Framework, SQL, Migraciones">Entity Framework, SQL, Migraciones</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1wDzz8PFDUUtunn7bC_G2sRbeYLZ5KaKJ/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name" data-en="Understanding the Cybersecurity Framework version 4.2" data-es="Conociendo el Marco de Ciberseguridad versión 4.2">Conociendo el Marco de Ciberseguridad versión 4.2</div>
-            <div class="cert-meta"><span class="cert-issuer">Agesic</span> · <span class="cert-year">2025</span> · 5 h</div>
-            <div class="cert-note" data-en="Cybersecurity, Regulatory framework" data-es="Ciberseguridad, Marco normativo">Ciberseguridad, Marco normativo</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1V3wHFjjZz6X5bg5MRjqvqsIEG6Duoylk/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name" data-en="Advanced Passport: Enterprise-Level Authentication" data-es="Passport Avanzado: Autenticación de Nivel Empresarial">Passport Avanzado: Autenticación de Nivel Empresarial</div>
-            <div class="cert-meta"><span class="cert-issuer">Coderhouse</span> · <span class="cert-year">2026</span></div>
-            <div class="cert-note">Passport.js, OAuth, JWT</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1zZFCcmrMQpRprkoHilGQWaJ2h8FIHaeU/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="cert-card">
-            <div class="cert-name" data-en="Workflows as Code: Git and Version Control" data-es="Workflows como Código: Git y Control de Versiones">Workflows como Código: Git y Control de Versiones</div>
-            <div class="cert-meta"><span class="cert-issuer">Coderhouse</span> · <span class="cert-year">2026</span></div>
-            <div class="cert-note" data-en="Git, GitHub, Version control" data-es="Git, GitHub, Control de versiones">Git, GitHub, Control de versiones</div>
-            <a class="cert-link" href="https://drive.google.com/file/d/1ezV4HYPx-If_ji8NN29VCgyutm_2Yhn6/view?usp=sharing" target="_blank" rel="noopener"><span data-en="View credential" data-es="Ver credencial">Ver credencial</span> <span aria-hidden="true">↗</span></a>
-          </div>
+        <div class="cert-chips" id="other-courses" hidden>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1v8Ep-yLWDcpamKWJG2W0lyk2a2GuSlfP/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Software Development Cycle and Test Planning" data-es="Ciclo de Desarrollo de Software y Planificación de Pruebas">Ciclo de Desarrollo de Software y Planificación de Pruebas</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1DbbX37TmWRVvWlWsczClgL3KU3h_5CA-/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Unleash the Potential of Agile Methodology: Intensive Course" data-es="Desata el Potencial de la Metodología Ágil: Curso Intensivo">Desata el Potencial de la Metodología Ágil: Curso Intensivo</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1wDzz8PFDUUtunn7bC_G2sRbeYLZ5KaKJ/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Mastery in Data Migrations and Queries with Entity Framework" data-es="Maestría en Migraciones y Consulta de Datos con Entity Framework">Maestría en Migraciones y Consulta de Datos con Entity Framework</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1V3wHFjjZz6X5bg5MRjqvqsIEG6Duoylk/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Understanding the Cybersecurity Framework version 4.2" data-es="Conociendo el Marco de Ciberseguridad versión 4.2">Conociendo el Marco de Ciberseguridad versión 4.2</span><span class="cert-chip-meta">Agesic · 2025 · 5 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1zZFCcmrMQpRprkoHilGQWaJ2h8FIHaeU/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Advanced Passport: Enterprise-Level Authentication" data-es="Passport Avanzado: Autenticación de Nivel Empresarial">Passport Avanzado: Autenticación de Nivel Empresarial</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
+          <a class="cert-chip" href="https://drive.google.com/file/d/1ezV4HYPx-If_ji8NN29VCgyutm_2Yhn6/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Workflows as Code: Git and Version Control" data-es="Workflows como Código: Git y Control de Versiones">Workflows como Código: Git y Control de Versiones</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
         </div>
       </div>
     </div>
@@ -1600,13 +1570,13 @@
       <div class="contact-inner reveal">
         <div class="section-label" style="justify-content:center" data-en="Contact" data-es="Contacto">Contacto</div>
         <h2 class="contact-title" data-en="Shall we work together?" data-es="¿Trabajamos juntos?">¿Trabajamos<br>juntos?</h2>
-        <p class="contact-sub" data-en="I'm available for new opportunities, freelance projects or just to chat about technology. Write to me!" data-es="Estoy disponible para nuevas oportunidades, proyectos freelance o simplemente para charlar sobre tecnología. ¡Escribime!">Estoy disponible para nuevas oportunidades, proyectos freelance o simplemente para charlar sobre tecnología. ¡Escribime!</p>
+        <p class="contact-sub" data-en="I'm looking for a full-time role, on-site in Montevideo or remote, and I also take on freelance projects. Write to me!" data-es="Busco un rol full-time, presencial en Montevideo o remoto, y también tomo proyectos freelance. ¡Escribime!">Busco un rol full-time, presencial en Montevideo o remoto, y también tomo proyectos freelance. ¡Escribime!</p>
         <div class="contact-actions">
           <a href="mailto:isanchez.workmail@gmail.com" class="btn-primary"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span data-en="Send an email" data-es="Enviar un email">Enviar un email</span></a>
           <button type="button" class="btn-primary btn-violet-2" id="copy-email"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span id="copy-email-label" data-en="Copy email" data-es="Copiar email">Copiar email</span></button>
-          <a href="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" data-href-en="https://drive.google.com/file/d/1lRDr3pxLdCaPOR2qr9oCW0XaDc2N5CO2/view?usp=sharing" data-href-es="https://drive.google.com/file/d/1AmtAp9MRVvRSg-3rHxFRkKyk9jRjwYbB/view?usp=sharing" class="btn-primary btn-violet-3" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
+          <a href="/cv/ignacio-sanchez-cv-es.pdf" data-href-en="/cv/ignacio-sanchez-cv-en.pdf" data-href-es="/cv/ignacio-sanchez-cv-es.pdf" class="btn-primary btn-violet-3" target="_blank"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v13M5 16l7 7 7-7"/><path d="M3 21h18"/></svg><span data-en="Download CV" data-es="Descargar CV">Descargar CV</span></a>
         </div>
-        <p class="contact-meta">isanchez.workmail@gmail.com · <span data-en="Montevideo, Uruguay (GMT-3) · Remote" data-es="Montevideo, Uruguay (GMT-3) · Remoto">Montevideo, Uruguay (GMT-3) · Remoto</span></p>
+        <p class="contact-meta">isanchez.workmail@gmail.com · <span data-en="Montevideo, Uruguay (GMT-3) · On-site or remote" data-es="Montevideo, Uruguay (GMT-3) · Presencial o remoto">Montevideo, Uruguay (GMT-3) · Presencial o remoto</span></p>
         <div class="contact-socials">
           <a href="https://www.linkedin.com/in/sanchezign/" target="_blank" aria-label="LinkedIn">
             <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
@@ -1619,16 +1589,27 @@
     </div>
   </section>
 
+  <dialog class="video-dialog" id="smartops-video" aria-label="SmartOps Agent demo">
+    <video controls playsinline preload="none" poster="/media/smartops-demo-poster.webp" width="880" height="550">
+      <source src="/media/smartops-demo.webm" type="video/webm">
+      <source src="/media/smartops-demo.mp4" type="video/mp4">
+    </video>
+    <div class="video-dialog-bar">
+      <span data-en="SmartOps Agent: from a supplier price list to an updated catalog." data-es="SmartOps Agent: de la lista de precios de un proveedor al catálogo actualizado.">SmartOps Agent: de la lista de precios de un proveedor al catálogo actualizado.</span>
+      <button type="button" class="video-dialog-close" data-en="Close" data-es="Cerrar">Cerrar</button>
+    </div>
+  </dialog>
+
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo">
       <svg class="logo-mark" viewBox="0 0 393 291" role="img" aria-label="Ignacio Sánchez"><use href="#logo-is"/></svg>
     </div>
     <nav class="footer-nav">
+      <a href="#projects" data-en="Projects" data-es="Proyectos">Proyectos</a>
       <a href="#about" data-en="About" data-es="Sobre mí">Sobre mí</a>
       <a href="#experience" data-en="Experience" data-es="Experiencia">Experiencia</a>
-      <a href="#projects" data-en="Projects" data-es="Proyectos">Proyectos</a>
-      <a href="#certs" data-en="Certifications" data-es="Certificaciones">Certificaciones</a>
+      <a href="#certs" data-en="Education" data-es="Formación">Formación</a>
       <a href="#contact" data-en="Contact" data-es="Contacto">Contacto</a>
     </nav>
     <p class="footer-copy">© 2026 Ignacio Sánchez Greppi</p>
@@ -1770,6 +1751,31 @@
         .then(() => { label.textContent = en ? 'Copied!' : '¡Copiado!'; })
         .catch(() => { label.textContent = email; })
         .finally(() => setTimeout(restore, 2500));
+    });
+
+    // ── OTHER COURSES ──
+    document.querySelectorAll('.cert-more-btn').forEach(btn => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      const label = btn.querySelector('span');
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') !== 'true';
+        btn.setAttribute('aria-expanded', String(open));
+        panel.hidden = !open;
+        label.setAttribute('data-en', open ? 'Hide courses' : 'Show 6 courses');
+        label.setAttribute('data-es', open ? 'Ocultar cursos' : 'Ver los 6 cursos');
+        label.textContent = label.getAttribute('data-' + (document.documentElement.lang === 'es' ? 'es' : 'en'));
+      });
+    });
+
+    // ── DEMO VIDEO ──
+    document.querySelectorAll('[data-open-video]').forEach(btn => {
+      const dlg = document.getElementById(btn.dataset.openVideo);
+      if (!dlg || typeof dlg.showModal !== 'function') { btn.remove(); return; }
+      const video = dlg.querySelector('video');
+      btn.addEventListener('click', e => { e.stopPropagation(); dlg.showModal(); video.play().catch(() => {}); });
+      dlg.querySelector('.video-dialog-close').addEventListener('click', () => dlg.close());
+      dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+      dlg.addEventListener('close', () => video.pause());
     });
 
     const nav = document.querySelector('.main-nav');
