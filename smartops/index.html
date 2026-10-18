@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartOps Agent: case study | Ignacio Sánchez Greppi</title>
+  <meta name="description" content="How I built SmartOps Agent, an AI operations agent for businesses on WhatsApp: problem, architecture, decisions, measured results and lessons learned.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%237c6af7'/%3E%3Csvg x='11' y='16.4' width='42' height='31.1' viewBox='0 0 393 291'%3E%3Cpath fill='white' fill-rule='evenodd' d='M234 6.5C166.5 12.6 129.3 46.1 132.5 97.9C133.5 115 139.7 134.3 143.8 133.2C144.7 133 169.7 126.7 199.3 119.4C228.8 112 253 105.7 253 105.4C253 105.1 249.2 103.9 244.6 102.6C215.4 94.5 215.3 71.9 244.5 66.5C270.8 61.7 291.2 70.9 293.7 88.8C294 91.2 294.6 93.7 295 94.4C295.6 95.3 339.4 85.1 372.2 76.4L375.9 75.4 373.9 68.2C361.9 24.9 305.5 0 234 6.5M0 89.4C0 152 0.3 168.4 1.3 168.5C2 168.5 22 163.7 45.8 157.7L89 147 89 78.7L89 10.4 44.5 10.4L0 10.4 0 89.4M241 138.6C201.7 148.4 168.9 156.7 168 157C166.3 157.6 173.6 162.5 180.9 165.6C193.1 170.8 215.1 177.1 240.3 182.5C259.3 186.5 276.1 191 282.1 193.6C292.5 198 296.5 206.6 292.6 215.9C289.3 223.9 270.1 228.5 248.5 226.5C221.6 224.1 214.3 218.3 211.5 197.2L210.9 192.4 169.5 192.4L128 192.4 128 199.2C128 213.8 132.3 230.7 139.2 243.2C155.9 273.5 196.9 289.5 259 289.8C326.2 290.2 368.1 267.9 380.4 225.2C392.7 182.4 379.3 148.4 343 130C334.1 125.5 319.5 120.4 315.7 120.5C313.9 120.6 280.3 128.7 241 138.6M44.5 187.8L0.5 198.9 0.3 242.2L0 285.4 44.5 285.4L89 285.4 89 230.9C89 201 88.9 176.5 88.8 176.5C88.6 176.6 68.7 181.6 44.5 187.8'/%3E%3C/svg%3E%3C/svg%3E">
+  <link rel="canonical" href="https://www.sanchezign.dev/smartops/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.sanchezign.dev/smartops/">
+  <meta property="og:title" content="SmartOps Agent: case study | Ignacio Sánchez Greppi">
+  <meta property="og:description" content="AI operations agent for businesses on WhatsApp. 2,100+ automated tests, 8/8 AI security evals and a live public demo on $0 infrastructure.">
+  <meta property="og:image" content="https://www.sanchezign.dev/media/smartops-demo-poster.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: 'Syne'; font-style: normal; font-weight: 400 800; font-display: swap; src: url(/fonts/syne-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: 'Syne'; font-style: normal; font-weight: 400 800; font-display: swap; src: url(/fonts/syne-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 300 500; font-display: swap; src: url(/fonts/dm-sans-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+    @font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 300 500; font-display: swap; src: url(/fonts/dm-sans-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+    :root {
+      --bg: #0a0a0f; --bg2: #111118; --bg3: #16161f;
+      --border: rgba(255,255,255,0.07);
+      --accent: #7c6af7; --accent2: #a78bfa; --accent3: #c4b5fd;
+      --text: #e8e8f0; --text2: #9090a8; --text3: #7a7a93;
+      --card: rgba(255,255,255,0.03);
+      --accent-strong: #6a56e8; --accent-strong-hover: #5a46d6;
+      --violet-2: #171328; --violet-3: #120f1f;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.7; overflow-x: hidden; }
+    html[lang="en"] [data-l="es"], html[lang="es"] [data-l="en"] { display: none !important; }
+    a { color: var(--accent3); }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent3); outline-offset: 3px; }
+
+    .top {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 0.9rem clamp(1rem, 5vw, 3rem);
+      background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+    }
+    .back { color: var(--text2); text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .back:hover { color: var(--text); }
+    .lang-toggle { display: flex; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .lang-btn { padding: 0.28rem 0.7rem; font: 700 0.75rem 'DM Sans', sans-serif; letter-spacing: 0.03em; cursor: pointer; border: none; background: transparent; color: var(--text2); }
+    .lang-btn.active { background: var(--accent-strong); color: #fff; }
+
+    main { max-width: 820px; margin: 0 auto; padding: 4rem clamp(1rem, 5vw, 2rem) 5rem; }
+    .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent2); font-weight: 500; margin-bottom: 1rem; }
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .lead { font-size: 1.1rem; color: var(--text2); font-weight: 300; max-width: 640px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 2rem 0 2.5rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;
+      padding: 0.7rem 1.4rem; border-radius: 10px; font-weight: 500; font-size: 0.92rem; color: #fff;
+      background: var(--accent-strong); transition: background 0.2s, transform 0.2s;
+    }
+    .btn:hover { background: var(--accent-strong-hover); transform: translateY(-2px); }
+    .btn.v2 { background: var(--violet-2); box-shadow: inset 0 0 0 1px rgba(124,106,247,0.22); }
+    .btn.v2:hover { background: #201a38; }
+    .btn svg { width: 15px; height: 15px; }
+
+    .video { border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #000; }
+    .video video { display: block; width: 100%; height: auto; }
+    .caption { font-size: 0.82rem; color: var(--text3); margin-top: 0.6rem; }
+
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin: 2.5rem 0 0; }
+    .stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; }
+    .stat strong { display: block; font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent3); line-height: 1.1; }
+    .stat span { font-size: 0.82rem; color: var(--text2); }
+
+    section { margin-top: 4rem; }
+    h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.1rem; }
+    p { color: var(--text2); margin-bottom: 1rem; }
+    p strong, li strong { color: var(--text); font-weight: 500; }
+    ul.points { list-style: none; display: grid; gap: 0.75rem; }
+    ul.points li { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; color: var(--text2); }
+    ul.points li strong { display: block; font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 0.2rem; }
+
+    .diagram { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 1rem; margin: 1.25rem 0 1rem; overflow-x: auto; }
+    .diagram svg { display: block; width: 100%; min-width: 620px; height: auto; }
+    .stack { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .stack span { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 0.2rem 0.6rem; font-size: 0.78rem; color: var(--text2); }
+
+    .cta { margin-top: 4.5rem; padding: 2rem; border: 1px solid var(--border); border-radius: 18px; background: var(--card); text-align: center; }
+    .cta h2 { margin-bottom: 0.5rem; }
+    .cta .actions { justify-content: center; margin-bottom: 0; }
+    footer { text-align: center; color: var(--text3); font-size: 0.8rem; padding: 2rem 1rem 3rem; border-top: 1px solid var(--border); }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="back" href="/#projects">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span data-l="en">Back to portfolio</span><span data-l="es">Volver al porfolio</span>
+    </a>
+    <div class="lang-toggle"><button class="lang-btn" type="button" data-set-lang="en" lang="en">EN</button><button class="lang-btn" type="button" data-set-lang="es" lang="es">ES</button></div>
+  </header>
+
+  <main>
+    <p class="label"><span data-l="en">Case study</span><span data-l="es">Caso de estudio</span></p>
+    <h1>SmartOps Agent</h1>
+    <p class="lead" data-l="en">An AI operations agent for businesses that run on WhatsApp. It reads supplier price lists, orders and voice notes in any format, keeps the catalog up to date and tells the team only what needs action. Built solo, to the standard of a delivery to a real client.</p>
+    <p class="lead" data-l="es">Un agente de operaciones con IA para negocios que trabajan por WhatsApp. Lee listas de precios de proveedores, pedidos y notas de voz en cualquier formato, mantiene el catálogo al día y le avisa al equipo solo lo que requiere acción. Lo construí solo, con el estándar de una entrega a un cliente real.</p>
+
+    <div class="actions">
+      <a class="btn" href="https://smartops-demo.duckdns.org" target="_blank" rel="noopener">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+        <span data-l="en">Live demo, no sign-up</span><span data-l="es">Demo en vivo, sin registro</span>
+      </a>
+      <a class="btn v2" href="https://github.com/sanchezign/smartops-agent" target="_blank" rel="noopener">
+        <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8 0 3.2.9.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1 .9 2.2v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3"/></svg>
+        <span data-l="en">View code</span><span data-l="es">Ver código</span>
+      </a>
+    </div>
+
+    <div class="video">
+      <video controls playsinline preload="metadata" poster="/media/smartops-demo-poster.webp" width="880" height="550">
+        <source src="/media/smartops-demo.webm" type="video/webm">
+        <source src="/media/smartops-demo.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="caption"><span data-l="en">50-second tour of the panel: a supplier spreadsheet in a new format stops for a person, the pipeline reads a photo of a price list, and a person takes over a chat.</span><span data-l="es">Recorrido de 50 segundos por el panel: una planilla de proveedor con un formato nuevo espera a una persona, el sistema lee la foto de una lista de precios y una persona toma un chat.</span></p>
+
+    <div class="stats">
+      <div class="stat"><strong data-l="en">2,137</strong><strong data-l="es">2.137</strong><span data-l="en">automated tests, including 187 E2E on Chrome, Android and iPhone</span><span data-l="es">tests automatizados, 187 de ellos E2E en Chrome, Android y iPhone</span></div>
+      <div class="stat"><strong>8/8</strong><span data-l="en">prompt-injection evals passed against the real model</span><span data-l="es">pruebas de prompt injection superadas contra el modelo real</span></div>
+      <div class="stat"><strong data-l="en">$0.32</strong><strong data-l="es">USD 0,32</strong><span data-l="en">of AI credits to build and test the whole project</span><span data-l="es">de créditos de IA para construir y probar todo el proyecto</span></div>
+      <div class="stat"><strong>80%</strong><span data-l="en">mutation score</span><span data-l="es">de mutation score</span></div>
+    </div>
+
+    <section>
+      <h2><span data-l="en">The problem</span><span data-l="es">El problema</span></h2>
+      <p data-l="en">Small distributors and hardware stores run on WhatsApp. Suppliers send price lists as photos of printed pages, PDFs, spreadsheets in their own layouts and voice notes. Customers ask for prices and place orders in the same chats. Someone copies prices into a spreadsheet by hand, orders get lost between messages, and nobody notices a 20% increase until the margin is gone.</p>
+      <p data-l="es">Las distribuidoras y ferreterías chicas trabajan por WhatsApp. Los proveedores mandan listas de precios como fotos de hojas impresas, PDF, planillas con su propio formato y audios. Los clientes consultan precios y hacen pedidos en los mismos chats. Alguien pasa los precios a mano a una planilla, los pedidos se pierden entre mensajes y nadie ve un aumento del 20% hasta que el margen ya no está.</p>
+    </section>
+
+    <section>
+      <h2><span data-l="en">Key decisions</span><span data-l="es">Decisiones clave</span></h2>
+      <ul class="points">
+        <li data-l="en"><strong>The backend decides; the AI reads.</strong> Claude extracts structured data validated against a schema. Every rule (duplicates, outliers, currency, VAT, full list or partial update) lives in tested code, never in a prompt.</li>
+        <li data-l="es"><strong>El backend decide; la IA lee.</strong> Claude extrae datos estructurados validados contra un esquema. Todas las reglas (duplicados, precios atípicos, moneda, IVA, lista completa o actualización parcial) viven en código con tests, nunca en un prompt.</li>
+        <li data-l="en"><strong>Never guess.</strong> Doubtful values, uncertain matches, new spreadsheet formats and suspicious messages become review items, with the original message beside them.</li>
+        <li data-l="es"><strong>Nunca adivinar.</strong> Los valores dudosos, las coincidencias inciertas, los formatos de planilla nuevos y los mensajes sospechosos pasan a revisión, con el mensaje original al lado.</li>
+        <li data-l="en"><strong>Spend only where it helps.</strong> A deterministic pre-filter keeps greetings and small talk away from the AI, known spreadsheet formats are read by code, and spend caps are checked before every call.</li>
+        <li data-l="es"><strong>Gastar solo donde sirve.</strong> Un filtro previo determinístico deja fuera de la IA los saludos y la charla, las planillas con formato conocido se leen por código y los topes de gasto se controlan antes de cada llamada.</li>
+        <li data-l="en"><strong>Reliable by construction.</strong> Webhooks are stored before answering, work goes through queues with retries and dead letters, and a transactional outbox hands work to n8n. Every step is idempotent.</li>
+        <li data-l="es"><strong>Confiable por diseño.</strong> Los webhooks se guardan antes de responder, el trabajo pasa por colas con reintentos y mensajes muertos, y un outbox transaccional le entrega el trabajo a n8n. Cada paso es idempotente.</li>
+        <li data-l="en"><strong>People first.</strong> A person's reply pauses the automatic answers only in that chat, and the team gets one summary per period instead of a stream of alerts.</li>
+        <li data-l="es"><strong>Las personas primero.</strong> La respuesta de una persona pausa las respuestas automáticas solo en ese chat, y el equipo recibe un resumen por período en lugar de una lluvia de alertas.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span data-l="en">Architecture</span><span data-l="es">Arquitectura</span></h2>
+      <div class="diagram">
+        <svg viewBox="0 0 720 300" role="img" aria-labelledby="arch-title">
+          <title id="arch-title">WhatsApp sends webhooks to an Express API that writes to PostgreSQL; a pg-boss worker processes media; n8n orchestrates three agents that call Claude through the API; a Next.js panel receives live updates.</title>
+          <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#7a7a93"/></marker></defs>
+          <g font-family="DM Sans, sans-serif" font-size="12" fill="#e8e8f0">
+            <rect x="10" y="120" width="120" height="56" rx="10" fill="#0f2a1c" stroke="#25d366"/>
+            <text x="70" y="144" text-anchor="middle" font-weight="600">WhatsApp</text>
+            <text x="70" y="161" text-anchor="middle" fill="#9090a8" font-size="11">Cloud API</text>
+
+            <rect x="200" y="110" width="160" height="76" rx="10" fill="#1a1530" stroke="#7c6af7"/>
+            <text x="280" y="138" text-anchor="middle" font-weight="600">API</text>
+            <text x="280" y="155" text-anchor="middle" fill="#9090a8" font-size="11">Express 5 · TypeScript</text>
+            <text x="280" y="171" text-anchor="middle" fill="#9090a8" font-size="11">rules + every write</text>
+
+            <rect x="200" y="226" width="160" height="56" rx="10" fill="#111827" stroke="#4169e1"/>
+            <text x="280" y="250" text-anchor="middle" font-weight="600">PostgreSQL</text>
+            <text x="280" y="267" text-anchor="middle" fill="#9090a8" font-size="11">data + pg-boss queues</text>
+
+            <rect x="430" y="226" width="140" height="56" rx="10" fill="#16161f" stroke="#7a7a93"/>
+            <text x="500" y="250" text-anchor="middle" font-weight="600">Worker</text>
+            <text x="500" y="267" text-anchor="middle" fill="#9090a8" font-size="11">media · Whisper · send</text>
+
+            <rect x="430" y="18" width="180" height="76" rx="10" fill="#2a1220" stroke="#ea4b71"/>
+            <text x="520" y="44" text-anchor="middle" font-weight="600">n8n</text>
+            <text x="520" y="61" text-anchor="middle" fill="#9090a8" font-size="11">receiver · processor</text>
+            <text x="520" y="77" text-anchor="middle" fill="#9090a8" font-size="11">notifier agents</text>
+
+            <rect x="640" y="30" width="70" height="52" rx="10" fill="#2a1a12" stroke="#d97757"/>
+            <text x="675" y="61" text-anchor="middle" font-weight="600">Claude</text>
+
+            <rect x="430" y="120" width="180" height="56" rx="10" fill="#16161f" stroke="#ffffff" stroke-opacity="0.5"/>
+            <text x="520" y="144" text-anchor="middle" font-weight="600">Panel</text>
+            <text x="520" y="161" text-anchor="middle" fill="#9090a8" font-size="11">Next.js · ES/EN · live (SSE)</text>
+          </g>
+          <g stroke="#7a7a93" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+            <path d="M130 148H196"/>
+            <path d="M280 186V222"/>
+            <path d="M360 254H426"/>
+            <path d="M330 110 L430 72"/>
+            <path d="M610 56H636"/>
+            <path d="M360 148H426"/>
+          </g>
+          <g font-family="DM Sans, sans-serif" font-size="10" fill="#7a7a93">
+            <text x="163" y="140" text-anchor="middle">webhook</text>
+            <text x="392" y="112">outbox</text>
+          </g>
+        </svg>
+      </div>
+      <p data-l="en">An Express 5 + TypeScript API owns the WhatsApp webhook, the business rules and every write to PostgreSQL. A worker on pg-boss queues downloads media, transcribes voice notes and sends messages. n8n orchestrates the receiver, processor and notifier agents by calling the API's internal endpoints. A bilingual, mobile-first Next.js panel opens on what waits for the person, with one-click answers, and updates live over SSE.</p>
+      <p data-l="es">Una API en Express 5 + TypeScript se encarga del webhook de WhatsApp, de las reglas de negocio y de toda escritura en PostgreSQL. Un worker con colas pg-boss descarga archivos, transcribe audios y envía mensajes. n8n orquesta los agentes receptor, procesador y notificador llamando a los endpoints internos de la API. Un panel en Next.js, bilingüe y pensado primero para el teléfono, abre con lo que espera a la persona, con respuestas de un clic, y se actualiza en vivo con SSE.</p>
+      <div class="stack"><span>Node.js</span><span>TypeScript</span><span>Express 5</span><span>PostgreSQL</span><span>pg-boss</span><span>Claude API</span><span>Zod</span><span>n8n</span><span>Next.js 15</span><span>React 19</span><span>Tailwind CSS</span><span>Vitest</span><span>Playwright</span><span>Docker</span><span>GitHub Actions</span></div>
+    </section>
+
+    <section>
+      <h2><span data-l="en">Results (measured)</span><span data-l="es">Resultados (medidos)</span></h2>
+      <ul class="points">
+        <li data-l="en"><strong>Accuracy on test data.</strong> A September PDF followed by an October photo produced exactly the expected 5 automatic price changes and 2 alerts, sent 1 doubtful product to review and left an absent product untouched.</li>
+        <li data-l="es"><strong>Precisión con datos de prueba.</strong> Un PDF de septiembre seguido de una foto de octubre dio exactamente los 5 cambios de precio automáticos y las 2 alertas esperadas, mandó 1 producto dudoso a revisión y no tocó un producto ausente.</li>
+        <li data-l="en"><strong>Prompt injection.</strong> 8 of 8 cases passed against the real model (6 attacks, 2 controls). Attacks were flagged and stopped for review, and no invented price was applied.</li>
+        <li data-l="es"><strong>Prompt injection.</strong> 8 de 8 casos correctos contra el modelo real (6 ataques, 2 controles). Los ataques quedaron marcados y frenados para revisión, y no se aplicó ningún precio inventado.</li>
+        <li data-l="en"><strong>Cost.</strong> A typical price list costs $0.012 to $0.017 to extract. A new spreadsheet format costs about $0.011 once, and $0 afterwards.</li>
+        <li data-l="es"><strong>Costo.</strong> Extraer una lista de precios típica cuesta entre USD 0,012 y 0,017. Un formato de planilla nuevo cuesta unos USD 0,011 una vez, y nada después.</li>
+        <li data-l="en"><strong>Resilience.</strong> With n8n stopped and restarted, every message was delivered once, with one run each.</li>
+        <li data-l="es"><strong>Resiliencia.</strong> Con n8n detenido y vuelto a levantar, cada mensaje se entregó una sola vez, con una sola corrida cada uno.</li>
+        <li data-l="en"><strong>Tests.</strong> 1,453 API unit and HTTP tests, 250 against a real Postgres, 247 panel unit tests and 187 browser tests on desktop Chrome, Pixel 7 and iPhone, with accessibility checks in both languages.</li>
+        <li data-l="es"><strong>Tests.</strong> 1.453 tests unitarios y HTTP de la API, 250 contra un Postgres real, 247 tests unitarios del panel y 187 tests en navegador en Chrome de escritorio, Pixel 7 e iPhone, con controles de accesibilidad en los dos idiomas.</li>
+        <li data-l="en"><strong>Infrastructure.</strong> The public demo runs with Docker Compose on an Oracle Cloud Always Free VM, at $0, with multi-architecture images (amd64 and arm64).</li>
+        <li data-l="es"><strong>Infraestructura.</strong> La demo pública corre con Docker Compose en una VM Always Free de Oracle Cloud, a costo cero, con imágenes multi-arquitectura (amd64 y arm64).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><span data-l="en">What was hard, and what I learned</span><span data-l="es">Lo difícil, y lo que aprendí</span></h2>
+      <ul class="points">
+        <li data-l="en"><strong>Meta disabled the business account on day one.</strong> It was a false positive on a new account. While the review was resolved, I kept developing against a local WhatsApp simulator that signs webhooks and imitates the Graph API, and it is still the default way to develop.</li>
+        <li data-l="es"><strong>Meta deshabilitó la cuenta de negocio el primer día.</strong> Fue un falso positivo en una cuenta nueva. Mientras se resolvía, seguí desarrollando contra un simulador local de WhatsApp que firma los webhooks e imita la Graph API, y sigue siendo la forma de trabajo por defecto.</li>
+        <li data-l="en"><strong>"1.850" can mean 1,850 or 1.85.</strong> The system never guesses: it learns each supplier's spreadsheet format once, with a person choosing the price column, and refuses ambiguous handwritten numbers.</li>
+        <li data-l="es"><strong>"1.850" puede ser mil ochocientos cincuenta o 1,85.</strong> El sistema nunca adivina: aprende el formato de planilla de cada proveedor una vez, con una persona eligiendo la columna de precio, y rechaza los números ambiguos escritos a mano.</li>
+        <li data-l="en"><strong>Real time through a tunnel.</strong> Cloudflare's edge held GET event streams while POST streams flowed in about 75 ms, so the panel opens its stream with POST and falls back to refreshing every 30 seconds.</li>
+        <li data-l="es"><strong>Tiempo real a través de un túnel.</strong> El borde de Cloudflare retenía los streams de eventos por GET mientras que por POST fluían en unos 75 ms, así que el panel abre su stream con POST y, si falla, se actualiza cada 30 segundos.</li>
+        <li data-l="en"><strong>A panel that works is not yet a panel that is clear.</strong> Real use showed that "pending reviews" and "open alerts" read as the same thing. The panel now sorts everything into To do, Activity and System status, with each decision written as a plain question.</li>
+        <li data-l="es"><strong>Un panel que funciona todavía no es un panel claro.</strong> El uso real mostró que "revisiones pendientes" y "alertas abiertas" parecían lo mismo. Ahora el panel ordena todo en Pendientes, Novedades y Estado del sistema, con cada decisión escrita como una pregunta simple.</li>
+      </ul>
+    </section>
+
+    <div class="cta">
+      <h2><span data-l="en">Want to talk about it?</span><span data-l="es">¿Hablamos?</span></h2>
+      <p data-l="en">I'm open to full-time roles and freelance projects, remote from Montevideo.</p>
+      <p data-l="es">Estoy abierto a roles full-time y proyectos freelance, en remoto desde Montevideo.</p>
+      <div class="actions">
+        <a class="btn" href="mailto:isanchez.workmail@gmail.com"><span data-l="en">Send an email</span><span data-l="es">Enviar un email</span></a>
+        <a class="btn v2" href="/cv/ignacio-sanchez-cv-en.pdf" target="_blank" rel="noopener" data-l="en">Download CV</a>
+        <a class="btn v2" href="/cv/ignacio-sanchez-cv-es.pdf" target="_blank" rel="noopener" data-l="es">Descargar CV</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>© 2026 Ignacio Sánchez Greppi · <a href="/">sanchezign.dev</a></footer>
+
+  <script>
+    (function () {
+      function setLang(lang) {
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-set-lang]').forEach(function (b) {
+          var on = b.getAttribute('data-set-lang') === lang;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-pressed', String(on));
+        });
+        try { localStorage.setItem('lang', lang); } catch (e) {}
+      }
+      document.querySelectorAll('[data-set-lang]').forEach(function (b) {
+        b.addEventListener('click', function () { setLang(b.getAttribute('data-set-lang')); });
+      });
+      var saved = 'en';
+      try { saved = localStorage.getItem('lang') || 'en'; } catch (e) {}
+      setLang(saved === 'es' ? 'es' : 'en');
+    })();
+  </script>
+</body>
+</html>
