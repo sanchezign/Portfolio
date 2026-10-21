@@ -2,16 +2,19 @@
 // content of the site and the CV (see _knowledge.js).
 // Needs one API key as an environment variable in Vercel:
 // GEMINI_API_KEY (Gemini, has a free tier) or ANTHROPIC_API_KEY (Claude).
-// If both are set, Gemini is used. CHAT_MODEL overrides the default model.
+// If both are set, Gemini answers first and Claude steps in when Gemini can't.
+// CHAT_MODEL overrides the default model of the main provider.
 import Anthropic from "@anthropic-ai/sdk";
 import { KNOWLEDGE } from "./_knowledge.js";
 
 const PROVIDER = process.env.GEMINI_API_KEY ? "gemini" : "claude";
 const MODEL = process.env.CHAT_MODEL || (PROVIDER === "gemini" ? "gemini-3.8-flash" : "claude-opus-5-5");
+const CLAUDE_MODEL = PROVIDER === "claude" ? MODEL : "claude-opus-5-5";
+const CLAUDE_BACKUP = PROVIDER === "gemini" && Boolean(process.env.ANTHROPIC_API_KEY);
 // Gemini's free tier often answers 503 ("high demand"); these models are then asked at once.
 const GEMINI_FALLBACKS = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
 const GEMINI_TIMEOUT_MS = 10000;          // main model; when overloaded it usually answers 503 within seconds
-const GEMINI_FALLBACK_TIMEOUT_MS = 20000; // fallbacks, asked at once after the main model fails
+const GEMINI_FALLBACK_TIMEOUT_MS = 10000; // fallbacks, asked at once after the main model fails
 const MAX_MESSAGES = 12;        // conversation turns kept per request
 const MAX_CHARS = 800;          // per visitor message
 const RATE_LIMIT = 20;          // requests per IP per window (best effort, per instance)
@@ -47,7 +50,7 @@ async function askClaude(messages) {
   claude ||= new Anthropic(); // reads ANTHROPIC_API_KEY
   try {
     const response = await claude.beta.messages.create({
-      model: MODEL,
+      model: CLAUDE_MODEL,
       max_tokens: 2000,
       output_config: { effort: "low" },
       cache_control: { type: "ephemeral" },
@@ -137,6 +140,20 @@ async function askGemini(messages) {
   }
 }
 
+// Gemini's free tier has no priority, so when it is busy Claude answers instead (if configured).
+async function askGeminiOrClaude(messages) {
+  try {
+    return await askGemini(messages);
+  } catch (error) {
+    if (!CLAUDE_BACKUP) throw error;
+    console.warn(`chat (gemini): ${error instanceof RateLimited ? "rate limited" : error.message || error}; asking Claude`);
+    const started = Date.now();
+    const reply = await askClaude(messages);
+    console.log(`chat (claude): answered with ${CLAUDE_MODEL} in ${Date.now() - started} ms`);
+    return reply;
+  }
+}
+
 function rateLimited(ip) {
   const now = Date.now();
   const entry = hits.get(ip);
@@ -183,7 +200,7 @@ export default async function handler(req, res) {
   if (!messages) return res.status(400).json({ error: "bad_request" });
 
   try {
-    const reply = (PROVIDER === "gemini" ? await askGemini(messages) : await askClaude(messages)).trim();
+    const reply = (PROVIDER === "gemini" ? await askGeminiOrClaude(messages) : await askClaude(messages)).trim();
     if (!reply) return res.status(200).json({ reply: null, error: "no_answer" });
     return res.status(200).json({ reply });
   } catch (error) {
