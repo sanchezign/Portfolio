@@ -10,7 +10,7 @@
       placeholder: 'Escribí tu pregunta…',
       send: 'Enviar',
       hello: '¡Hola! Soy el asistente de Ignacio. Preguntame lo que quieras sobre sus proyectos, experiencia, stack o disponibilidad.',
-      chips: ['¿Qué es SmartOps Agent?', '¿Qué tecnologías usa?', '¿Busca trabajo remoto?', '¿Cómo lo contacto?'],
+      chips: ['¿Quién es Ignacio Sánchez?', '¿Qué tecnologías usa?', '¿Está disponible para trabajar ahora?', '¿Cómo lo contacto?'],
       note: 'Respuestas generadas con IA a partir del porfolio y el CV.',
       error: 'No pude responder ahora. Probá de nuevo en un rato o escribile a isanchez.workmail@gmail.com.',
       limit: 'Llegaste al límite de preguntas por ahora. Probá más tarde o escribile a isanchez.workmail@gmail.com.'
@@ -23,7 +23,7 @@
       placeholder: 'Type your question…',
       send: 'Send',
       hello: "Hi! I'm Ignacio's assistant. Ask me anything about his projects, experience, stack or availability.",
-      chips: ['What is SmartOps Agent?', 'What tech stack does he use?', 'Is he open to remote work?', 'How can I contact him?'],
+      chips: ['Who is Ignacio Sánchez?', 'What tech stack does he use?', 'Is he available to work now?', 'How can I contact him?'],
       note: 'AI-generated answers based on the portfolio and CV.',
       error: "I couldn't answer right now. Please try again later or email isanchez.workmail@gmail.com.",
       limit: "You've reached the question limit for now. Please try later or email isanchez.workmail@gmail.com."
