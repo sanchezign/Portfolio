@@ -8,6 +8,8 @@ import { KNOWLEDGE } from "./_knowledge.js";
 
 const PROVIDER = process.env.GEMINI_API_KEY ? "gemini" : "claude";
 const MODEL = process.env.CHAT_MODEL || (PROVIDER === "gemini" ? "gemini-3.8-flash" : "claude-opus-5-5");
+// Gemini's free tier sometimes answers 503 ("high demand"); these models are tried next.
+const GEMINI_FALLBACKS = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
 const MAX_MESSAGES = 12;        // conversation turns kept per request
 const MAX_CHARS = 800;          // per visitor message
 const RATE_LIMIT = 20;          // requests per IP per window (best effort, per instance)
@@ -68,31 +70,40 @@ async function askClaude(messages) {
 }
 
 async function askGemini(messages) {
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM }] },
-        contents: messages.map((m) => ({
-          role: m.role === "assistant" ? "model" : "user",
-          parts: [{ text: m.content }],
-        })),
-        generationConfig: { maxOutputTokens: 2000, thinkingConfig: { thinkingLevel: "low" } },
-      }),
+  const contents = messages.map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content }],
+  }));
+  let lastError;
+  let rateLimited = false;
+  for (const model of [MODEL, ...GEMINI_FALLBACKS.filter((m) => m !== MODEL)]) {
+    const generationConfig = { maxOutputTokens: 2000 };
+    // Only the main model gets an explicit thinking level; fallbacks use their default.
+    if (model === MODEL) generationConfig.thinkingConfig = { thinkingLevel: "low" };
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
+        body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents, generationConfig }),
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      const parts = data.candidates?.[0]?.content?.parts || [];
+      return parts
+        .filter((part) => typeof part.text === "string" && !part.thought)
+        .map((part) => part.text)
+        .join("");
     }
-  );
-  if (response.status === 429) throw new RateLimited();
-  if (!response.ok) {
-    throw new Error(`Gemini API error ${response.status}: ${(await response.text()).slice(0, 500)}`);
+    lastError = new Error(`Gemini API error ${response.status} (${model}): ${(await response.text()).slice(0, 300)}`);
+    // Overloaded, quota used up or model not available: try the next model.
+    if (response.status === 429) rateLimited = true;
+    else if (response.status < 500 && response.status !== 404) throw lastError;
+    console.warn(`chat (gemini): ${model} returned ${response.status}, trying next model`);
   }
-  const data = await response.json();
-  const parts = data.candidates?.[0]?.content?.parts || [];
-  return parts
-    .filter((part) => typeof part.text === "string" && !part.thought)
-    .map((part) => part.text)
-    .join("");
+  if (rateLimited) throw new RateLimited();
+  throw lastError;
 }
 
 function rateLimited(ip) {
