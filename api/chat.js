@@ -3,13 +3,18 @@
 // Needs one API key as an environment variable in Vercel:
 // GEMINI_API_KEY (Gemini, has a free tier) or ANTHROPIC_API_KEY (Claude).
 // If both are set, Gemini is used. CHAT_MODEL overrides the default model.
+// Optional GROQ_API_KEY (free tier): Groq answers when Gemini is busy or fails.
 import Anthropic from "@anthropic-ai/sdk";
 import { KNOWLEDGE } from "./_knowledge.js";
 
 const PROVIDER = process.env.GEMINI_API_KEY ? "gemini" : "claude";
 const MODEL = process.env.CHAT_MODEL || (PROVIDER === "gemini" ? "gemini-3.8-flash" : "claude-opus-5-5");
-// Gemini's free tier sometimes answers 503 ("high demand"); these models are tried next.
+// Gemini's free tier often answers 503 ("high demand"); these models are then asked at once.
 const GEMINI_FALLBACKS = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
+const GEMINI_TIMEOUT_MS = 10000;          // main model; when overloaded it usually answers 503 within seconds
+const GEMINI_FALLBACK_TIMEOUT_MS = 10000; // fallbacks, asked at once after the main model fails
+const GROQ_MODEL = "openai/gpt-oss-120b";
+const GROQ_TIMEOUT_MS = 15000;
 const MAX_MESSAGES = 12;        // conversation turns kept per request
 const MAX_CHARS = 800;          // per visitor message
 const RATE_LIMIT = 20;          // requests per IP per window (best effort, per instance)
@@ -69,41 +74,101 @@ async function askClaude(messages) {
   }
 }
 
+async function callGemini(model, contents, thinking, signal, timeout) {
+  const generationConfig = { maxOutputTokens: 2000 };
+  // A low thinking level keeps answers fast; the API rejects it on models that don't support it.
+  if (thinking) generationConfig.thinkingConfig = { thinkingLevel: "low" };
+  return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
+    body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents, generationConfig }),
+    signal: AbortSignal.any([signal, AbortSignal.timeout(timeout)]),
+  });
+}
+
+// Asks one model; throws (with .status when Gemini answered) if it can't answer.
+async function askGeminiModel(model, contents, signal, timeout) {
+  const started = Date.now();
+  let response;
+  try {
+    response = await callGemini(model, contents, true, signal, timeout);
+    if (response.status === 400) response = await callGemini(model, contents, false, signal, timeout);
+  } catch (error) {
+    if (!signal.aborted) console.warn(`chat (gemini): ${model} failed after ${Date.now() - started} ms (${error.name})`);
+    throw error;
+  }
+  if (!response.ok) {
+    const error = new Error(`Gemini API error ${response.status} (${model}): ${(await response.text()).slice(0, 300)}`);
+    error.status = response.status;
+    console.warn(`chat (gemini): ${model} returned ${response.status} after ${Date.now() - started} ms`);
+    throw error;
+  }
+  const data = await response.json();
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  console.log(`chat (gemini): answered with ${model} in ${Date.now() - started} ms`);
+  return parts
+    .filter((part) => typeof part.text === "string" && !part.thought)
+    .map((part) => part.text)
+    .join("");
+}
+
 async function askGemini(messages) {
   const contents = messages.map((m) => ({
     role: m.role === "assistant" ? "model" : "user",
     parts: [{ text: m.content }],
   }));
-  let lastError;
-  let rateLimited = false;
-  for (const model of [MODEL, ...GEMINI_FALLBACKS.filter((m) => m !== MODEL)]) {
-    const generationConfig = { maxOutputTokens: 2000 };
-    // Only the main model gets an explicit thinking level; fallbacks use their default.
-    if (model === MODEL) generationConfig.thinkingConfig = { thinkingLevel: "low" };
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
-        body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents, generationConfig }),
-      }
-    );
-    if (response.ok) {
-      const data = await response.json();
-      const parts = data.candidates?.[0]?.content?.parts || [];
-      return parts
-        .filter((part) => typeof part.text === "string" && !part.thought)
-        .map((part) => part.text)
-        .join("");
+  const controller = new AbortController();
+  // Overloaded, quota used up, timed out or model not available: worth trying another model.
+  const retryable = (error) => !error.status || error.status === 429 || error.status === 404 || error.status >= 500;
+  const fail = (errors) => {
+    if (errors.some((e) => e.status === 429)) throw new RateLimited();
+    throw errors[errors.length - 1];
+  };
+  try {
+    return await askGeminiModel(MODEL, contents, controller.signal, GEMINI_TIMEOUT_MS);
+  } catch (error) {
+    if (!retryable(error)) throw error;
+    // Ask all the fallback models at once and keep the first answer.
+    const fallbacks = GEMINI_FALLBACKS.filter((m) => m !== MODEL);
+    try {
+      return await Promise.any(fallbacks.map((m) => askGeminiModel(m, contents, controller.signal, GEMINI_FALLBACK_TIMEOUT_MS)));
+    } catch (aggregate) {
+      fail([error, ...aggregate.errors]);
+    } finally {
+      controller.abort();
     }
-    lastError = new Error(`Gemini API error ${response.status} (${model}): ${(await response.text()).slice(0, 300)}`);
-    // Overloaded, quota used up or model not available: try the next model.
-    if (response.status === 429) rateLimited = true;
-    else if (response.status < 500 && response.status !== 404) throw lastError;
-    console.warn(`chat (gemini): ${model} returned ${response.status}, trying next model`);
   }
-  if (rateLimited) throw new RateLimited();
-  throw lastError;
+}
+
+// Groq's free tier (OpenAI-compatible API) as a backup for when Gemini is overloaded.
+async function askGroq(messages) {
+  const started = Date.now();
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      messages: [{ role: "system", content: SYSTEM }, ...messages],
+      max_completion_tokens: 2000,
+      reasoning_effort: "low",
+    }),
+    signal: AbortSignal.timeout(GROQ_TIMEOUT_MS),
+  });
+  if (response.status === 429) throw new RateLimited();
+  if (!response.ok) throw new Error(`Groq API error ${response.status}: ${(await response.text()).slice(0, 300)}`);
+  const data = await response.json();
+  console.log(`chat (groq): answered with ${GROQ_MODEL} in ${Date.now() - started} ms`);
+  return data.choices?.[0]?.message?.content || "";
+}
+
+async function askGeminiOrGroq(messages) {
+  try {
+    return await askGemini(messages);
+  } catch (error) {
+    if (!process.env.GROQ_API_KEY) throw error;
+    console.warn(`chat (gemini): ${error instanceof RateLimited ? "rate limited" : error.message || error}; asking Groq`);
+    return askGroq(messages);
+  }
 }
 
 function rateLimited(ip) {
@@ -152,7 +217,7 @@ export default async function handler(req, res) {
   if (!messages) return res.status(400).json({ error: "bad_request" });
 
   try {
-    const reply = (PROVIDER === "gemini" ? await askGemini(messages) : await askClaude(messages)).trim();
+    const reply = (PROVIDER === "gemini" ? await askGeminiOrGroq(messages) : await askClaude(messages)).trim();
     if (!reply) return res.status(200).json({ reply: null, error: "no_answer" });
     return res.status(200).json({ reply });
   } catch (error) {
