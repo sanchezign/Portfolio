@@ -3,6 +3,7 @@
 // Needs one API key as an environment variable in Vercel:
 // GEMINI_API_KEY (Gemini, has a free tier) or ANTHROPIC_API_KEY (Claude).
 // If both are set, Gemini is used. CHAT_MODEL overrides the default model.
+// Optional GROQ_API_KEY (free tier): Groq answers when Gemini is busy or fails.
 import Anthropic from "@anthropic-ai/sdk";
 import { KNOWLEDGE } from "./_knowledge.js";
 
@@ -11,7 +12,9 @@ const MODEL = process.env.CHAT_MODEL || (PROVIDER === "gemini" ? "gemini-3.8-fla
 // Gemini's free tier often answers 503 ("high demand"); these models are then asked at once.
 const GEMINI_FALLBACKS = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
 const GEMINI_TIMEOUT_MS = 10000;          // main model; when overloaded it usually answers 503 within seconds
-const GEMINI_FALLBACK_TIMEOUT_MS = 20000; // fallbacks, asked at once after the main model fails
+const GEMINI_FALLBACK_TIMEOUT_MS = 10000; // fallbacks, asked at once after the main model fails
+const GROQ_MODEL = "openai/gpt-oss-120b";
+const GROQ_TIMEOUT_MS = 15000;
 const MAX_MESSAGES = 12;        // conversation turns kept per request
 const MAX_CHARS = 800;          // per visitor message
 const RATE_LIMIT = 20;          // requests per IP per window (best effort, per instance)
@@ -137,6 +140,37 @@ async function askGemini(messages) {
   }
 }
 
+// Groq's free tier (OpenAI-compatible API) as a backup for when Gemini is overloaded.
+async function askGroq(messages) {
+  const started = Date.now();
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.GROQ_API_KEY}` },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      messages: [{ role: "system", content: SYSTEM }, ...messages],
+      max_completion_tokens: 2000,
+      reasoning_effort: "low",
+    }),
+    signal: AbortSignal.timeout(GROQ_TIMEOUT_MS),
+  });
+  if (response.status === 429) throw new RateLimited();
+  if (!response.ok) throw new Error(`Groq API error ${response.status}: ${(await response.text()).slice(0, 300)}`);
+  const data = await response.json();
+  console.log(`chat (groq): answered with ${GROQ_MODEL} in ${Date.now() - started} ms`);
+  return data.choices?.[0]?.message?.content || "";
+}
+
+async function askGeminiOrGroq(messages) {
+  try {
+    return await askGemini(messages);
+  } catch (error) {
+    if (!process.env.GROQ_API_KEY) throw error;
+    console.warn(`chat (gemini): ${error instanceof RateLimited ? "rate limited" : error.message || error}; asking Groq`);
+    return askGroq(messages);
+  }
+}
+
 function rateLimited(ip) {
   const now = Date.now();
   const entry = hits.get(ip);
@@ -183,7 +217,7 @@ export default async function handler(req, res) {
   if (!messages) return res.status(400).json({ error: "bad_request" });
 
   try {
-    const reply = (PROVIDER === "gemini" ? await askGemini(messages) : await askClaude(messages)).trim();
+    const reply = (PROVIDER === "gemini" ? await askGeminiOrGroq(messages) : await askClaude(messages)).trim();
     if (!reply) return res.status(200).json({ reply: null, error: "no_answer" });
     return res.status(200).json({ reply });
   } catch (error) {
