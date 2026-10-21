@@ -20,7 +20,7 @@ Diseña y desarrolla sitios y aplicaciones web completos. Desde 2023 acompaña a
 
 ## Perfil profesional (del CV)
 
-Full Stack Developer especializado en desarrollo web y automatización con IA. Desde 2023 construye sitios y aplicaciones para clientes freelance y los lleva a producción con Node.js, TypeScript, React y Next.js. Desarrolló SmartOps Agent, un agente de IA para WhatsApp con Claude y n8n respaldado por más de 2.100 tests automatizados y CI/CD, y aplicó esa experiencia en una automatización real para una empresa a través de Workana. Busca un rol estable donde sumar desarrollo full stack con foco en calidad, seguridad y resultados.
+Full Stack Developer especializado en desarrollo web y automatización con IA. Desde 2023 construye sitios y aplicaciones para clientes freelance y los lleva a producción con Node.js, TypeScript, React y Next.js. Desarrolla agentes de IA para WhatsApp con Claude y n8n, respaldados por tests automatizados y CI/CD, y ofrece soluciones similares para negocios a través de Workana. Busca un rol estable donde sumar desarrollo full stack con foco en calidad, seguridad y resultados.
 
 ## Habilidades técnicas
 
@@ -42,7 +42,7 @@ Full Stack Developer especializado en desarrollo web y automatización con IA. D
 ## Experiencia profesional
 
 Full Stack Developer Freelance, clientes directos y Workana (2023 – actualidad), Montevideo, remoto:
-- Workana (2026, AI Automation Developer): desarrolló para una empresa un proyecto de automatización con WhatsApp Business API y n8n, con un enfoque similar al de SmartOps Agent. Tecnologías: WhatsApp API, n8n, Node.js.
+- Workana (actualidad, freelance): a partir de SmartOps Agent, su proyecto propio de automatización con IA, ofrece soluciones a medida para negocios: respuestas automáticas a consultas frecuentes, recordatorios y avisos por email o WhatsApp, carga de datos de formularios en planillas y reportes automáticos, mientras sigue ampliando su cartera de clientes. Todavía no hay un proyecto de automatización terminado para un cliente de Workana; si preguntan, decirlo con honestidad y hablar de SmartOps Agent.
 - Pura Vida Huertas (2025, rebranding, Full Stack Developer): rehízo la marca como sitio full stack de punta a punta: diseño, frontend, backend y deploy en producción. Catálogo de productos y contenidos sobre una base MongoDB, formulario de contacto y diseño responsive. Tecnologías: React, Node.js, MongoDB, Tailwind CSS.
 - Pura Vida (2024, Full Stack Developer): lideró el sitio de la marca de jardinería y paisajismo de inicio a fin: diseño UI, maquetación, desarrollo y deploy, con foco en identidad de marca y experiencia de usuario. Tecnologías: HTML, CSS, JavaScript, Node.js.
 - Golden Pets (2023, Web Developer): primer cliente real. Sitio responsive en producción con catálogo de productos e integración con redes sociales alineada a la marca. Tecnologías: HTML, CSS, JavaScript, React.
