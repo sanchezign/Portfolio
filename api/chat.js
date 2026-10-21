@@ -162,6 +162,7 @@ async function askGroq(messages) {
 }
 
 async function askGeminiOrGroq(messages) {
+  if (process.env.GROQ_API_KEY) return askGroq(messages); // TEMP: test Groq only
   try {
     return await askGemini(messages);
   } catch (error) {
