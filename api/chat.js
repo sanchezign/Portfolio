@@ -8,9 +8,10 @@ import { KNOWLEDGE } from "./_knowledge.js";
 
 const PROVIDER = process.env.GEMINI_API_KEY ? "gemini" : "claude";
 const MODEL = process.env.CHAT_MODEL || (PROVIDER === "gemini" ? "gemini-3.8-flash" : "claude-opus-5-5");
-// Gemini's free tier sometimes answers 503 ("high demand"); these models are tried next.
+// Gemini's free tier often answers 503 ("high demand"); these models are then asked at once.
 const GEMINI_FALLBACKS = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
-const GEMINI_TIMEOUT_MS = 15000; // per model, so a slow model doesn't leave the visitor waiting
+const GEMINI_TIMEOUT_MS = 10000;          // main model; when overloaded it usually answers 503 within seconds
+const GEMINI_FALLBACK_TIMEOUT_MS = 20000; // fallbacks, asked at once after the main model fails
 const MAX_MESSAGES = 12;        // conversation turns kept per request
 const MAX_CHARS = 800;          // per visitor message
 const RATE_LIMIT = 20;          // requests per IP per window (best effort, per instance)
@@ -70,7 +71,7 @@ async function askClaude(messages) {
   }
 }
 
-async function callGemini(model, contents, thinking) {
+async function callGemini(model, contents, thinking, signal, timeout) {
   const generationConfig = { maxOutputTokens: 2000 };
   // A low thinking level keeps answers fast; the API rejects it on models that don't support it.
   if (thinking) generationConfig.thinkingConfig = { thinkingLevel: "low" };
@@ -78,8 +79,34 @@ async function callGemini(model, contents, thinking) {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
     body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents, generationConfig }),
-    signal: AbortSignal.timeout(GEMINI_TIMEOUT_MS),
+    signal: AbortSignal.any([signal, AbortSignal.timeout(timeout)]),
   });
+}
+
+// Asks one model; throws (with .status when Gemini answered) if it can't answer.
+async function askGeminiModel(model, contents, signal, timeout) {
+  const started = Date.now();
+  let response;
+  try {
+    response = await callGemini(model, contents, true, signal, timeout);
+    if (response.status === 400) response = await callGemini(model, contents, false, signal, timeout);
+  } catch (error) {
+    if (!signal.aborted) console.warn(`chat (gemini): ${model} failed after ${Date.now() - started} ms (${error.name})`);
+    throw error;
+  }
+  if (!response.ok) {
+    const error = new Error(`Gemini API error ${response.status} (${model}): ${(await response.text()).slice(0, 300)}`);
+    error.status = response.status;
+    console.warn(`chat (gemini): ${model} returned ${response.status} after ${Date.now() - started} ms`);
+    throw error;
+  }
+  const data = await response.json();
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  console.log(`chat (gemini): answered with ${model} in ${Date.now() - started} ms`);
+  return parts
+    .filter((part) => typeof part.text === "string" && !part.thought)
+    .map((part) => part.text)
+    .join("");
 }
 
 async function askGemini(messages) {
@@ -87,37 +114,27 @@ async function askGemini(messages) {
     role: m.role === "assistant" ? "model" : "user",
     parts: [{ text: m.content }],
   }));
-  let lastError;
-  let rateLimited = false;
-  for (const model of [MODEL, ...GEMINI_FALLBACKS.filter((m) => m !== MODEL)]) {
-    const started = Date.now();
-    let response;
+  const controller = new AbortController();
+  // Overloaded, quota used up, timed out or model not available: worth trying another model.
+  const retryable = (error) => !error.status || error.status === 429 || error.status === 404 || error.status >= 500;
+  const fail = (errors) => {
+    if (errors.some((e) => e.status === 429)) throw new RateLimited();
+    throw errors[errors.length - 1];
+  };
+  try {
+    return await askGeminiModel(MODEL, contents, controller.signal, GEMINI_TIMEOUT_MS);
+  } catch (error) {
+    if (!retryable(error)) throw error;
+    // Ask all the fallback models at once and keep the first answer.
+    const fallbacks = GEMINI_FALLBACKS.filter((m) => m !== MODEL);
     try {
-      response = await callGemini(model, contents, true);
-      if (response.status === 400) response = await callGemini(model, contents, false);
-    } catch (error) {
-      // Timed out or network error: try the next model.
-      lastError = error;
-      console.warn(`chat (gemini): ${model} failed after ${Date.now() - started} ms (${error.name}), trying next model`);
-      continue;
+      return await Promise.any(fallbacks.map((m) => askGeminiModel(m, contents, controller.signal, GEMINI_FALLBACK_TIMEOUT_MS)));
+    } catch (aggregate) {
+      fail([error, ...aggregate.errors]);
+    } finally {
+      controller.abort();
     }
-    if (response.ok) {
-      const data = await response.json();
-      const parts = data.candidates?.[0]?.content?.parts || [];
-      console.log(`chat (gemini): answered with ${model} in ${Date.now() - started} ms`);
-      return parts
-        .filter((part) => typeof part.text === "string" && !part.thought)
-        .map((part) => part.text)
-        .join("");
-    }
-    lastError = new Error(`Gemini API error ${response.status} (${model}): ${(await response.text()).slice(0, 300)}`);
-    // Overloaded, quota used up or model not available: try the next model.
-    if (response.status === 429) rateLimited = true;
-    else if (response.status < 500 && response.status !== 404) throw lastError;
-    console.warn(`chat (gemini): ${model} returned ${response.status} after ${Date.now() - started} ms, trying next model`);
   }
-  if (rateLimited) throw new RateLimited();
-  throw lastError;
 }
 
 function rateLimited(ip) {
