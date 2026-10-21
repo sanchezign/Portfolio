@@ -1,10 +1,13 @@
 // Portfolio chatbot: answers visitors' questions about Ignacio using only the
 // content of the site and the CV (see _knowledge.js).
-// Needs the ANTHROPIC_API_KEY environment variable in Vercel.
+// Needs one API key as an environment variable in Vercel:
+// GEMINI_API_KEY (Gemini, has a free tier) or ANTHROPIC_API_KEY (Claude).
+// If both are set, Gemini is used. CHAT_MODEL overrides the default model.
 import Anthropic from "@anthropic-ai/sdk";
 import { KNOWLEDGE } from "./_knowledge.js";
 
-const MODEL = process.env.CHAT_MODEL || "claude-opus-5-5";
+const PROVIDER = process.env.GEMINI_API_KEY ? "gemini" : "claude";
+const MODEL = process.env.CHAT_MODEL || (PROVIDER === "gemini" ? "gemini-3.8-flash" : "claude-opus-5-5");
 const MAX_MESSAGES = 12;        // conversation turns kept per request
 const MAX_CHARS = 800;          // per visitor message
 const RATE_LIMIT = 20;          // requests per IP per window (best effort, per instance)
@@ -31,8 +34,66 @@ How to answer:
 ${KNOWLEDGE}
 </portfolio>`;
 
-const client = new Anthropic(); // reads ANTHROPIC_API_KEY
 const hits = new Map();
+let claude;
+
+class RateLimited extends Error {}
+
+async function askClaude(messages) {
+  claude ||= new Anthropic(); // reads ANTHROPIC_API_KEY
+  try {
+    const response = await claude.beta.messages.create({
+      model: MODEL,
+      max_tokens: 2000,
+      output_config: { effort: "low" },
+      cache_control: { type: "ephemeral" },
+      // On a policy decline, re-run the request on Anthropic's recommended fallback model.
+      betas: ["server-side-fallback-2026-07-01"],
+      fallbacks: "default",
+      system: SYSTEM,
+      messages,
+    });
+    if (response.stop_reason === "refusal") return "";
+    return response.content
+      .filter((block) => block.type === "text")
+      .map((block) => block.text)
+      .join("");
+  } catch (error) {
+    if (error instanceof Anthropic.RateLimitError) throw new RateLimited();
+    if (error instanceof Anthropic.AuthenticationError) {
+      throw new Error("invalid or missing ANTHROPIC_API_KEY");
+    }
+    throw error;
+  }
+}
+
+async function askGemini(messages) {
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM }] },
+        contents: messages.map((m) => ({
+          role: m.role === "assistant" ? "model" : "user",
+          parts: [{ text: m.content }],
+        })),
+        generationConfig: { maxOutputTokens: 2000, thinkingConfig: { thinkingLevel: "low" } },
+      }),
+    }
+  );
+  if (response.status === 429) throw new RateLimited();
+  if (!response.ok) {
+    throw new Error(`Gemini API error ${response.status}: ${(await response.text()).slice(0, 500)}`);
+  }
+  const data = await response.json();
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  return parts
+    .filter((part) => typeof part.text === "string" && !part.thought)
+    .map((part) => part.text)
+    .join("");
+}
 
 function rateLimited(ip) {
   const now = Date.now();
@@ -80,38 +141,12 @@ export default async function handler(req, res) {
   if (!messages) return res.status(400).json({ error: "bad_request" });
 
   try {
-    const response = await client.beta.messages.create({
-      model: MODEL,
-      max_tokens: 2000,
-      output_config: { effort: "low" },
-      cache_control: { type: "ephemeral" },
-      // On a policy decline, re-run the request on Anthropic's recommended fallback model.
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
-      system: SYSTEM,
-      messages,
-    });
-
-    if (response.stop_reason === "refusal") {
-      return res.status(200).json({ reply: null, error: "refusal" });
-    }
-    const reply = response.content
-      .filter((block) => block.type === "text")
-      .map((block) => block.text)
-      .join("")
-      .trim();
+    const reply = (PROVIDER === "gemini" ? await askGemini(messages) : await askClaude(messages)).trim();
+    if (!reply) return res.status(200).json({ reply: null, error: "no_answer" });
     return res.status(200).json({ reply });
   } catch (error) {
-    if (error instanceof Anthropic.RateLimitError) {
-      return res.status(429).json({ error: "rate_limited" });
-    }
-    if (error instanceof Anthropic.AuthenticationError) {
-      console.error("chat: invalid or missing ANTHROPIC_API_KEY");
-    } else if (error instanceof Anthropic.APIError) {
-      console.error(`chat: API error ${error.status}: ${error.message}`);
-    } else {
-      console.error("chat:", error);
-    }
+    if (error instanceof RateLimited) return res.status(429).json({ error: "rate_limited" });
+    console.error(`chat (${PROVIDER}):`, error.message || error);
     return res.status(500).json({ error: "server_error" });
   }
 }
