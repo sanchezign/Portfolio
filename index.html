@@ -579,6 +579,13 @@
     .project-links .link-code.link-violet-3 { background: var(--violet-3); box-shadow: inset 0 0 0 1px rgba(124,106,247,0.16); }
     .project-links .link-code.link-violet-3:hover { background: #1a1630; box-shadow: inset 0 0 0 1px rgba(124,106,247,0.35); }
     .project-links svg { width: 14px; height: 14px; }
+    .project-links .link-code.link-live { animation: live-pulse 2.2s ease-out infinite; }
+    .project-links .link-code.link-live:hover { animation-play-state: paused; box-shadow: inset 0 0 0 1px var(--accent2), 0 0 0 3px rgba(167,139,250,0.35); }
+    @keyframes live-pulse {
+      0% { box-shadow: inset 0 0 0 1px rgba(167,139,250,0.9), 0 0 0 0 rgba(167,139,250,0.55); }
+      70% { box-shadow: inset 0 0 0 1px rgba(167,139,250,0.5), 0 0 0 8px rgba(167,139,250,0); }
+      100% { box-shadow: inset 0 0 0 1px rgba(167,139,250,0.9), 0 0 0 0 rgba(167,139,250,0); }
+    }
     .project-highlights { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: -0.25rem 0 1.25rem; }
     .project-highlights .hl {
       display: inline-flex; align-items: baseline; gap: 0.35rem;
@@ -902,6 +909,7 @@
       *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
       .marquee-row { animation: none !important; }
       .orb { animation: none !important; }
+      .project-links .link-code.link-live { animation: none !important; box-shadow: inset 0 0 0 1px var(--accent2); }
     }
   
     /* ── LANG TOGGLE ── */
@@ -1061,7 +1069,7 @@
             <div class="project-stack"><span>Node.js</span><span>TypeScript</span><span>Express</span><span>Next.js 15</span><span>PostgreSQL</span><span>Claude AI</span><span>n8n</span><span>WhatsApp API</span><span>Docker</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/smartops-agent" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver c&#243;digo</a>
-              <a href="https://smartops-demo.duckdns.org" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://smartops-demo.duckdns.org" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
               <a href="/smartops/" class="link-code link-violet-3" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <span data-en="Case study" data-es="Caso de estudio">Caso de estudio</span></a>
             </div>
           </div>
@@ -1083,7 +1091,7 @@
             <div class="project-stack"><span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span><span>JWT</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Feria-Artesanal" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://feria-artesanal.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://feria-artesanal.vercel.app/" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1103,7 +1111,7 @@
             <div class="project-stack"><span>Next.js 15</span><span>TypeScript</span><span>Tailwind CSS</span><span>shadcn/ui</span><span>Zod</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/automation-landing" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://automation-landing-two.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://automation-landing-two.vercel.app/" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1123,7 +1131,7 @@
             <div class="project-stack"><span>React</span><span>Vite</span><span>Context API</span><span>CSS</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Account-Tracker" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://account-tracker-tau.vercel.app" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://account-tracker-tau.vercel.app" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1143,7 +1151,7 @@
             <div class="project-stack"><span>React</span><span>Vite</span><span>Tailwind</span><span>DaisyUI</span><span>Axios</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Organization-App" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://organization-app-k7nm.onrender.com/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://organization-app-k7nm.onrender.com/" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1163,7 +1171,7 @@
             <div class="project-stack"><span>React</span><span>Tailwind</span><span>OpenWeatherMap API</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Weather-App" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://weather-app-pi-three-57.vercel.app" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://weather-app-pi-three-57.vercel.app" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1183,7 +1191,7 @@
             <div class="project-stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Pura-Vida" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://pura-vida-eight.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://pura-vida-eight.vercel.app/" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1203,7 +1211,7 @@
             <div class="project-stack"><span>JavaScript</span><span>HTML</span><span>CSS</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/CalculatorJs" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://sanchezign.github.io/CalculatorJs/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://sanchezign.github.io/CalculatorJs/" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1223,7 +1231,7 @@
             <div class="project-stack"><span>Astro</span><span>Tailwind</span><span>DaisyUI</span><span>JavaScript</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/Medi-Health" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://medi-health-ivory.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://medi-health-ivory.vercel.app/" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
@@ -1243,7 +1251,7 @@
             <div class="project-stack"><span>Astro</span><span>Tailwind</span><span>JavaScript</span><span>Markdown</span></div>
             <div class="project-links">
               <a href="https://github.com/sanchezign/law-staff" target="_blank" class="link-demo" style="flex:none;padding:0.5rem 1rem;"><svg fill="currentColor" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> Ver código</a>
-              <a href="https://law-staff.vercel.app/" target="_blank" class="link-code" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
+              <a href="https://law-staff.vercel.app/" target="_blank" class="link-code link-live" style="flex:none;padding:0.5rem 1rem;"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg> <span data-en="Live demo" data-es="Demo en vivo">Demo en vivo</span></a>
             </div>
           </div>
         </div>
