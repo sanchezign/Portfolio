@@ -5,6 +5,16 @@
       "has": [{ "type": "host", "value": "ignaciosanchez.vercel.app" }],
       "destination": "https://www.sanchezign.dev/:path",
       "permanent": true
+    },
+    {
+      "source": "/cv/ignacio-sanchez-cv-es.pdf",
+      "destination": "/cv/CV_Ignacio_Sanchez_ES.pdf",
+      "permanent": true
+    },
+    {
+      "source": "/cv/ignacio-sanchez-cv-en.pdf",
+      "destination": "/cv/CV_Ignacio_Sanchez_EN.pdf",
+      "permanent": true
     }
   ],
   "headers": [
