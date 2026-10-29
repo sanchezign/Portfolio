@@ -11,7 +11,7 @@ export const KNOWLEDGE = `
 - Idiomas: español nativo, inglés intermedio avanzado (B2).
 - Busca: un rol full-time, presencial en Montevideo o remoto (abierto a las dos opciones). También toma proyectos freelance. Está disponible ("Open to work").
 - Contacto: email isanchez.workmail@gmail.com · LinkedIn https://www.linkedin.com/in/sanchezign/ · GitHub https://github.com/sanchezign · Web https://www.sanchezign.dev
-- CV para descargar: https://www.sanchezign.dev/cv/ignacio-sanchez-cv-es.pdf (español) y https://www.sanchezign.dev/cv/ignacio-sanchez-cv-en.pdf (inglés).
+- CV para descargar: https://www.sanchezign.dev/cv/CV_Ignacio_Sanchez_ES.pdf (español) y https://www.sanchezign.dev/cv/CV_Ignacio_Sanchez_EN.pdf (inglés).
 - Experiencia: más de 3 años desarrollando para clientes (desde 2023).
 
 ## Presentación
