@@ -84,9 +84,9 @@ Resultados medidos:
 
 Lo difícil y lo que aprendió: Meta deshabilitó la cuenta de negocio el primer día (falso positivo), así que construyó un simulador local de WhatsApp que firma webhooks e imita la Graph API. "1.850" puede ser 1850 o 1,85: el sistema aprende el formato de planilla de cada proveedor una vez, con una persona eligiendo la columna de precio. El borde de Cloudflare retenía los streams de eventos por GET, así que el panel abre su stream con POST y, si falla, se actualiza cada 30 segundos. El uso real mostró que el panel tenía que ser más claro, y ahora ordena todo en Pendientes, Novedades y Estado del sistema.
 
-## Proyecto de cliente destacado: Pura Vida Paisajismo
+## Proyecto de cliente destacado: Pura Vida Paisajismo (2026)
 
-Sitio en producción para un estudio de paisajismo de Uruguay (diseño, construcción y mantenimiento de jardines en Montevideo y todo el país). Su diferencial: el visitante arma su jardín en 3D desde el navegador antes de empezar la obra, y puede escribir por WhatsApp en un clic. Cada cambio se publica solo en Cloudflare Workers, con una preview automática por PR. Astro, TypeScript, Tailwind CSS, Three.js, Cloudflare Workers. Sitio: https://puravidapaisajismo.com
+Proyecto de 2026, distinto de los sitios anteriores de Pura Vida (2024) y Pura Vida Huertas (2025). Sitio en producción para un estudio de paisajismo de Uruguay (diseño, construcción y mantenimiento de jardines en Montevideo y todo el país). Su diferencial: el visitante arma su jardín en 3D desde el navegador antes de empezar la obra, y puede escribir por WhatsApp en un clic. Cada cambio se publica solo en Cloudflare Workers, con una preview automática por PR. Astro, TypeScript, Tailwind CSS, Three.js, Cloudflare Workers. Sitio: https://puravidapaisajismo.com
 
 ## Otros proyectos (todos con código en GitHub)
 
