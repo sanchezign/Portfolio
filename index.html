@@ -713,6 +713,12 @@
       position: absolute; right: 12px; bottom: 12px; width: 22px; height: 22px; border-radius: 50%;
       border: 1px solid rgba(250,204,21,0.45); background: radial-gradient(circle, rgba(250,204,21,0.25), rgba(250,204,21,0.05));
     }
+    .cert-cover-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; z-index: 1; background: #fff; transition: transform 0.35s; }
+    .cert-chip.has-photo .cert-cover::before, .cert-chip.has-photo .cert-cover-seal { display: none; }
+    .cert-chip.has-photo:hover .cert-cover-photo { transform: scale(1.04); }
+    .cert-chip.has-photo .cert-chip-foot { flex-wrap: wrap; }
+    .cert-chip.has-photo .cert-cover { aspect-ratio: 297 / 210; min-height: 0; }
+    .cert-chip-foot .cert-chip-name { flex-basis: 100%; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); line-height: 1.3; }
     .cert-chip-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0 0.35rem; }
     .cert-chip-meta { font-size: 0.75rem; color: var(--text3); }
     .cert-chip-arrow { font-size: 0.75rem; color: var(--accent2); }
@@ -1634,9 +1640,8 @@
             <h3 class="cert-group-title" data-en="Other courses" data-es="Otros cursos">Otros cursos</h3>
             <p class="cert-group-sub" data-en="Coderhouse · Agesic" data-es="Coderhouse · Agesic">Coderhouse · Agesic</p>
           </div>
-          <button type="button" class="cert-more-btn" aria-expanded="false" aria-controls="other-courses"><span data-en="Show 6 courses" data-es="Ver los 6 cursos">Ver los 6 cursos</span></button>
         </div>
-        <div class="cert-chips" id="other-courses" hidden>
+        <div class="cert-chips" id="other-courses">
           <a class="cert-chip" href="https://drive.google.com/file/d/1v8Ep-yLWDcpamKWJG2W0lyk2a2GuSlfP/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Software Development Cycle and Test Planning" data-es="Ciclo de Desarrollo de Software y Planificación de Pruebas">Ciclo de Desarrollo de Software y Planificación de Pruebas</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
           <a class="cert-chip" href="https://drive.google.com/file/d/1DbbX37TmWRVvWlWsczClgL3KU3h_5CA-/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Unleash the Potential of Agile Methodology: Intensive Course" data-es="Desata el Potencial de la Metodología Ágil: Curso Intensivo">Desata el Potencial de la Metodología Ágil: Curso Intensivo</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
           <a class="cert-chip" href="https://drive.google.com/file/d/1wDzz8PFDUUtunn7bC_G2sRbeYLZ5KaKJ/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Mastery in Data Migrations and Queries with Entity Framework" data-es="Maestría en Migraciones y Consulta de Datos con Entity Framework">Maestría en Migraciones y Consulta de Datos con Entity Framework</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
@@ -1863,6 +1868,22 @@
       foot.className = 'cert-chip-foot';
       foot.append(meta, arrow);
       chip.replaceChildren(cover, foot);
+      const m = chip.getAttribute('href').match(/\/d\/([\w-]+)/);
+      const src = chip.dataset.thumb || (m && 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w640');
+      if (src) {
+        const img = new Image();
+        img.loading = 'lazy'; img.decoding = 'async'; img.referrerPolicy = 'no-referrer';
+        img.className = 'cert-cover-photo';
+        img.alt = '';
+        img.addEventListener('load', () => {
+          if (img.naturalWidth < 50) { img.remove(); return; }
+          chip.classList.add('has-photo');
+          foot.prepend(name);
+        });
+        img.addEventListener('error', () => img.remove());
+        img.src = src;
+        cover.appendChild(img);
+      }
     });
 
     // ── CERTIFICATE VIEWER ──
@@ -1883,20 +1904,6 @@
       certDlg.querySelector('.video-dialog-close').addEventListener('click', () => certDlg.close());
       certDlg.addEventListener('click', e => { if (e.target === certDlg) certDlg.close(); });
     }
-
-    // ── OTHER COURSES ──
-    document.querySelectorAll('.cert-more-btn').forEach(btn => {
-      const panel = document.getElementById(btn.getAttribute('aria-controls'));
-      const label = btn.querySelector('span');
-      btn.addEventListener('click', () => {
-        const open = btn.getAttribute('aria-expanded') !== 'true';
-        btn.setAttribute('aria-expanded', String(open));
-        panel.hidden = !open;
-        label.setAttribute('data-en', open ? 'Hide courses' : 'Show 6 courses');
-        label.setAttribute('data-es', open ? 'Ocultar cursos' : 'Ver los 6 cursos');
-        label.textContent = label.getAttribute('data-' + (document.documentElement.lang === 'es' ? 'es' : 'en'));
-      });
-    });
 
     // ── DEMO VIDEO ──
     document.querySelectorAll('[data-open-video]').forEach(btn => {
