@@ -690,16 +690,49 @@
     #certs { padding: 6rem 0; border-top: 1px solid var(--border); }
     .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
     .cert-group { margin-top: 2.5rem; }
-    .cert-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .cert-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }
     .cert-chip {
-      display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.55rem;
-      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-      padding: 0.55rem 0.9rem; text-decoration: none; transition: border-color 0.2s, background 0.2s;
+      display: grid; grid-template-columns: 1fr auto; align-content: start; gap: 0.25rem 0.5rem;
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+      padding: 0 0 0.75rem; text-decoration: none; transition: border-color 0.2s, background 0.2s, transform 0.2s;
     }
-    .cert-chip:hover { border-color: rgba(124,106,247,0.4); background: var(--card-hover); }
-    .cert-chip-name { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); }
-    .cert-chip-meta { font-size: 0.75rem; color: var(--text3); white-space: nowrap; }
-    .cert-chip-arrow { font-size: 0.75rem; color: var(--accent2); }
+    .cert-chip:hover { border-color: rgba(124,106,247,0.4); background: var(--card-hover); transform: translateY(-2px); }
+    .cert-chip-name { grid-column: 1 / -1; padding: 0 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .cert-chip-meta { padding-left: 0.85rem; font-size: 0.75rem; color: var(--text3); }
+    .cert-chip-arrow { padding-right: 0.85rem; font-size: 0.75rem; color: var(--accent2); }
+    .cert-thumb {
+      grid-column: 1 / -1; position: relative; aspect-ratio: 297 / 205; margin-bottom: 0.5rem; overflow: hidden;
+      background: linear-gradient(135deg, rgba(124,106,247,0.16), rgba(124,106,247,0.04));
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; color: rgba(167,155,255,0.45);
+    }
+    .cert-thumb svg { width: 34px; height: 34px; }
+    .cert-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.35s; }
+    .cert-chip:hover .cert-thumb img, .cert-feature:hover .cert-thumb img { transform: scale(1.04); }
+    .cert-feature {
+      display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 1.5rem;
+      margin-bottom: 0.9rem; padding: 0.9rem; border-radius: 14px; text-decoration: none;
+      background: linear-gradient(135deg, rgba(124,106,247,0.1), var(--card)); border: 1px solid rgba(124,106,247,0.3);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .cert-feature:hover { border-color: rgba(124,106,247,0.55); }
+    .cert-feature .cert-thumb { grid-column: auto; margin: 0; border: 1px solid var(--border); border-radius: 9px; }
+    .cert-feature-kicker { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.4rem; }
+    .cert-feature-name { display: block; font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 0.5rem; }
+    .cert-feature-meta { display: block; font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+    .cert-feature .cert-link { margin-top: 0.9rem; font-size: 0.82rem; }
+    .cert-dialog { max-width: min(1100px, 94vw); }
+    .cert-dialog img { display: block; width: 100%; height: auto; background: #fff; }
+    @media (max-width: 640px) {
+      .cert-feature { grid-template-columns: 1fr; gap: 0.9rem; }
+      .cert-feature-name { font-size: 1.1rem; }
+    }
+    @media (max-width: 480px) {
+      .cert-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+      .cert-chip-name { font-size: 0.8rem; padding: 0 0.65rem; }
+      .cert-chip-meta { padding-left: 0.65rem; font-size: 0.7rem; }
+      .cert-chip-arrow { padding-right: 0.65rem; }
+    }
     .cert-more-btn {
       display: inline-flex; align-items: center; gap: 0.4rem; margin-left: 1rem;
       padding: 0.45rem 1rem; border-radius: 8px; cursor: pointer;
@@ -1529,10 +1562,19 @@
           <span class="cert-group-icon"><svg fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/><path d="M22 10v6"/></svg></span>
           <div>
             <h3 class="cert-group-title" data-en="Full Stack Developer Career" data-es="Carrera Full Stack Developer">Carrera Full Stack Developer</h3>
-            <p class="cert-group-sub" data-en="Coderhouse · 6 courses" data-es="Coderhouse · 6 cursos">Coderhouse · 6 cursos</p>
+            <p class="cert-group-sub" data-en="Coderhouse · 6 courses · completed 2026" data-es="Coderhouse · 6 cursos · finalizada en 2026">Coderhouse · 6 cursos · finalizada en 2026</p>
           </div>
           <span class="cert-badge" data-en="Top 10 distinction" data-es="Distinción Top 10">Distinción Top 10</span>
         </div>
+        <a class="cert-feature" href="/img/certs/carrera-fullstack-coderhouse.webp" target="_blank" rel="noopener" data-cert-view>
+          <span class="cert-thumb"><svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><circle cx="12" cy="17" r="3"/><path d="M10.5 19.5 10 23l2-1 2 1-.5-3.5"/><path d="M7 8h10M8 11h8"/></svg><img src="/img/certs/carrera-fullstack-coderhouse-thumb.webp" width="640" height="435" loading="lazy" alt="Certificado de la Carrera de Desarrollo Full Stack de Coderhouse a nombre de Ignacio Sanchez Greppi"></span>
+          <span>
+            <span class="cert-feature-kicker" data-en="Career certificate" data-es="Certificado de carrera">Certificado de carrera</span>
+            <span class="cert-feature-name" data-en="Full Stack Development Career" data-es="Carrera de Desarrollo Full Stack">Carrera de Desarrollo Full Stack</span>
+            <span class="cert-feature-meta" data-en="Coderhouse · May 2026 · 106 hours over 53 weeks, all academic requirements completed." data-es="Coderhouse · Mayo 2026 · 106 horas a lo largo de 53 semanas, con todos los requisitos académicos cumplidos.">Coderhouse · Mayo 2026 · 106 horas a lo largo de 53 semanas, con todos los requisitos académicos cumplidos.</span>
+            <span class="cert-link"><span data-en="View certificate" data-es="Ver certificado">Ver certificado</span> ↗</span>
+          </span>
+        </a>
         <div class="cert-chips">
           <a class="cert-chip" href="https://drive.google.com/file/d/1N2Zbz2-nYTFt31sow40XhPmFPnJkFMBS/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Web Development" data-es="Desarrollo Web">Desarrollo Web</span><span class="cert-chip-meta">2023 · 38 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
           <a class="cert-chip" href="https://drive.google.com/file/d/1X7Zul3gEeWQ-e-hsXWy1vvAfR22GUEM3/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name">Javascript</span><span class="cert-chip-meta">2026 · 20 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
@@ -1611,6 +1653,14 @@
       </div>
     </div>
   </section>
+
+  <dialog class="video-dialog cert-dialog" id="cert-viewer" aria-label="Certificado">
+    <img src="" alt="">
+    <div class="video-dialog-bar">
+      <a class="cert-link" href="#" target="_blank" rel="noopener" style="margin:0"><span data-en="Open full size" data-es="Abrir en tamaño completo">Abrir en tamaño completo</span> ↗</a>
+      <button type="button" class="video-dialog-close" data-en="Close" data-es="Cerrar">Cerrar</button>
+    </div>
+  </dialog>
 
   <dialog class="video-dialog" id="smartops-video" aria-label="SmartOps Agent demo">
     <video controls playsinline preload="none" poster="/media/smartops-demo-poster.webp" width="880" height="550">
@@ -1775,6 +1825,44 @@
         .catch(() => { label.textContent = email; })
         .finally(() => setTimeout(restore, 2500));
     });
+
+    // ── CERTIFICATE THUMBNAILS ──
+    const certIcon = '<svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><circle cx="12" cy="17" r="3"/><path d="M10.5 19.5 10 23l2-1 2 1-.5-3.5"/><path d="M7 8h10M8 11h8"/></svg>';
+    document.querySelectorAll('.cert-chip').forEach(chip => {
+      if (chip.querySelector('.cert-thumb')) return;
+      const m = chip.getAttribute('href').match(/\/d\/([\w-]+)/);
+      const src = chip.dataset.thumb || (m && 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w480');
+      const thumb = document.createElement('span');
+      thumb.className = 'cert-thumb';
+      thumb.innerHTML = certIcon;
+      if (src) {
+        const img = new Image();
+        img.loading = 'lazy'; img.decoding = 'async'; img.alt = ''; img.referrerPolicy = 'no-referrer';
+        img.addEventListener('error', () => img.remove());
+        img.src = src;
+        thumb.appendChild(img);
+      }
+      chip.prepend(thumb);
+    });
+
+    // ── CERTIFICATE VIEWER ──
+    const certDlg = document.getElementById('cert-viewer');
+    if (certDlg && typeof certDlg.showModal === 'function') {
+      const certImg = certDlg.querySelector('img');
+      const certOpen = certDlg.querySelector('a');
+      document.querySelectorAll('[data-cert-view]').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const thumbImg = link.querySelector('img');
+          certImg.src = link.getAttribute('href');
+          certImg.alt = thumbImg ? thumbImg.alt : '';
+          certOpen.href = link.getAttribute('href');
+          certDlg.showModal();
+        });
+      });
+      certDlg.querySelector('.video-dialog-close').addEventListener('click', () => certDlg.close());
+      certDlg.addEventListener('click', e => { if (e.target === certDlg) certDlg.close(); });
+    }
 
     // ── OTHER COURSES ──
     document.querySelectorAll('.cert-more-btn').forEach(btn => {
