@@ -79,7 +79,7 @@
     photoMode = !photoMode;
     box.classList.toggle('pc-photo', photoMode);
     renderHud(true);
-    if (!photoMode) kick();
+    kick();
   });
 
   // ── carga diferida de los datos ──
@@ -328,14 +328,14 @@
 
   // ── sonda ──
   var probe = { x: 0, y: 0, tx: 0, ty: 0, a: 0, ta: 0, until: 0 };
-  var R = 78;
+  var R = 130, LENS = 80;          // radio de la sonda y de la lente (unidades de datos)
   function local(e) {
     var r = box.getBoundingClientRect();
     var ox = (cw - DW * sc) / 2, oy = (ch - DH * sc) / 2;
     return [(e.clientX - r.left - ox) / sc, (e.clientY - r.top - oy) / sc];
   }
   function onMove(e) {
-    if (!lines || photoMode || reduce) return;
+    if (!lines || reduce) return;
     var p = local(e);
     probe.tx = p[0]; probe.ty = p[1];
     if (probe.a < 0.02) { probe.x = p[0]; probe.y = p[1]; }
@@ -375,8 +375,22 @@
       c.beginPath(); c.arc(nodes[i], nodes[i + 1], (1.2 + 1.4 * k) / sc, 0, 7); c.fill();
     }
     c.globalAlpha = 1;
+    // lente: en modo circuito se abre un hueco y debajo se ve la foto (máscara CSS en el <img>);
+    // en modo foto el canvas entero queda enmascarado al círculo (CSS) y muestra el circuito
+    var ox2 = (cw - DW * sc) / 2, oy2 = (ch - DH * sc) / 2;
+    var cx = ox2 + x * sc, cy = oy2 + y * sc;
+    box.style.setProperty('--pc-x', cx.toFixed(1) + 'px');
+    box.style.setProperty('--pc-y', cy.toFixed(1) + 'px');
+    box.style.setProperty('--pc-r', ((photoMode ? R : LENS) * sc * a).toFixed(1) + 'px');
+    if (!photoMode) {
+      c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = 'destination-out';
+      var lr = LENS * sc * a * dpr, eg = c.createRadialGradient(cx * dpr, cy * dpr, 0, cx * dpr, cy * dpr, lr);
+      eg.addColorStop(0, 'rgba(0,0,0,1)'); eg.addColorStop(0.72, 'rgba(0,0,0,1)'); eg.addColorStop(1, 'rgba(0,0,0,0)');
+      c.fillStyle = eg; c.beginPath(); c.arc(cx * dpr, cy * dpr, lr, 0, 7); c.fill();
+      c.restore();
+    }
     // anillo, guía y lectura
-    var rr = 9 + 1.5 * Math.sin(t / 220);
+    var rr = LENS * sc * a * (photoMode ? 0.62 : 0.9) + 1.5 * Math.sin(t / 220);
     c.strokeStyle = 'rgba(' + C.head + ',' + (0.9 * a) + ')'; c.lineWidth = 1.2 / sc;
     c.beginPath(); c.arc(x, y, rr / sc * (sc > 0.9 ? 1 : 1.2), 0, 7); c.stroke();
     // la guía sale hacia el lado con más espacio
@@ -434,11 +448,11 @@
     if (!lines || !cw) return;
     var dt = Math.min(64, t - (lastT || t)); lastT = t;
     var fade = scrollFade();
-    var running = visible && !photoMode && !document.hidden && fade < 1;
+    var running = visible && !document.hidden && fade < 1 && (!photoMode || probe.a > 0.01);
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (photoMode) return;
+    if (photoMode) { ctx.fillStyle = '#0d0b18'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
 
     var booting = !reduce && bootStart >= 0 && t - bootStart < BOOT;
     if (bootStart < 0 && !reduce) { renderHud(); return; }   // todavía no entró en pantalla
@@ -482,7 +496,7 @@
         drawProbe(ctx, t);
       }
     }
-    if (probe.a < 0.01) elReading.style.opacity = 0;
+    if (probe.a < 0.01) { elReading.style.opacity = 0; box.style.setProperty('--pc-r', '0px'); }
     // apagado con el scroll: se borra de abajo hacia arriba
     if (fade > 0) {
       ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
