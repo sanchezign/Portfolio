@@ -67,6 +67,10 @@
   function build(introDone) {
     items = [];
     if (badge) items.push({ el: badge, start: 0, last: '' });
+    var units = left.querySelectorAll('.hero-btns > a, .hero-socials > a');
+    var unitItems = Array.prototype.map.call(units, function (u, k) {
+      return { el: u, start: introDone ? -1e9 : 1700 + k * 130, unit: true, last: '' };
+    });
     plan.forEach(function (b) {
       var chars = split(b.el);
       var big = b.el === hi || b.el === name;
@@ -74,6 +78,7 @@
         items.push({ el: c, start: introDone ? -1e9 : b.start + k * b.step, big: big, fs: big ? parseFloat(getComputedStyle(c).fontSize) : 0, last: '' });
       });
     });
+    items = items.concat(unitItems);
     syncGradient();
     measure();
   }
@@ -130,6 +135,9 @@
         var y = (1 - a) * 0.35 - g * 0.25;                  // entra desde abajo, sale hacia arriba
         it.el.dataset.dy = (y * it.fs).toFixed(2);
         css = o.toFixed(3) + '|translateY(' + y.toFixed(3) + 'em)|' + (hidden > 0.01 ? 'blur(' + (hidden * 8).toFixed(1) + 'px)' : '');
+      } else if (it.unit) {
+        var uy = (1 - a) * 16 - g * 12;                     // botones e íconos: suben al entrar, se van hacia arriba
+        css = o.toFixed(3) + '|' + (Math.abs(uy) > 0.05 ? 'translateY(' + uy.toFixed(1) + 'px)' : '') + '|' + (hidden > 0.01 ? 'blur(' + (hidden * 4).toFixed(1) + 'px)' : '');
       } else {
         css = o.toFixed(3) + '||' + (hidden > 0.01 ? 'blur(' + (hidden * 4).toFixed(1) + 'px)' : '');
       }

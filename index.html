@@ -300,7 +300,7 @@
     .btn-cv:hover { border-color: var(--accent); color: var(--accent3); transform: translateY(-2px); }
     .hero-socials { display: flex; gap: 1rem; margin-top: 2.5rem; justify-content: center; }
     .hero-socials a {
-      width: 52px; height: 52px; border-radius: 14px;
+      width: 60px; height: 60px; border-radius: 16px;
       border: 1.5px solid rgba(255,255,255,0.2);
       background: var(--card);
       display: flex; align-items: center; justify-content: center;
@@ -308,7 +308,7 @@
       transition: all 0.2s;
     }
     .hero-socials a:hover { border-color: var(--accent); color: var(--accent2); background: var(--glow); transform: translateY(-2px); }
-    .hero-socials svg { width: 22px; height: 22px; }
+    .hero-socials svg { width: 30px; height: 30px; }
 
     /* Hero image */
     .hero-img-col {
@@ -981,8 +981,9 @@
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .hero-left > .hero-btns { animation: fadeInUp 0.7s ease 1.5s both; }
-    .hero-left > .hero-socials { animation: fadeInUp 0.7s ease 1.65s both; }
+    .hero-left > .hero-btns, .hero-left > .hero-socials { animation: none; }
+    .hero-anim:not(.hero-ready) .hero-btns > a,
+    .hero-anim:not(.hero-ready) .hero-socials > a { opacity: 0; animation: heroFailsafe 0.4s ease 2.5s forwards; }
     .hero-img-col { animation: fadeInUp 0.9s ease 0.3s both; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
