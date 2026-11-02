@@ -55,7 +55,9 @@
           probe: 'PROBE', photo: 'View photo', circuit: 'View circuit' }
   };
   function lang() { return document.documentElement.lang === 'en' ? 'en' : 'es'; }
-  var state = 'boot', shownState = '', pulseCount = 0, shownCount = -1, photoMode = false;
+  // arranca en modo foto: el circuito se ve en la lente o con el botón
+  var state = 'boot', shownState = '', pulseCount = 0, shownCount = -1, photoMode = true, bootSeen = false;
+  box.classList.add('pc-photo');
   function renderHud(force) {
     var t = T[lang()];
     if (force || shownState !== state) {
@@ -78,6 +80,8 @@
   btn.addEventListener('click', function () {
     photoMode = !photoMode;
     box.classList.toggle('pc-photo', photoMode);
+    // la primera vez que se pasa a circuito se ve el encendido completo
+    if (!photoMode && !bootSeen && !reduce) { bootSeen = true; bootStart = performance.now(); }
     renderHud(true);
     kick();
   });
@@ -103,7 +107,7 @@
   new IntersectionObserver(function (es) {
     es.forEach(function (e) {
       visible = e.isIntersecting;
-      if (visible) { if (lines && bootStart < 0) bootStart = performance.now(); kick(); }
+      if (visible) { if (lines && bootStart < 0 && !photoMode) bootStart = performance.now(); kick(); }
     });
   }, { threshold: 0.15 }).observe(box);
 
@@ -186,7 +190,7 @@
     });
     box.classList.add('pc-on');
     resize();
-    if (visible && bootStart < 0) bootStart = performance.now();
+    if (visible && bootStart < 0 && !photoMode) bootStart = performance.now();
     if (reduce) { bootStart = -1; state = 'rest'; renderHud(); }
     kick();
   }
@@ -455,12 +459,13 @@
     if (photoMode) { ctx.fillStyle = '#0d0b18'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
 
     var booting = !reduce && bootStart >= 0 && t - bootStart < BOOT;
-    if (bootStart < 0 && !reduce) { renderHud(); return; }   // todavía no entró en pantalla
+    if (bootStart < 0 && !reduce && !photoMode) { renderHud(); return; }   // todavía no entró en pantalla
     if (booting) {
       state = 'boot';
       toData(ctx);
       bootDraw(ctx, (t - bootStart) / BOOT);
       if ((t - bootStart) / BOOT > 0.5) drawChip(ctx, t, false);
+      probe.a = 0;   // durante el encendido no hay lente
     } else {
       ctx.drawImage(base, 0, 0);
       toData(ctx);
