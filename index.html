@@ -495,13 +495,13 @@
     }
     .exp-tracker {
       position: absolute; left: -4px; top: 1.5rem; width: 30px; height: 30px; margin-top: -15px;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      background: var(--bg); border: 1.5px solid var(--accent2); color: var(--text);
-      box-shadow: 0 0 0 4px rgba(124,106,247,0.15), 0 0 16px rgba(167,139,250,0.45);
+      display: flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--text);
+      filter: drop-shadow(0 0 6px rgba(167,139,250,0.75));
       pointer-events: none; z-index: 2; will-change: transform; opacity: 0; transition: opacity 0.3s;
     }
     .exp-tracker.on { opacity: 1; }
-    .exp-tracker svg { width: 16px; height: auto; fill: currentColor; }
+    .exp-tracker svg { width: 24px; height: auto; fill: currentColor; }
     .exp-card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: 14px; padding: 0.9rem 1.4rem;
