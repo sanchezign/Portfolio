@@ -145,13 +145,18 @@ for lv in JAW_LEVELS:
 face = cv2.erode(skin.astype(np.uint8), np.ones((9, 9), np.uint8)) > 0
 FS, FLO, FHI, FMIN, FTOL = [float(x) for x in os.environ.get('FACE', '3.2,14,34,34,1.8').split(',')]
 e_face = (cv2.Canny(cv2.GaussianBlur(gray, (0, 0), FS), FLO, FHI) > 0) & face
+# solo los trazos principales: los más largos de cada zona (ojos, nariz, boca)
+FMAX = int(os.environ.get('FMAX', '14'))
+cand = []
 for c in chains(e_face, FMIN):
     # en la zona de la barba (debajo de la boca) solo quedan los trazos largos
     if np.median(c[:, 1]) > PH * 0.43 and plen(c) < 90: continue
-    add(1, c, FTOL, 3)
+    cand.append(c)
+cand.sort(key=plen, reverse=True)
+for c in cand[:FMAX]: add(1, c, FTOL, 3)
 suit_in = cv2.erode(suit.astype(np.uint8), np.ones((11, 11), np.uint8)) > 0
 e_suit = (cv2.Canny(cv2.GaussianBlur(gray, (0, 0), 2.6), 14, 34) > 0) & suit_in
-for c in chains(e_suit, 70): add(1, c, 1.4)
+for c in chains(e_suit, float(os.environ.get('SUITMIN', '150'))): add(1, c, 1.6)  # solo solapas largas
 
 # ── 3d. flujo: líneas de corriente sobre un campo de orientación suave ──
 labimg = np.zeros((PH, PW), np.float32)
@@ -167,7 +172,11 @@ TX, TY = np.cos(ang), np.sin(ang)
 # zona donde corre el flujo: todo el cuerpo menos el interior de la cara
 dskin = cv2.distanceTransform(skin.astype(np.uint8), cv2.DIST_L2, 5)
 flow_ok = inner & ~(dskin > 16)
-DSEP, DTEST, CELL = 11.0, 5.5, 3
+# separación entre líneas: más aire en el saco que en el pelo
+SEP_HAIR, SEP_BODY = [float(x) for x in os.environ.get('SEP', '11,22').split(',')]
+sepmap = cv2.GaussianBlur(np.where(yy < PH * 0.42, SEP_HAIR, SEP_BODY).astype(np.float32), (0, 0), 25)
+def sep(x, y): return float(sepmap[int(y), int(x)])
+DSEP, CELL = SEP_BODY, 3
 GH, GW = PH // CELL + 1, PW // CELL + 1
 grid = [[[] for _ in range(GW)] for _ in range(GH)]
 def near(x, y, d, sid):
@@ -186,7 +195,7 @@ def trace(x0, y0, sid):
             vx, vy = TX[int(y), int(x)], TY[int(y), int(x)]
             if pv is None: vx, vy = vx * sgn, vy * sgn
             elif vx * pv[0] + vy * pv[1] < 0: vx, vy = -vx, -vy
-            if seg and near(x, y, DTEST, sid): break
+            if seg and near(x, y, 0.5 * sep(x, y), sid): break
             seg.append((x, y)); pv = (vx, vy); x += vx; y += vy
         pts = seg if sgn == 1 else seg[::-1][:-1] + pts
     return pts
@@ -197,14 +206,15 @@ for sy in range(8, PH, 29):
         while q:
             x, y = q.popleft()
             if not (0 <= x < PW - 1 and 0 <= y < PH - 1 and flow_ok[int(y), int(x)]): continue
-            if near(x, y, DSEP, -1): continue
+            if near(x, y, sep(x, y), -1): continue
             pts = trace(x, y, sid)
             if len(pts) < 24: continue
             for k in range(0, len(pts), 2): grid[int(pts[k][1] / CELL)][int(pts[k][0] / CELL)].append((pts[k][0], pts[k][1], sid))
             flow.append(np.array(pts, np.float32)); sid += 1
             for k in range(0, len(pts), 6):
                 x1, y1 = pts[k]; vx, vy = TX[int(y1), int(x1)], TY[int(y1), int(x1)]
-                q.append((x1 - vy * DSEP, y1 + vx * DSEP)); q.append((x1 + vy * DSEP, y1 - vx * DSEP))
+                d_ = sep(x1, y1)
+                q.append((x1 - vy * d_, y1 + vx * d_)); q.append((x1 + vy * d_, y1 - vx * d_))
 for c in flow: add(2, c, 1.0, 2, 20)
 
 # ── salida ──

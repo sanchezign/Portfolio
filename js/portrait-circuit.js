@@ -390,7 +390,7 @@
       c.restore();
     }
     // anillo, guía y lectura
-    var rr = LENS * sc * a * (photoMode ? 0.62 : 0.9) + 1.5 * Math.sin(t / 220);
+    var rr = Math.max(1, LENS * sc * a * (photoMode ? 0.62 : 0.9) + 1.5 * Math.sin(t / 220));
     c.strokeStyle = 'rgba(' + C.head + ',' + (0.9 * a) + ')'; c.lineWidth = 1.2 / sc;
     c.beginPath(); c.arc(x, y, rr / sc * (sc > 0.9 ? 1 : 1.2), 0, 7); c.stroke();
     // la guía sale hacia el lado con más espacio
