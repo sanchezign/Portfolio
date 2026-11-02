@@ -433,6 +433,17 @@
       content: ''; position: absolute; inset: 0; pointer-events: none;
       background: linear-gradient(180deg, rgba(10,10,15,0) 65%, rgba(10,10,15,0.55) 100%);
     }
+    /* Retrato de partículas (js/photo-particles.js) */
+    .pp-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .pp-a img { opacity: 0; transition: opacity 0.9s ease; }
+    .pp-a.pp-done img {
+      opacity: 1;
+      -webkit-mask-image: radial-gradient(circle var(--pp-r, 0px) at var(--pp-x, 50%) var(--pp-y, 50%), transparent 70%, #000 100%);
+      mask-image: radial-gradient(circle var(--pp-r, 0px) at var(--pp-x, 50%) var(--pp-y, 50%), transparent 70%, #000 100%);
+    }
+    .pp-b img { opacity: var(--pp-reveal, 0); }
+    .pp-b { cursor: pointer; }
+    @media (hover: hover) and (pointer: fine) { .pp-b { cursor: crosshair; } }
     .about-photo-ph {
       display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
       color: var(--text3);
@@ -2177,6 +2188,7 @@
 <script src="/js/hero-intro.js" defer></script>
 <script src="/js/exp-tracker.js" defer></script>
 <script src="/js/particles.js" defer></script>
+<script src="/js/photo-particles.js" defer></script>
 <script src="/chat/widget.js" defer></script>
 </body>
 </html>
