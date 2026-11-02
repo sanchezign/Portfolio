@@ -142,21 +142,83 @@ for lv in JAW_LEVELS:
     for c in measure.find_contours(lumb, lv):
         c = c[:, ::-1]
         for seg in split_valid(c, at(jaw_zone, c), 70): add(1, seg, 1.2)
+# ── rasgos de la cara a partir de puntos de referencia del rostro ──
+# tools/profile-landmarks.json: 478 puntos (malla facial de MediaPipe, con iris) sobre la
+# imagen de trabajo. Se dibujan curvas suaves por esos puntos en lugar de bordes de la foto.
+LM = np.array(json.load(open(os.path.join(ROOT, 'tools/profile-landmarks.json'))), np.float32)
+def spline(idx, n=10, closed=False):
+    P = LM[idx]
+    if closed: P = np.vstack([P[-1:], P, P[:2]])
+    else: P = np.vstack([P[:1], P, P[-1:]])
+    out = []
+    for i in range(1, len(P) - 2):
+        p0, p1, p2, p3 = P[i - 1], P[i], P[i + 1], P[i + 2]
+        for t in np.linspace(0, 1, n, endpoint=False):
+            t2, t3 = t * t, t * t * t
+            out.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 + (-p0 + 3 * p1 - 3 * p2 + p3) * t3))
+    out.append(P[-2])
+    return np.array(out, np.float32)
+def feat(c, layer=1):
+    lines.append((layer, np.asarray(c, np.float32) * SC))
+def part(c, f0, f1):   # tramo de una curva, entre fracciones de su largo
+    d = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(c, axis=0).T))]); L = d[-1]
+    return c[(d >= f0 * L) & (d <= f1 * L)]
+# ojos: párpado superior entero, inferior solo en el centro, iris recortado por los párpados
+EYES = [  # (superior, inferior, iris centro, iris borde)
+    ([33, 246, 161, 160, 159, 158, 157, 173, 133], [33, 7, 163, 144, 145, 153, 154, 155, 133], 468, [469, 470, 471, 472]),
+    ([263, 466, 388, 387, 386, 385, 384, 398, 362], [263, 249, 390, 373, 374, 380, 381, 382, 362], 473, [474, 475, 476, 477]),
+]
+for up, lo, ic, ir in EYES:
+    cu, cl = spline(up), spline(lo)
+    feat(cu)
+    feat(part(cl, 0.3, 0.85))
+    # pliegue del párpado: copia del párpado superior, más arriba y más corta
+    h = float(np.max(cl[:, 1]) - np.min(cu[:, 1]))
+    crease = part(cu, 0.15, 0.8).copy(); crease[:, 1] -= 0.38 * h
+    feat(crease)
+    cx, cy = LM[ic]; r = 1.45 * float(np.mean(np.hypot(*(LM[ir] - LM[ic]).T)))
+    poly = np.vstack([cu, cl[::-1]]).astype(np.float32)
+    ang = np.linspace(0, 2 * np.pi, 48)
+    circ = np.column_stack([cx + r * np.cos(ang), cy + r * np.sin(ang)]).astype(np.float32)
+    ins = np.array([cv2.pointPolygonTest(poly.reshape(-1, 1, 2), (float(x), float(y)), True) > 1.0 for x, y in circ])
+    # arco del iris visible (tramo continuo más largo dentro del ojo)
+    if ins.any() and not ins.all():
+        k = int(np.argmin(ins)); ins_r = np.roll(ins, -k); circ_r = np.roll(circ, -k, axis=0)
+        best, cur = [], []
+        for pnt, ok in zip(circ_r, ins_r):
+            if ok: cur.append(pnt)
+            else:
+                if len(cur) > len(best): best = cur
+                cur = []
+        if len(cur) > len(best): best = cur
+        if len(best) > 3: feat(np.array(best))
+    elif ins.all(): feat(np.vstack([circ, circ[:1]]))
+    pa = np.linspace(0, 2 * np.pi, 16)   # pupila
+    feat(np.column_stack([cx + r * 0.3 * np.cos(pa), cy + r * 0.3 * np.sin(pa)]))
+# cejas: borde de arriba entero y borde de abajo más corto, abiertos
+for lob, upb in (([46, 53, 52, 65, 55], [70, 63, 105, 66, 107]), ([276, 283, 282, 295, 285], [300, 293, 334, 296, 336])):
+    feat(spline(upb))
+    feat(part(spline(lob), 0.1, 0.9))
+# nariz: línea del costado del tabique, alas y base
+feat(part(spline([193, 122, 196, 3, 51, 45]), 0.12, 1))
+feat(spline([131, 115, 102, 64, 240]))
+feat(spline([240, 97, 2, 326]))
+feat(spline([457, 459, 309, 392]))
+# boca: línea de la boca, labio superior (arco de cupido) y parte del inferior
+feat(spline([78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308]))
+feat(part(spline([61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291]), 0.12, 0.88))
+feat(part(spline([61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291]), 0.28, 0.72))
+# orejas y otros bordes fuera de la malla facial (Canny), lejos de ojos, nariz y boca
+hull = cv2.convexHull(LM[:468].reshape(-1, 1, 2))
 face = cv2.erode(skin.astype(np.uint8), np.ones((9, 9), np.uint8)) > 0
-FS, FLO, FHI, FMIN, FTOL = [float(x) for x in os.environ.get('FACE', '3.2,14,34,34,1.8').split(',')]
-e_face = (cv2.Canny(cv2.GaussianBlur(gray, (0, 0), FS), FLO, FHI) > 0) & face
-# solo los trazos principales: los más largos de cada zona (ojos, nariz, boca)
-FMAX = int(os.environ.get('FMAX', '14'))
-cand = []
-for c in chains(e_face, FMIN):
-    # en la zona de la barba (debajo de la boca) solo quedan los trazos largos
-    if np.median(c[:, 1]) > PH * 0.43 and plen(c) < 90: continue
-    cand.append(c)
-cand.sort(key=plen, reverse=True)
-for c in cand[:FMAX]: add(1, c, FTOL, 3)
+e_face = (cv2.Canny(cv2.GaussianBlur(gray, (0, 0), 3.2), 14, 34) > 0) & face
+for c in chains(e_face, 34):
+    mx, my = np.median(c, axis=0)
+    if cv2.pointPolygonTest(hull, (float(mx), float(my)), True) > -6: continue
+    add(1, c, 1.8, 3)
 suit_in = cv2.erode(suit.astype(np.uint8), np.ones((11, 11), np.uint8)) > 0
 e_suit = (cv2.Canny(cv2.GaussianBlur(gray, (0, 0), 2.6), 14, 34) > 0) & suit_in
-for c in chains(e_suit, float(os.environ.get('SUITMIN', '150'))): add(1, c, 1.6)  # solo solapas largas
+for c in chains(e_suit, 70): add(1, c, 1.4)
 
 # ── 3d. flujo: líneas de corriente sobre un campo de orientación suave ──
 labimg = np.zeros((PH, PW), np.float32)
@@ -172,11 +234,7 @@ TX, TY = np.cos(ang), np.sin(ang)
 # zona donde corre el flujo: todo el cuerpo menos el interior de la cara
 dskin = cv2.distanceTransform(skin.astype(np.uint8), cv2.DIST_L2, 5)
 flow_ok = inner & ~(dskin > 16)
-# separación entre líneas: más aire en el saco que en el pelo
-SEP_HAIR, SEP_BODY = [float(x) for x in os.environ.get('SEP', '11,22').split(',')]
-sepmap = cv2.GaussianBlur(np.where(yy < PH * 0.42, SEP_HAIR, SEP_BODY).astype(np.float32), (0, 0), 25)
-def sep(x, y): return float(sepmap[int(y), int(x)])
-DSEP, CELL = SEP_BODY, 3
+DSEP, DTEST, CELL = 11.0, 5.5, 3
 GH, GW = PH // CELL + 1, PW // CELL + 1
 grid = [[[] for _ in range(GW)] for _ in range(GH)]
 def near(x, y, d, sid):
@@ -195,7 +253,7 @@ def trace(x0, y0, sid):
             vx, vy = TX[int(y), int(x)], TY[int(y), int(x)]
             if pv is None: vx, vy = vx * sgn, vy * sgn
             elif vx * pv[0] + vy * pv[1] < 0: vx, vy = -vx, -vy
-            if seg and near(x, y, 0.5 * sep(x, y), sid): break
+            if seg and near(x, y, DTEST, sid): break
             seg.append((x, y)); pv = (vx, vy); x += vx; y += vy
         pts = seg if sgn == 1 else seg[::-1][:-1] + pts
     return pts
@@ -206,15 +264,14 @@ for sy in range(8, PH, 29):
         while q:
             x, y = q.popleft()
             if not (0 <= x < PW - 1 and 0 <= y < PH - 1 and flow_ok[int(y), int(x)]): continue
-            if near(x, y, sep(x, y), -1): continue
+            if near(x, y, DSEP, -1): continue
             pts = trace(x, y, sid)
             if len(pts) < 24: continue
             for k in range(0, len(pts), 2): grid[int(pts[k][1] / CELL)][int(pts[k][0] / CELL)].append((pts[k][0], pts[k][1], sid))
             flow.append(np.array(pts, np.float32)); sid += 1
             for k in range(0, len(pts), 6):
                 x1, y1 = pts[k]; vx, vy = TX[int(y1), int(x1)], TY[int(y1), int(x1)]
-                d_ = sep(x1, y1)
-                q.append((x1 - vy * d_, y1 + vx * d_)); q.append((x1 + vy * d_, y1 - vx * d_))
+                q.append((x1 - vy * DSEP, y1 + vx * DSEP)); q.append((x1 + vy * DSEP, y1 - vx * DSEP))
 for c in flow: add(2, c, 1.0, 2, 20)
 
 # ── salida ──
