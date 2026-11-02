@@ -601,6 +601,7 @@
     }
     .project-highlights .hl strong { font-family: 'Syne', sans-serif; color: var(--accent3); font-size: 0.85rem; }
     .project-highlights .hl em { font-style: normal; }
+    .featured-mode .project-img { height: auto; aspect-ratio: 16 / 10; }
     @media (min-width: 769px) {
       .projects-grid.featured-mode { grid-template-columns: 1fr 1fr; }
       .featured-mode .project-card.featured-main { grid-column: 1 / -1; }
@@ -690,16 +691,74 @@
     #certs { padding: 6rem 0; border-top: 1px solid var(--border); }
     .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
     .cert-group { margin-top: 2.5rem; }
-    .cert-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .cert-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.85rem; }
     .cert-chip {
-      display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.55rem;
-      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-      padding: 0.55rem 0.9rem; text-decoration: none; transition: border-color 0.2s, background 0.2s;
+      display: flex; flex-direction: column; gap: 0.6rem; padding: 0.55rem 0.55rem 0.7rem;
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      text-decoration: none; transition: border-color 0.2s, transform 0.2s;
     }
-    .cert-chip:hover { border-color: rgba(124,106,247,0.4); background: var(--card-hover); }
-    .cert-chip-name { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); }
-    .cert-chip-meta { font-size: 0.75rem; color: var(--text3); white-space: nowrap; }
+    .cert-chip:hover { border-color: rgba(124,106,247,0.45); transform: translateY(-3px); }
+    .cert-cover {
+      position: relative; aspect-ratio: 297 / 165; border-radius: 9px; overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      padding: 1rem 1.1rem; gap: 0.45rem;
+      background: radial-gradient(120% 90% at 80% 0%, rgba(124,106,247,0.28), transparent 60%), linear-gradient(160deg, #1c1833, #121019);
+    }
+    .cert-cover::before {
+      content: ''; position: absolute; inset: 6px; border-radius: 6px; pointer-events: none;
+      border: 1px solid rgba(167,155,255,0.22);
+    }
+    .cert-cover-issuer { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent2); }
+    .cert-cover .cert-chip-name { font-family: 'Syne', sans-serif; font-size: 0.86rem; font-weight: 700; color: var(--text); line-height: 1.25; }
+    .cert-cover-seal {
+      position: absolute; right: 12px; bottom: 12px; width: 22px; height: 22px; border-radius: 50%;
+      border: 1px solid rgba(250,204,21,0.45); background: radial-gradient(circle, rgba(250,204,21,0.25), rgba(250,204,21,0.05));
+    }
+    .cert-cover-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; z-index: 1; background: #fff; transition: transform 0.35s; }
+    .cert-chip.has-photo .cert-cover::before, .cert-chip.has-photo .cert-cover-seal { display: none; }
+    .cert-chip.has-photo:hover .cert-cover-photo { transform: scale(1.04); }
+    .cert-chip.has-photo .cert-chip-foot { flex-wrap: wrap; }
+    .cert-chip.has-photo .cert-cover { aspect-ratio: 297 / 210; min-height: 0; }
+    .cert-chip-foot .cert-chip-name { flex-basis: 100%; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .cert-chip-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0 0.35rem; }
+    .cert-chip-meta { font-size: 0.75rem; color: var(--text3); }
     .cert-chip-arrow { font-size: 0.75rem; color: var(--accent2); }
+    .cert-thumb {
+      position: relative; aspect-ratio: 297 / 205; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(124,106,247,0.16), rgba(124,106,247,0.04));
+    }
+    .cert-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.35s; }
+    .cert-thumb svg { width: 34px; height: 34px; color: rgba(167,155,255,0.45); }
+    .cert-feature:hover .cert-thumb img { transform: scale(1.04); }
+    .cert-feature {
+      display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 1.5rem;
+      margin-bottom: 0.9rem; padding: 0.9rem; border-radius: 14px; text-decoration: none;
+      background: linear-gradient(135deg, rgba(124,106,247,0.1), var(--card)); border: 1px solid rgba(124,106,247,0.3);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .cert-feature:hover { border-color: rgba(124,106,247,0.55); }
+    .cert-feature .cert-thumb { grid-column: auto; margin: 0; border: 1px solid var(--border); border-radius: 9px; }
+    .cert-feature-kicker { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.4rem; }
+    .cert-feature-name { display: block; font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 0.5rem; }
+    .cert-feature-meta { display: block; font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+    .cert-feature .cert-link { margin-top: 0.9rem; font-size: 0.82rem; }
+    .cert-dialog { max-width: min(1100px, 94vw); }
+    .cert-dialog img { display: block; width: 100%; height: auto; background: #fff; }
+    @media (max-width: 640px) {
+      .cert-feature { grid-template-columns: 1fr; gap: 0.9rem; }
+      .cert-feature-name { font-size: 1.1rem; }
+    }
+    @media (max-width: 760px) { .cert-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 480px) {
+      .cert-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
+      .cert-chip { padding: 0.4rem 0.4rem 0.6rem; }
+      .cert-cover { aspect-ratio: auto; min-height: 112px; padding: 0.9rem 0.6rem; gap: 0.3rem; }
+      .cert-cover .cert-chip-name { font-size: 0.74rem; }
+      .cert-cover-issuer { font-size: 0.55rem; letter-spacing: 0.12em; }
+      .cert-cover-seal { display: none; }
+      .cert-chip-meta { font-size: 0.7rem; }
+    }
     .cert-more-btn {
       display: inline-flex; align-items: center; gap: 0.4rem; margin-left: 1rem;
       padding: 0.45rem 1rem; border-radius: 8px; cursor: pointer;
@@ -1058,7 +1117,7 @@
       <div class="projects-grid reveal" id="projects-grid">
         <div class="project-card" data-category="fullstack">
           <div class="project-img" style="position:relative;overflow:hidden;">
-            <img src="img/smartops-agent.webp" width="600" height="960" loading="lazy" decoding="async" alt="Conversación en SmartOps Agent: lista de precios de un proveedor y respuesta del bot" data-alt-en="SmartOps Agent conversation: a supplier price list and the bot reply" data-alt-es="Conversación en SmartOps Agent: lista de precios de un proveedor y respuesta del bot" style="width:100%;height:100%;object-fit:cover;object-position:center 35%;transition:transform 0.4s;">
+            <img src="img/smartops-dashboard.webp" width="1152" height="630" loading="lazy" decoding="async" alt="Panel de SmartOps Agent: mensajes, automatización y lo que espera a una persona" data-alt-en="SmartOps Agent dashboard: messages, automation and what is waiting for a person" data-alt-es="Panel de SmartOps Agent: mensajes, automatización y lo que espera a una persona" style="width:100%;height:100%;object-fit:cover;object-position:left top;transition:transform 0.4s;">
             <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
             <button type="button" class="video-play" data-open-video="smartops-video">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
@@ -1084,8 +1143,8 @@
 
         <div class="project-card" data-category="frontend">
           <div class="project-img" style="position:relative;overflow:hidden;">
-            <img src="img/pura-vida-paisajismo.webp" width="640" height="293" loading="lazy" decoding="async" alt="Captura de Pura Vida Paisajismo" data-alt-en="Screenshot of Pura Vida Paisajismo" data-alt-es="Captura de Pura Vida Paisajismo" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
+            <img src="img/pura-vida-paisajismo-hd.webp" width="1280" height="800" loading="lazy" decoding="async" alt="Captura de Pura Vida Paisajismo" data-alt-en="Screenshot of Pura Vida Paisajismo" data-alt-es="Captura de Pura Vida Paisajismo" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
+            <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
           </div>
           <div class="project-body">
             <h3 class="project-name" data-featured="true" data-order="1">Pura Vida Paisajismo</h3>
@@ -1225,7 +1284,7 @@
         <div class="project-card" data-category="frontend">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/medi-health.webp" width="640" height="360" loading="lazy" decoding="async" alt="Captura de Medi-Health" data-alt-en="Screenshot of Medi-Health" data-alt-es="Captura de Medi-Health" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
+            <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
           </div>
           <div class="project-body">
             <h3 class="project-name">Medi-Health</h3>
@@ -1245,7 +1304,7 @@
         <div class="project-card" data-category="frontend">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/law-staff.webp" width="640" height="420" loading="lazy" decoding="async" alt="Captura de Law Staff" data-alt-en="Screenshot of Law Staff" data-alt-es="Captura de Law Staff" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
-            <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
+            <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
           </div>
           <div class="project-body">
             <h3 class="project-name">Law Staff</h3>
@@ -1529,10 +1588,19 @@
           <span class="cert-group-icon"><svg fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/><path d="M22 10v6"/></svg></span>
           <div>
             <h3 class="cert-group-title" data-en="Full Stack Developer Career" data-es="Carrera Full Stack Developer">Carrera Full Stack Developer</h3>
-            <p class="cert-group-sub" data-en="Coderhouse · 6 courses" data-es="Coderhouse · 6 cursos">Coderhouse · 6 cursos</p>
+            <p class="cert-group-sub" data-en="Coderhouse · 6 courses · completed 2026" data-es="Coderhouse · 6 cursos · finalizada en 2026">Coderhouse · 6 cursos · finalizada en 2026</p>
           </div>
           <span class="cert-badge" data-en="Top 10 distinction" data-es="Distinción Top 10">Distinción Top 10</span>
         </div>
+        <a class="cert-feature" href="/img/certs/carrera-fullstack-coderhouse.webp" target="_blank" rel="noopener" data-cert-view>
+          <span class="cert-thumb"><svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><circle cx="12" cy="17" r="3"/><path d="M10.5 19.5 10 23l2-1 2 1-.5-3.5"/><path d="M7 8h10M8 11h8"/></svg><img src="/img/certs/carrera-fullstack-coderhouse-thumb.webp" width="640" height="435" loading="lazy" alt="Certificado de la Carrera de Desarrollo Full Stack de Coderhouse a nombre de Ignacio Sanchez Greppi"></span>
+          <span>
+            <span class="cert-feature-kicker" data-en="Career certificate" data-es="Certificado de carrera">Certificado de carrera</span>
+            <span class="cert-feature-name" data-en="Full Stack Development Career" data-es="Carrera de Desarrollo Full Stack">Carrera de Desarrollo Full Stack</span>
+            <span class="cert-feature-meta" data-en="Coderhouse · May 2026 · 106 hours over 53 weeks, all academic requirements completed." data-es="Coderhouse · Mayo 2026 · 106 horas a lo largo de 53 semanas, con todos los requisitos académicos cumplidos.">Coderhouse · Mayo 2026 · 106 horas a lo largo de 53 semanas, con todos los requisitos académicos cumplidos.</span>
+            <span class="cert-link"><span data-en="View certificate" data-es="Ver certificado">Ver certificado</span> ↗</span>
+          </span>
+        </a>
         <div class="cert-chips">
           <a class="cert-chip" href="https://drive.google.com/file/d/1N2Zbz2-nYTFt31sow40XhPmFPnJkFMBS/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Web Development" data-es="Desarrollo Web">Desarrollo Web</span><span class="cert-chip-meta">2023 · 38 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
           <a class="cert-chip" href="https://drive.google.com/file/d/1X7Zul3gEeWQ-e-hsXWy1vvAfR22GUEM3/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name">Javascript</span><span class="cert-chip-meta">2026 · 20 h</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
@@ -1573,9 +1641,8 @@
             <h3 class="cert-group-title" data-en="Other courses" data-es="Otros cursos">Otros cursos</h3>
             <p class="cert-group-sub" data-en="Coderhouse · Agesic" data-es="Coderhouse · Agesic">Coderhouse · Agesic</p>
           </div>
-          <button type="button" class="cert-more-btn" aria-expanded="false" aria-controls="other-courses"><span data-en="Show 6 courses" data-es="Ver los 6 cursos">Ver los 6 cursos</span></button>
         </div>
-        <div class="cert-chips" id="other-courses" hidden>
+        <div class="cert-chips" id="other-courses">
           <a class="cert-chip" href="https://drive.google.com/file/d/1v8Ep-yLWDcpamKWJG2W0lyk2a2GuSlfP/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Software Development Cycle and Test Planning" data-es="Ciclo de Desarrollo de Software y Planificación de Pruebas">Ciclo de Desarrollo de Software y Planificación de Pruebas</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
           <a class="cert-chip" href="https://drive.google.com/file/d/1DbbX37TmWRVvWlWsczClgL3KU3h_5CA-/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Unleash the Potential of Agile Methodology: Intensive Course" data-es="Desata el Potencial de la Metodología Ágil: Curso Intensivo">Desata el Potencial de la Metodología Ágil: Curso Intensivo</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
           <a class="cert-chip" href="https://drive.google.com/file/d/1wDzz8PFDUUtunn7bC_G2sRbeYLZ5KaKJ/view?usp=sharing" target="_blank" rel="noopener"><span class="cert-chip-name" data-en="Mastery in Data Migrations and Queries with Entity Framework" data-es="Maestría en Migraciones y Consulta de Datos con Entity Framework">Maestría en Migraciones y Consulta de Datos con Entity Framework</span><span class="cert-chip-meta">Coderhouse · 2026</span><span class="cert-chip-arrow" aria-hidden="true">↗</span></a>
@@ -1611,6 +1678,14 @@
       </div>
     </div>
   </section>
+
+  <dialog class="video-dialog cert-dialog" id="cert-viewer" aria-label="Certificado">
+    <img src="" alt="">
+    <div class="video-dialog-bar">
+      <a class="cert-link" href="#" target="_blank" rel="noopener" style="margin:0"><span data-en="Open full size" data-es="Abrir en tamaño completo">Abrir en tamaño completo</span> ↗</a>
+      <button type="button" class="video-dialog-close" data-en="Close" data-es="Cerrar">Cerrar</button>
+    </div>
+  </dialog>
 
   <dialog class="video-dialog" id="smartops-video" aria-label="SmartOps Agent demo">
     <video controls playsinline preload="none" poster="/media/smartops-demo-poster.webp" width="880" height="550">
@@ -1776,19 +1851,60 @@
         .finally(() => setTimeout(restore, 2500));
     });
 
-    // ── OTHER COURSES ──
-    document.querySelectorAll('.cert-more-btn').forEach(btn => {
-      const panel = document.getElementById(btn.getAttribute('aria-controls'));
-      const label = btn.querySelector('span');
-      btn.addEventListener('click', () => {
-        const open = btn.getAttribute('aria-expanded') !== 'true';
-        btn.setAttribute('aria-expanded', String(open));
-        panel.hidden = !open;
-        label.setAttribute('data-en', open ? 'Hide courses' : 'Show 6 courses');
-        label.setAttribute('data-es', open ? 'Ocultar cursos' : 'Ver los 6 cursos');
-        label.textContent = label.getAttribute('data-' + (document.documentElement.lang === 'es' ? 'es' : 'en'));
-      });
+    // ── CERTIFICATE COVERS ──
+    document.querySelectorAll('.cert-chip').forEach(chip => {
+      const name = chip.querySelector('.cert-chip-name');
+      const meta = chip.querySelector('.cert-chip-meta');
+      const arrow = chip.querySelector('.cert-chip-arrow');
+      const first = meta.textContent.split('·')[0].trim();
+      const groupSub = chip.closest('.cert-group').querySelector('.cert-group-sub');
+      const issuer = /\d/.test(first) ? groupSub.textContent.split('·')[0].trim() : first;
+      if (!/\d/.test(first)) meta.textContent = meta.textContent.split('·').slice(1).join('·').trim();
+      const cover = document.createElement('span');
+      cover.className = 'cert-cover';
+      cover.innerHTML = '<span class="cert-cover-issuer"></span><span class="cert-cover-seal" aria-hidden="true"></span>';
+      cover.firstChild.textContent = issuer;
+      cover.appendChild(name);
+      const foot = document.createElement('span');
+      foot.className = 'cert-chip-foot';
+      foot.append(meta, arrow);
+      chip.replaceChildren(cover, foot);
+      const m = chip.getAttribute('href').match(/\/d\/([\w-]+)/);
+      const src = chip.dataset.thumb || (m && 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w640');
+      if (src) {
+        const img = new Image();
+        img.loading = 'lazy'; img.decoding = 'async'; img.referrerPolicy = 'no-referrer';
+        img.className = 'cert-cover-photo';
+        img.alt = '';
+        img.addEventListener('load', () => {
+          if (img.naturalWidth < 50) { img.remove(); return; }
+          chip.classList.add('has-photo');
+          foot.prepend(name);
+        });
+        img.addEventListener('error', () => img.remove());
+        img.src = src;
+        cover.appendChild(img);
+      }
     });
+
+    // ── CERTIFICATE VIEWER ──
+    const certDlg = document.getElementById('cert-viewer');
+    if (certDlg && typeof certDlg.showModal === 'function') {
+      const certImg = certDlg.querySelector('img');
+      const certOpen = certDlg.querySelector('a');
+      document.querySelectorAll('[data-cert-view]').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const thumbImg = link.querySelector('img');
+          certImg.src = link.getAttribute('href');
+          certImg.alt = thumbImg ? thumbImg.alt : '';
+          certOpen.href = link.getAttribute('href');
+          certDlg.showModal();
+        });
+      });
+      certDlg.querySelector('.video-dialog-close').addEventListener('click', () => certDlg.close());
+      certDlg.addEventListener('click', e => { if (e.target === certDlg) certDlg.close(); });
+    }
 
     // ── DEMO VIDEO ──
     document.querySelectorAll('[data-open-video]').forEach(btn => {
