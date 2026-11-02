@@ -690,25 +690,40 @@
     #certs { padding: 6rem 0; border-top: 1px solid var(--border); }
     .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
     .cert-group { margin-top: 2.5rem; }
-    .cert-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }
+    .cert-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.85rem; }
     .cert-chip {
-      display: grid; grid-template-columns: 1fr auto; align-content: start; gap: 0.25rem 0.5rem;
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
-      padding: 0 0 0.75rem; text-decoration: none; transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      display: flex; flex-direction: column; gap: 0.6rem; padding: 0.55rem 0.55rem 0.7rem;
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      text-decoration: none; transition: border-color 0.2s, transform 0.2s;
     }
-    .cert-chip:hover { border-color: rgba(124,106,247,0.4); background: var(--card-hover); transform: translateY(-2px); }
-    .cert-chip-name { grid-column: 1 / -1; padding: 0 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); line-height: 1.3; }
-    .cert-chip-meta { padding-left: 0.85rem; font-size: 0.75rem; color: var(--text3); }
-    .cert-chip-arrow { padding-right: 0.85rem; font-size: 0.75rem; color: var(--accent2); }
+    .cert-chip:hover { border-color: rgba(124,106,247,0.45); transform: translateY(-3px); }
+    .cert-cover {
+      position: relative; aspect-ratio: 297 / 165; border-radius: 9px; overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      padding: 1rem 1.1rem; gap: 0.45rem;
+      background: radial-gradient(120% 90% at 80% 0%, rgba(124,106,247,0.28), transparent 60%), linear-gradient(160deg, #1c1833, #121019);
+    }
+    .cert-cover::before {
+      content: ''; position: absolute; inset: 6px; border-radius: 6px; pointer-events: none;
+      border: 1px solid rgba(167,155,255,0.22);
+    }
+    .cert-cover-issuer { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent2); }
+    .cert-cover .cert-chip-name { font-family: 'Syne', sans-serif; font-size: 0.86rem; font-weight: 700; color: var(--text); line-height: 1.25; }
+    .cert-cover-seal {
+      position: absolute; right: 12px; bottom: 12px; width: 22px; height: 22px; border-radius: 50%;
+      border: 1px solid rgba(250,204,21,0.45); background: radial-gradient(circle, rgba(250,204,21,0.25), rgba(250,204,21,0.05));
+    }
+    .cert-chip-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0 0.35rem; }
+    .cert-chip-meta { font-size: 0.75rem; color: var(--text3); }
+    .cert-chip-arrow { font-size: 0.75rem; color: var(--accent2); }
     .cert-thumb {
-      grid-column: 1 / -1; position: relative; aspect-ratio: 297 / 205; margin-bottom: 0.5rem; overflow: hidden;
+      position: relative; aspect-ratio: 297 / 205; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, rgba(124,106,247,0.16), rgba(124,106,247,0.04));
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center; color: rgba(167,155,255,0.45);
     }
-    .cert-thumb svg { width: 34px; height: 34px; }
     .cert-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.35s; }
-    .cert-chip:hover .cert-thumb img, .cert-feature:hover .cert-thumb img { transform: scale(1.04); }
+    .cert-thumb svg { width: 34px; height: 34px; color: rgba(167,155,255,0.45); }
+    .cert-feature:hover .cert-thumb img { transform: scale(1.04); }
     .cert-feature {
       display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 1.5rem;
       margin-bottom: 0.9rem; padding: 0.9rem; border-radius: 14px; text-decoration: none;
@@ -727,11 +742,15 @@
       .cert-feature { grid-template-columns: 1fr; gap: 0.9rem; }
       .cert-feature-name { font-size: 1.1rem; }
     }
+    @media (max-width: 760px) { .cert-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 480px) {
-      .cert-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
-      .cert-chip-name { font-size: 0.8rem; padding: 0 0.65rem; }
-      .cert-chip-meta { padding-left: 0.65rem; font-size: 0.7rem; }
-      .cert-chip-arrow { padding-right: 0.65rem; }
+      .cert-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
+      .cert-chip { padding: 0.4rem 0.4rem 0.6rem; }
+      .cert-cover { padding: 0.7rem 0.6rem; gap: 0.3rem; }
+      .cert-cover .cert-chip-name { font-size: 0.74rem; }
+      .cert-cover-issuer { font-size: 0.55rem; letter-spacing: 0.12em; }
+      .cert-cover-seal { display: none; }
+      .cert-chip-meta { font-size: 0.7rem; }
     }
     .cert-more-btn {
       display: inline-flex; align-items: center; gap: 0.4rem; margin-left: 1rem;
@@ -1826,23 +1845,24 @@
         .finally(() => setTimeout(restore, 2500));
     });
 
-    // ── CERTIFICATE THUMBNAILS ──
-    const certIcon = '<svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><circle cx="12" cy="17" r="3"/><path d="M10.5 19.5 10 23l2-1 2 1-.5-3.5"/><path d="M7 8h10M8 11h8"/></svg>';
+    // ── CERTIFICATE COVERS ──
     document.querySelectorAll('.cert-chip').forEach(chip => {
-      if (chip.querySelector('.cert-thumb')) return;
-      const m = chip.getAttribute('href').match(/\/d\/([\w-]+)/);
-      const src = chip.dataset.thumb || (m && 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w480');
-      const thumb = document.createElement('span');
-      thumb.className = 'cert-thumb';
-      thumb.innerHTML = certIcon;
-      if (src) {
-        const img = new Image();
-        img.loading = 'lazy'; img.decoding = 'async'; img.alt = ''; img.referrerPolicy = 'no-referrer';
-        img.addEventListener('error', () => img.remove());
-        img.src = src;
-        thumb.appendChild(img);
-      }
-      chip.prepend(thumb);
+      const name = chip.querySelector('.cert-chip-name');
+      const meta = chip.querySelector('.cert-chip-meta');
+      const arrow = chip.querySelector('.cert-chip-arrow');
+      const first = meta.textContent.split('·')[0].trim();
+      const groupSub = chip.closest('.cert-group').querySelector('.cert-group-sub');
+      const issuer = /\d/.test(first) ? groupSub.textContent.split('·')[0].trim() : first;
+      if (!/\d/.test(first)) meta.textContent = meta.textContent.split('·').slice(1).join('·').trim();
+      const cover = document.createElement('span');
+      cover.className = 'cert-cover';
+      cover.innerHTML = '<span class="cert-cover-issuer"></span><span class="cert-cover-seal" aria-hidden="true"></span>';
+      cover.firstChild.textContent = issuer;
+      cover.appendChild(name);
+      const foot = document.createElement('span');
+      foot.className = 'cert-chip-foot';
+      foot.append(meta, arrow);
+      chip.replaceChildren(cover, foot);
     });
 
     // ── CERTIFICATE VIEWER ──
