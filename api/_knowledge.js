@@ -43,7 +43,7 @@ Full Stack Developer especializado en desarrollo web y automatización con IA. D
 
 Full Stack Developer Freelance, clientes directos y Workana (2023 – actualidad), Montevideo, remoto:
 - Workana (actualidad, freelance): a partir de SmartOps Agent, su proyecto propio de automatización con IA, ofrece soluciones a medida para negocios: respuestas automáticas a consultas frecuentes, recordatorios y avisos por email o WhatsApp, carga de datos de formularios en planillas y reportes automáticos, mientras sigue ampliando su cartera de clientes. Todavía no hay un proyecto de automatización terminado para un cliente de Workana; si preguntan, decirlo con honestidad y hablar de SmartOps Agent.
-- Pura Vida Huertas (2025, rebranding, Full Stack Developer): rehízo la marca como sitio full stack de punta a punta: diseño, frontend, backend y deploy en producción. Catálogo de productos y contenidos sobre una base MongoDB, formulario de contacto y diseño responsive. Tecnologías: React, Node.js, MongoDB, Tailwind CSS.
+- Pura Vida Paisajismo (2025, Full Stack Developer): sitio en producción para un estudio de paisajismo de Uruguay, hecho de punta a punta. El visitante arma su jardín en 3D desde el navegador y escribe por WhatsApp en un clic. Deploy automático en Cloudflare Workers con preview por PR. Tecnologías: Astro, TypeScript, Three.js, Tailwind CSS, Cloudflare Workers.
 - Pura Vida (2024, Full Stack Developer): lideró el sitio de la marca de jardinería y paisajismo de inicio a fin: diseño UI, maquetación, desarrollo y deploy, con foco en identidad de marca y experiencia de usuario. Tecnologías: HTML, CSS, JavaScript, Node.js.
 - Golden Pets (2023, Web Developer): primer cliente real. Sitio responsive en producción con catálogo de productos e integración con redes sociales alineada a la marca. Tecnologías: HTML, CSS, JavaScript, React.
 - Mantenimiento: ofrece soporte y mantenimiento post-lanzamiento a cada cliente.
@@ -84,9 +84,9 @@ Resultados medidos:
 
 Lo difícil y lo que aprendió: Meta deshabilitó la cuenta de negocio el primer día (falso positivo), así que construyó un simulador local de WhatsApp que firma webhooks e imita la Graph API. "1.850" puede ser 1850 o 1,85: el sistema aprende el formato de planilla de cada proveedor una vez, con una persona eligiendo la columna de precio. El borde de Cloudflare retenía los streams de eventos por GET, así que el panel abre su stream con POST y, si falla, se actualiza cada 30 segundos. El uso real mostró que el panel tenía que ser más claro, y ahora ordena todo en Pendientes, Novedades y Estado del sistema.
 
-## Proyecto de cliente destacado: Pura Vida Paisajismo (2026)
+## Proyecto de cliente destacado: Pura Vida Paisajismo (2025)
 
-Proyecto de 2026, distinto de los sitios anteriores de Pura Vida (2024) y Pura Vida Huertas (2025). Sitio en producción para un estudio de paisajismo de Uruguay (diseño, construcción y mantenimiento de jardines en Montevideo y todo el país). Su diferencial: el visitante arma su jardín en 3D desde el navegador antes de empezar la obra, y puede escribir por WhatsApp en un clic. Cada cambio se publica solo en Cloudflare Workers, con una preview automática por PR. Astro, TypeScript, Tailwind CSS, Three.js, Cloudflare Workers. Sitio: https://puravidapaisajismo.com
+Proyecto de 2025, distinto del sitio anterior de Pura Vida (2024). Sitio en producción para un estudio de paisajismo de Uruguay (diseño, construcción y mantenimiento de jardines en Montevideo y todo el país). Su diferencial: el visitante arma su jardín en 3D desde el navegador antes de empezar la obra, y puede escribir por WhatsApp en un clic. Cada cambio se publica solo en Cloudflare Workers, con una preview automática por PR. Astro, TypeScript, Tailwind CSS, Three.js, Cloudflare Workers. Sitio: https://puravidapaisajismo.com
 
 ## Otros proyectos (todos con código en GitHub)
 
