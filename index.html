@@ -690,16 +690,21 @@
     #certs { padding: 6rem 0; border-top: 1px solid var(--border); }
     .certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
     .cert-group { margin-top: 2.5rem; }
-    .cert-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }
-    .cert-chip {
-      display: grid; grid-template-columns: 1fr auto; align-content: start; gap: 0.25rem 0.5rem;
-      background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
-      padding: 0 0 0.75rem; text-decoration: none; transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    .cert-chips {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
     }
-    .cert-chip:hover { border-color: rgba(124,106,247,0.4); background: var(--card-hover); transform: translateY(-2px); }
-    .cert-chip-name { grid-column: 1 / -1; padding: 0 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); line-height: 1.3; }
-    .cert-chip-meta { padding-left: 0.85rem; font-size: 0.75rem; color: var(--text3); }
-    .cert-chip-arrow { padding-right: 0.85rem; font-size: 0.75rem; color: var(--accent2); }
+    .cert-chip {
+      display: flex; align-items: center; gap: 0.75rem; min-width: 0;
+      background: var(--card); padding: 0.85rem 1.1rem; text-decoration: none; transition: background 0.2s;
+    }
+    .cert-chip:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .cert-chip::before { content: ''; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: var(--accent2); box-shadow: 0 0 0 3px rgba(124,106,247,0.15); }
+    .cert-chip:hover { background: var(--card-hover); }
+    .cert-chip-name { flex: 1; min-width: 0; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .cert-chip-meta { font-size: 0.75rem; color: var(--text3); white-space: nowrap; }
+    .cert-chip-arrow { font-size: 0.75rem; color: var(--accent2); transition: transform 0.2s; }
+    .cert-chip:hover .cert-chip-arrow { transform: translate(2px, -2px); }
     .cert-thumb {
       grid-column: 1 / -1; position: relative; aspect-ratio: 297 / 205; margin-bottom: 0.5rem; overflow: hidden;
       background: linear-gradient(135deg, rgba(124,106,247,0.16), rgba(124,106,247,0.04));
@@ -708,7 +713,7 @@
     }
     .cert-thumb svg { width: 34px; height: 34px; }
     .cert-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.35s; }
-    .cert-chip:hover .cert-thumb img, .cert-feature:hover .cert-thumb img { transform: scale(1.04); }
+    .cert-feature:hover .cert-thumb img { transform: scale(1.04); }
     .cert-feature {
       display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: 1.5rem;
       margin-bottom: 0.9rem; padding: 0.9rem; border-radius: 14px; text-decoration: none;
@@ -727,11 +732,11 @@
       .cert-feature { grid-template-columns: 1fr; gap: 0.9rem; }
       .cert-feature-name { font-size: 1.1rem; }
     }
-    @media (max-width: 480px) {
-      .cert-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
-      .cert-chip-name { font-size: 0.8rem; padding: 0 0.65rem; }
-      .cert-chip-meta { padding-left: 0.65rem; font-size: 0.7rem; }
-      .cert-chip-arrow { padding-right: 0.65rem; }
+    @media (max-width: 700px) {
+      .cert-chips { grid-template-columns: 1fr; }
+      .cert-chip { flex-wrap: wrap; row-gap: 0.2rem; padding: 0.8rem 0.95rem; }
+      .cert-chip-name { flex-basis: calc(100% - 3rem); }
+      .cert-chip-meta { margin-left: calc(7px + 0.75rem); }
     }
     .cert-more-btn {
       display: inline-flex; align-items: center; gap: 0.4rem; margin-left: 1rem;
@@ -1824,25 +1829,6 @@
         .then(() => { label.textContent = en ? 'Copied!' : '¡Copiado!'; })
         .catch(() => { label.textContent = email; })
         .finally(() => setTimeout(restore, 2500));
-    });
-
-    // ── CERTIFICATE THUMBNAILS ──
-    const certIcon = '<svg fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><circle cx="12" cy="17" r="3"/><path d="M10.5 19.5 10 23l2-1 2 1-.5-3.5"/><path d="M7 8h10M8 11h8"/></svg>';
-    document.querySelectorAll('.cert-chip').forEach(chip => {
-      if (chip.querySelector('.cert-thumb')) return;
-      const m = chip.getAttribute('href').match(/\/d\/([\w-]+)/);
-      const src = chip.dataset.thumb || (m && 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w480');
-      const thumb = document.createElement('span');
-      thumb.className = 'cert-thumb';
-      thumb.innerHTML = certIcon;
-      if (src) {
-        const img = new Image();
-        img.loading = 'lazy'; img.decoding = 'async'; img.alt = ''; img.referrerPolicy = 'no-referrer';
-        img.addEventListener('error', () => img.remove());
-        img.src = src;
-        thumb.appendChild(img);
-      }
-      chip.prepend(thumb);
     });
 
     // ── CERTIFICATE VIEWER ──
