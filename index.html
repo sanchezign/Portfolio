@@ -555,6 +555,13 @@
     }
     .project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
     .project-card:hover .project-img img { transform: scale(1.04); }
+    .project-img-link { position: absolute; inset: 0; z-index: 1; cursor: pointer; }
+    .project-img > span { z-index: 2; pointer-events: none; }
+    .project-img .video-play { z-index: 2; }
+    .project-name-link { color: inherit; text-decoration: none; transition: color 0.2s; }
+    .project-name-link:hover, .project-name-link:focus-visible { color: var(--accent2, #a78bfa); }
+    .project-name-arrow { display: inline-block; margin-left: 0.3rem; font-size: 0.8em; opacity: 0; transform: translate(-3px, 3px); transition: opacity 0.2s, transform 0.2s; }
+    .project-name-link:hover .project-name-arrow, .project-name-link:focus-visible .project-name-arrow { opacity: 0.8; transform: none; }
     .project-img-ph { color: var(--text3); opacity: 0.3; }
     .project-img-ph svg { width: 48px; height: 48px; }
     .project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
@@ -1163,6 +1170,7 @@
         <div class="project-card" data-category="fullstack">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/smartops-dashboard.webp" width="1152" height="630" loading="lazy" decoding="async" alt="Panel de SmartOps Agent: mensajes, automatización y lo que espera a una persona" data-alt-en="SmartOps Agent dashboard: messages, automation and what is waiting for a person" data-alt-es="Panel de SmartOps Agent: mensajes, automatización y lo que espera a una persona" style="width:100%;height:100%;object-fit:cover;object-position:left top;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://smartops-demo.duckdns.org" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
             <button type="button" class="video-play" data-open-video="smartops-video">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
@@ -1170,7 +1178,7 @@
             </button>
           </div>
           <div class="project-body">
-            <h3 class="project-name" data-featured="true" data-order="2">SmartOps Agent</h3>
+            <h3 class="project-name" data-featured="true" data-order="2"><a class="project-name-link" href="https://smartops-demo.duckdns.org" target="_blank" rel="noopener">SmartOps Agent<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="AI operations agent for businesses on WhatsApp. Reads price lists, orders and voice notes in any format, keeps the catalog up to date and routes doubts to a person. Includes a bilingual panel with one-click decisions and chats marked when they wait for a reply, plus a live public demo." data-es="Agente de operaciones con IA para negocios en WhatsApp. Lee listas de precios, pedidos y notas de voz en cualquier formato, mantiene el catálogo actualizado y deriva dudas a una persona. Incluye un panel bilingüe con decisiones de un clic y chats marcados cuando esperan respuesta, y una demo pública en vivo.">Agente de operaciones con IA para negocios en WhatsApp. Lee listas de precios, pedidos y notas de voz en cualquier formato, mantiene el catálogo actualizado y deriva dudas a una persona. Incluye un panel bilingüe con decisiones de un clic y chats marcados cuando esperan respuesta, y una demo pública en vivo.</div>
             <div class="project-highlights">
               <span class="hl"><strong data-en="2,100+" data-es="2.100+">2.100+</strong> <em data-en="automated tests" data-es="tests automatizados">tests automatizados</em></span>
@@ -1189,10 +1197,11 @@
         <div class="project-card" data-category="frontend">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/pura-vida-paisajismo-hd.webp" width="1280" height="800" loading="lazy" decoding="async" alt="Captura de Pura Vida Paisajismo" data-alt-en="Screenshot of Pura Vida Paisajismo" data-alt-es="Captura de Pura Vida Paisajismo" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://puravidapaisajismo.com" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name" data-featured="true" data-order="1">Pura Vida Paisajismo</h3>
+            <h3 class="project-name" data-featured="true" data-order="1"><a class="project-name-link" href="https://puravidapaisajismo.com" target="_blank" rel="noopener">Pura Vida Paisajismo<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Production site for a landscaping studio in Uruguay. Visitors design their garden in 3D right in the browser before any work begins. Every change ships automatically to Cloudflare Workers, with an automatic preview on every PR." data-es="Sitio en producción para un estudio de paisajismo de Uruguay. El visitante arma su jardín en 3D desde el navegador antes de empezar la obra. Cada cambio se publica solo en Cloudflare Workers, con una preview automática por PR.">Sitio en producción para un estudio de paisajismo de Uruguay. El visitante arma su jardín en 3D desde el navegador antes de empezar la obra. Cada cambio se publica solo en Cloudflare Workers, con una preview automática por PR.</div>
             <div class="project-highlights">
               <span class="hl"><strong data-en="Client" data-es="Cliente">Cliente</strong> <em data-en="live in production" data-es="real en producción">real en producción</em></span>
@@ -1209,10 +1218,11 @@
         <div class="project-card" data-category="fullstack">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/feria-artesanal.webp" width="640" height="420" loading="lazy" decoding="async" alt="Captura de Feria Artesanal" data-alt-en="Screenshot of Feria Artesanal" data-alt-es="Captura de Feria Artesanal" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://feria-artesanal.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">Feria Artesanal</h3>
+            <h3 class="project-name"><a class="project-name-link" href="https://feria-artesanal.vercel.app/" target="_blank" rel="noopener">Feria Artesanal<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Complete MERN marketplace. Artisan product catalog, JWT authentication, shopping cart and admin panel." data-es="Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.">Marketplace MERN completo. Catálogo de productos artesanales, autenticación JWT, carrito de compras y panel de administración.</div>
             <div class="project-highlights">
               <span class="hl"><strong>3</strong> <em data-en="user roles" data-es="roles de usuario">roles de usuario</em></span>
@@ -1229,10 +1239,11 @@
         <div class="project-card" data-category="fullstack">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/automation-landing.webp" width="640" height="380" loading="lazy" decoding="async" alt="Captura de AI Automation Landing" data-alt-en="Screenshot of AI Automation Landing" data-alt-es="Captura de AI Automation Landing" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://automation-landing-two.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">AI Automation Landing</h3>
+            <h3 class="project-name"><a class="project-name-link" href="https://automation-landing-two.vercel.app/" target="_blank" rel="noopener">AI Automation Landing<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Landing page for AI agent and automation services (n8n, Copilot Studio, WhatsApp bots). Bilingual, with validated environment variables and GitHub Actions CI." data-es="Landing de servicios de agentes de IA y automatización (n8n, Copilot Studio, bots de WhatsApp). Bilingüe, con validación de variables de entorno y CI en GitHub Actions.">Landing de servicios de agentes de IA y automatización (n8n, Copilot Studio, bots de WhatsApp). Bilingüe, con validación de variables de entorno y CI en GitHub Actions.</div>
             <div class="project-highlights">
               <span class="hl"><strong data-en="EN/ES" data-es="ES/EN">ES/EN</strong> <em data-en="bilingual" data-es="bilingüe">bilingüe</em></span>
@@ -1249,10 +1260,11 @@
         <div class="project-card" data-category="fullstack">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/account-tracker.webp" width="640" height="293" loading="lazy" decoding="async" alt="Captura de Account Tracker" data-alt-en="Screenshot of Account Tracker" data-alt-es="Captura de Account Tracker" style="width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://account-tracker-tau.vercel.app" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">Account Tracker</h3>
+            <h3 class="project-name"><a class="project-name-link" href="https://account-tracker-tau.vercel.app" target="_blank" rel="noopener">Account Tracker<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Personal finance app. Income and expense tracking, automatic balance and pie chart." data-es="App de finanzas personales. Registro de ingresos y gastos, balance automático y gráfico de torta.">App de finanzas personales. Registro de ingresos y gastos, balance automático y gráfico de torta.</div>
             <div class="project-highlights">
               <span class="hl"><strong data-en="Auto" data-es="Balance">Balance</strong> <em data-en="balance" data-es="automático">automático</em></span>
@@ -1269,10 +1281,11 @@
         <div class="project-card" data-category="fullstack">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/organization-app.webp" width="640" height="350" loading="lazy" decoding="async" alt="Captura de Organization App" data-alt-en="Screenshot of Organization App" data-alt-es="Captura de Organization App" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://organization-app-k7nm.onrender.com/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">Organization App</h3>
+            <h3 class="project-name"><a class="project-name-link" href="https://organization-app-k7nm.onrender.com/" target="_blank" rel="noopener">Organization App<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Organization app with login/register. Notes management, custom boards and integrated calendar." data-es="App de organización con login/registro. Gestión de notas, tableros personalizados y calendario integrado.">App de organización con login/registro. Gestión de notas, tableros personalizados y calendario integrado.</div>
             <div class="project-highlights">
               <span class="hl"><strong data-en="Custom" data-es="Tableros">Tableros</strong> <em data-en="boards" data-es="personalizados">personalizados</em></span>
@@ -1289,10 +1302,11 @@
         <div class="project-card" data-category="academic">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/weather-app.webp" width="640" height="348" loading="lazy" decoding="async" alt="Captura de Weather App" data-alt-en="Screenshot of Weather App" data-alt-es="Captura de Weather App" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://weather-app-pi-three-57.vercel.app" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#a1a1aa;backdrop-filter:blur(8px);" data-en="Frontend · Academic" data-es="Frontend · Académico">Frontend · Académico</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">Weather App</h3>
+            <h3 class="project-name"><a class="project-name-link" href="https://weather-app-pi-three-57.vercel.app" target="_blank" rel="noopener">Weather App<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Real-time weather app. City lookup with temperature, condition and weekly forecast." data-es="App del clima en tiempo real. Consulta por ciudad con temperatura, condición y pronóstico semanal.">App del clima en tiempo real. Consulta por ciudad con temperatura, condición y pronóstico semanal.</div>
             <div class="project-highlights">
               <span class="hl"><strong data-en="Real-time" data-es="API">API</strong> <em data-en="weather API" data-es="clima en tiempo real">clima en tiempo real</em></span>
@@ -1309,10 +1323,11 @@
         <div class="project-card" data-category="academic">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/calculator-js.webp" width="452" height="602" loading="lazy" decoding="async" alt="Captura de Calculator JS" data-alt-en="Screenshot of Calculator JS" data-alt-es="Captura de Calculator JS" style="width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://sanchezign.github.io/CalculatorJs/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;top:0.75rem;left:0.75rem;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#a1a1aa;backdrop-filter:blur(8px);" data-en="Frontend · Academic" data-es="Frontend · Académico">Frontend · Académico</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">Calculator JS</h3>
+            <h3 class="project-name"><a class="project-name-link" href="https://sanchezign.github.io/CalculatorJs/" target="_blank" rel="noopener">Calculator JS<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Modern responsive calculator with chained operations and error prevention. Pure Vanilla JS." data-es="Calculadora moderna y responsive con operaciones encadenadas y prevención de errores. Vanilla JS puro.">Calculadora moderna y responsive con operaciones encadenadas y prevención de errores. Vanilla JS puro.</div>
             <div class="project-highlights">
               <span class="hl"><strong>0</strong> <em data-en="libraries, vanilla JS" data-es="librerías, JS puro">librerías, JS puro</em></span>
@@ -1329,10 +1344,11 @@
         <div class="project-card" data-category="frontend">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/medi-health.webp" width="640" height="360" loading="lazy" decoding="async" alt="Captura de Medi-Health" data-alt-en="Screenshot of Medi-Health" data-alt-es="Captura de Medi-Health" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://medi-health-ivory.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">Medi-Health</h3>
+            <h3 class="project-name"><a class="project-name-link" href="https://medi-health-ivory.vercel.app/" target="_blank" rel="noopener">Medi-Health<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Health website with Astro and Tailwind. Services, benefits, blog and medical coverage. Responsive design." data-es="Web de salud con Astro y Tailwind. Servicios, beneficios, blog y cobertura médica. Diseño responsivo.">Web de salud con Astro y Tailwind. Servicios, beneficios, blog y cobertura médica. Diseño responsivo.</div>
             <div class="project-highlights">
               <span class="hl"><strong>Blog</strong> <em data-en="on health" data-es="de salud">de salud</em></span>
@@ -1349,10 +1365,11 @@
         <div class="project-card" data-category="frontend">
           <div class="project-img" style="position:relative;overflow:hidden;">
             <img src="img/law-staff.webp" width="640" height="420" loading="lazy" decoding="async" alt="Captura de Law Staff" data-alt-en="Screenshot of Law Staff" data-alt-es="Captura de Law Staff" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
+            <a class="project-img-link" href="https://law-staff.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
             <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#38bdf8;backdrop-filter:blur(8px);">Frontend</span>
           </div>
           <div class="project-body">
-            <h3 class="project-name">Law Staff</h3>
+            <h3 class="project-name"><a class="project-name-link" href="https://law-staff.vercel.app/" target="_blank" rel="noopener">Law Staff<span class="project-name-arrow" aria-hidden="true">↗</span></a></h3>
             <div class="project-desc" data-en="Website for a law firm. Home, about us and blog sections. Professional design with Astro." data-es="Sitio web para estudio jurídico. Secciones de inicio, sobre nosotros y blog. Diseño profesional con Astro.">Sitio web para estudio jurídico. Secciones de inicio, sobre nosotros y blog. Diseño profesional con Astro.</div>
             <div class="project-highlights">
               <span class="hl"><strong>3</strong> <em data-en="sections" data-es="secciones">secciones</em></span>
