@@ -106,7 +106,7 @@ Proyecto de 2025, distinto del sitio anterior de Pura Vida (2024). Sitio en prod
 ## Formación
 
 - Carrera Full Stack Developer, Coderhouse (2024 – 2026), con distinción Top 10 (entre los 10 mejores estudiantes). Certificado de carrera emitido el 3 de mayo de 2026: 106 horas a lo largo de 53 semanas, con todos los requisitos académicos cumplidos. 6 cursos: Desarrollo Web (2023, 38 h), JavaScript (2026, 20 h), React JS (2026, 16 h), Backend I: Desarrollo Avanzado (2026, 18 h), Backend II: Diseño y Arquitectura (2026, 16 h) y Backend III: Testing y Escalabilidad (2026, 16 h).
-- Universidad ORT Uruguay: 2 años cursados, 1 año de Ingeniería en Sistemas y 1 año de Licenciatura en Multimedia.
+- Universidad ORT Uruguay: estudios no finalizados. Cursó 1 año de la Licenciatura en Multimedia y 1 semestre (6 meses) de Ingeniería en Sistemas. No tiene título universitario.
 
 ## Certificaciones
 
