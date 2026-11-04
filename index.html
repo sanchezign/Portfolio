@@ -433,44 +433,37 @@
       content: ''; position: absolute; inset: 0; pointer-events: none;
       background: linear-gradient(180deg, rgba(10,10,15,0) 65%, rgba(10,10,15,0.55) 100%);
     }
-    /* Retrato circuito (js/portrait-circuit.js) */
-    .about-photo.pc-on { background: radial-gradient(120% 90% at 60% 35%, #15122a 0%, #0b0a12 70%); }
-    /* modo circuito: la foto solo se ve dentro de la lente que sigue al mouse */
-    .about-photo.pc-on img {
-      -webkit-mask-image: radial-gradient(circle calc(var(--pc-r, 0px) + 0.1px) at var(--pc-x, 50%) var(--pc-y, 50%), #000 72%, transparent 100%);
-      mask-image: radial-gradient(circle calc(var(--pc-r, 0px) + 0.1px) at var(--pc-x, 50%) var(--pc-y, 50%), #000 72%, transparent 100%);
+    /* Retrato 3D holográfico (js/portrait-holo.js) */
+    .about-photo.ph-on {
+      background:
+        linear-gradient(rgba(124,106,247,0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+        linear-gradient(90deg, rgba(124,106,247,0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+        radial-gradient(70% 55% at 50% 38%, #1d1740 0%, #0b0a12 72%);
     }
-    .about-photo.pc-on.pc-photo img { -webkit-mask-image: none; mask-image: none; }
-    .pc-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; transition: opacity 0.6s ease; touch-action: pan-y; }
-    /* modo foto: el circuito solo se ve dentro de la lente */
-    .about-photo.pc-photo .pc-canvas {
-      -webkit-mask-image: radial-gradient(circle calc(var(--pc-r, 0px) + 0.1px) at var(--pc-x, 50%) var(--pc-y, 50%), #000 58%, transparent 100%);
-      mask-image: radial-gradient(circle calc(var(--pc-r, 0px) + 0.1px) at var(--pc-x, 50%) var(--pc-y, 50%), #000 58%, transparent 100%);
-    }
-    .pc-hud, .pc-toggle { display: none; }
-    .about-photo.pc-on .pc-hud { display: block; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    .about-photo.ph-on img { opacity: 0; transition: opacity 0.6s ease; }
+    .about-photo.ph-on.ph-photo img { opacity: 1; }
+    .ph-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; transition: opacity 0.6s ease;
+      filter: drop-shadow(0 0 6px rgba(139,92,246,0.55)) drop-shadow(0 0 22px rgba(124,106,247,0.35)); }
+    .about-photo:not(.ph-on) .ph-canvas, .about-photo.ph-photo .ph-canvas { opacity: 0; }
+    .ph-hud, .ph-toggle { display: none; }
+    .about-photo.ph-on .ph-hud { display: block; position: absolute; inset: 0; z-index: 2; pointer-events: none;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
-      font-size: 0.62rem; letter-spacing: 0.08em; color: var(--text3); text-transform: uppercase; transition: opacity 0.4s ease; }
-    .about-photo.pc-photo .pc-hud > :not(.pc-corner):not(.pc-reading) { opacity: 0; }
-    .pc-corner { position: absolute; width: 12px; height: 12px; border: 0 solid rgba(196,181,253,0.55); }
-    .pc-tl { top: 12px; left: 12px; border-top-width: 1px; border-left-width: 1px; }
-    .pc-tr { top: 12px; right: 12px; border-top-width: 1px; border-right-width: 1px; }
-    .pc-bl { bottom: 12px; left: 12px; border-bottom-width: 1px; border-left-width: 1px; }
-    .pc-br { bottom: 12px; right: 12px; border-bottom-width: 1px; border-right-width: 1px; }
-    .pc-label { position: absolute; top: 20px; left: 30px; color: var(--accent3); }
-    .pc-readout { position: absolute; top: 20px; right: 30px; }
-    .pc-readout i { font-style: normal; }
-    .pc-readout b { font-weight: 400; color: var(--text); }
-    @media (max-width: 520px) { .pc-readout { display: none; } }
-    .pc-reading { position: absolute; top: 0; left: 0; white-space: nowrap; color: var(--text); opacity: 0; will-change: transform;
-      background: rgba(10,10,15,0.72); padding: 0.15rem 0.35rem; border-radius: 4px; }
-    .about-photo.pc-on .pc-toggle { display: block; position: absolute; bottom: 14px; left: 26px; z-index: 3;
+      font-size: 0.62rem; letter-spacing: 0.08em; color: var(--text3); text-transform: uppercase; }
+    .about-photo.ph-photo .ph-label, .about-photo.ph-photo .ph-readout { opacity: 0; }
+    .ph-corner { position: absolute; width: 12px; height: 12px; border: 0 solid rgba(196,181,253,0.55); }
+    .ph-tl { top: 12px; left: 12px; border-top-width: 1px; border-left-width: 1px; }
+    .ph-tr { top: 12px; right: 12px; border-top-width: 1px; border-right-width: 1px; }
+    .ph-bl { bottom: 12px; left: 12px; border-bottom-width: 1px; border-left-width: 1px; }
+    .ph-br { bottom: 12px; right: 12px; border-bottom-width: 1px; border-right-width: 1px; }
+    .ph-label { position: absolute; top: 20px; left: 30px; color: var(--accent3); }
+    .ph-readout { position: absolute; top: 20px; right: 30px; white-space: pre; font-variant-numeric: tabular-nums; }
+    @media (max-width: 520px) { .ph-readout { display: none; } .ph-canvas { filter: drop-shadow(0 0 8px rgba(139,92,246,0.5)); } }
+    .about-photo.ph-on .ph-toggle { display: block; position: absolute; bottom: 14px; left: 26px; z-index: 3;
       font: inherit; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
       font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent3);
       background: rgba(10,10,15,0.6); border: 1px solid rgba(196,181,253,0.3); border-radius: 6px; padding: 0.35rem 0.6rem; cursor: pointer; }
-    .pc-toggle:hover { border-color: var(--accent2); color: var(--text); }
-    .pc-toggle:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
-    @media (hover: hover) and (pointer: fine) { .about-photo.pc-on { cursor: crosshair; } }
+    .ph-toggle:hover { border-color: var(--accent2); color: var(--text); }
+    .ph-toggle:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
     .about-photo-ph {
       display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
       color: var(--text3);
@@ -2220,7 +2213,7 @@
 <script src="/js/hero-intro.js" defer></script>
 <script src="/js/exp-tracker.js" defer></script>
 <script src="/js/particles.js" defer></script>
-<script src="/js/portrait-circuit.js" defer></script>
+<script src="/js/portrait-holo.js" defer></script>
 <script src="/chat/widget.js" defer></script>
 </body>
 </html>
