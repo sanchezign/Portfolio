@@ -1,8 +1,12 @@
 /* Nutria holográfica que se asoma sobre la foto de "Sobre mí".
-   - Al pasar el mouse por la foto, la nutria sube desde atrás del borde superior y apoya las
-     patitas en el borde; al salir, vuelve a esconderse.
-   - Mientras está afuera, la cabeza y los ojos siguen al mouse.
-   - En pantallas táctiles se asoma cuando la foto está en pantalla, o al tocarla, y sigue el dedo.
+   - Entrada: al pasar el mouse por la foto, la nutria salta desde atrás del borde superior con
+     un resorte (se pasa un poco y rebota), las patitas llegan primero al borde y, al rato,
+     hace un gesto con la cabeza.
+   - Afuera: la cabeza sigue al mouse con un resorte suave y respira.
+   - Salida: al sacar el mouse (con medio segundo de gracia), no se esconde: se desarma como
+     holograma, con una línea de luz que baja y deja la parte de arriba como un fantasma que se
+     apaga.
+   - En pantallas táctiles se asoma cuando la foto está bien a la vista y mira al dedo.
    - Con prefers-reduced-motion aparece y desaparece sin animación y no sigue el mouse.
    Se dibuja con WebGL en un shader (formas suaves con raymarching), sin dependencias.
    Es decorativa: aria-hidden y sin eventos de puntero. Sin WebGL no aparece. */
@@ -26,114 +30,142 @@
     '#extension GL_OES_standard_derivatives : enable',
     'precision highp float;',
     'varying vec2 vP;',
-    'uniform vec2 uSpan;      // media extensión visible en x e y (mundo)',
-    'uniform float uYc;       // centro vertical de la vista',
-    'uniform float uEdge;     // altura del borde de la foto',
-    'uniform float uRise;     // 0 escondida, 1 afuera (cuerpo)',
-    'uniform float uPaw;      // 0..1 patitas',
-    'uniform vec2 uLook;      // giro de la cabeza (yaw, pitch)',
+    'uniform vec2 uSpan;     // media extensión visible (mundo)',
+    'uniform float uEdge;    // altura del borde de la foto',
+    'uniform float uBase;    // desplazamiento vertical del cuerpo (0 = afuera)',
+    'uniform float uPawOff;  // las patitas se adelantan al cuerpo',
+    'uniform float uPawOk;   // cuánto pueden bajar las patitas por delante del borde',
+    'uniform mat3 uRot;      // giro de la cabeza (inversa)',
+    'uniform vec3 uBody;     // x = corrimiento, y = inclinación, z = respiración',
+    'uniform vec2 uSquash;',
+    'uniform float uHolo;    // 0 = sólida; 0..1 = desarmándose',
     'uniform float uTime;',
     'uniform float uBlink;',
-    'mat3 rotY(float a){ float c=cos(a), s=sin(a); return mat3(c,0.,-s, 0.,1.,0., s,0.,c); }',
-    'mat3 rotX(float a){ float c=cos(a), s=sin(a); return mat3(1.,0.,0., 0.,c,s, 0.,-s,c); }',
+    'uniform vec2 uEye;      // brillo de los ojos, sigue la mirada',
     'float sdEll(vec3 p, vec3 r){ float k0 = length(p / r); float k1 = length(p / (r * r)); return k0 * (k0 - 1.0) / max(k1, 1e-4); }',
     'float sdCap(vec3 p, vec3 a, vec3 b, float r){ vec3 pa = p - a, ba = b - a; float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0); return length(pa - ba * h) - r; }',
     'float smin(float a, float b, float k){ float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0); return mix(b, a, h) - k * h * (1.0 - h); }',
-    'mat3 headR; vec3 headP; float bodyY; float pawY;',
-    // mapa: x = distancia, y = material (0 pelaje, 1 ojo, 2 nariz, 3 bigote, 4 pata)
+    'const vec3 PIV = vec3(0.0, 0.85, -0.05);   // cuello',
+    'const vec3 HEAD = vec3(0.0, 1.62, 0.0);    // centro de la cabeza',
+    // espacio del cuerpo: origen en el borde, sin el salto ni la inclinación
+    'vec3 toBody(vec3 p) {',
+    '  p.y -= uEdge + uBase; p.x -= uBody.x;',
+    '  float c = cos(uBody.y), s = sin(uBody.y);',
+    '  p.xy = mat2(c, -s, s, c) * p.xy;',
+    '  p.xy /= uSquash;',
+    '  return p;',
+    '}',
+    'vec3 toHead(vec3 b) { return uRot * (b - PIV) + PIV - HEAD; }',
+    // x = distancia, y = material (0 pelaje, 1 ojo, 2 nariz, 3 bigote, 4 pata, 5 hocico)
     'vec2 map(vec3 p) {',
-    '  vec3 q = headR * (p - headP);',
-    '  float d = sdEll(q, vec3(1.05, 0.9, 0.88));',
-    '  for (int i = 0; i < 2; i++) { float s = i == 0 ? -1.0 : 1.0;',
-    '    vec3 e = q - vec3(s * 0.8, 0.58, -0.12);',
-    '    float ear = sdEll(e, vec3(0.24, 0.21, 0.14));',
-    '    ear = max(ear, -sdEll(e - vec3(0.0, -0.02, 0.12), vec3(0.13, 0.11, 0.08)));',
-    '    d = smin(d, ear, 0.1);',
-    '    d = smin(d, sdEll(q - vec3(s * 0.22, -0.36, 0.72), vec3(0.3, 0.24, 0.24)), 0.12);',
-    '  }',
-    '  d = smin(d, sdEll(q - vec3(0.0, -0.3, 0.55), vec3(0.55, 0.36, 0.38)), 0.18);',
+    '  vec3 b = toBody(p);',
+    '  vec3 q = toHead(b);',
+    '  vec3 qa = vec3(abs(q.x), q.y, q.z);',
+    '  float d = sdEll(q - vec3(0.0, 0.02, 0.0), vec3(1.06, 0.78, 0.84));',
+    '  d = smin(d, sdEll(qa - vec3(0.42, -0.22, 0.32), vec3(0.42, 0.36, 0.5)), 0.2);',     // mejillas
+    '  vec3 e = qa - vec3(0.76, 0.48, -0.2);',                                                // orejas
+    '  float ear = max(sdEll(e, vec3(0.2, 0.17, 0.12)), -sdEll(e - vec3(-0.01, -0.02, 0.11), vec3(0.11, 0.09, 0.07)));',
+    '  d = smin(d, ear, 0.07);',
+    '  d = smin(d, sdEll(qa - vec3(0.38, 0.36, 0.52), vec3(0.2, 0.08, 0.16)), 0.12);',        // cejas
+    '  d = smin(d, sdEll(q - vec3(0.0, -0.56, 0.58), vec3(0.2, 0.12, 0.17)), 0.08);',        // mentón
     '  vec2 r = vec2(d, 0.0);',
-    '  float nose = sdEll(q - vec3(0.0, -0.17, 0.98), vec3(0.2, 0.12, 0.12));',
+    '  float pad = sdEll(qa - vec3(0.2, -0.3, 0.72), vec3(0.29, 0.22, 0.21));',            // almohadillas del hocico
+    '  if (pad < r.x + 0.03) r = vec2(smin(r.x, pad, 0.06), 5.0);',
+    '  float nose = sdEll(q - vec3(0.0, -0.1, 0.93), vec3(0.22, 0.14, 0.12));',
+    '  nose = max(nose, -(q.y + 0.2));',
     '  if (nose < r.x) r = vec2(nose, 2.0);',
-    '  for (int i = 0; i < 2; i++) { float s = i == 0 ? -1.0 : 1.0;',
-    '    float eye = sdEll(q - vec3(s * 0.42, 0.13, 0.73), vec3(0.155, 0.17 * uBlink + 0.012, 0.09));',
-    '    if (eye < r.x) r = vec2(eye, 1.0);',
-    '    for (int k = 0; k < 3; k++) { float fk = float(k);',
-    '      vec3 a = vec3(s * 0.42, -0.3 - fk * 0.07, 0.88);',
-    '      vec3 b = vec3(s * 1.65, -0.08 - fk * 0.2 + fk * fk * 0.02, 0.45 - fk * 0.05);',
-    '      float w = sdCap(q, a, b, 0.011);',
-    '      if (w < r.x) r = vec2(w, 3.0);',
-    '    }',
+    '  float eye = sdEll(qa - vec3(0.4, 0.12, 0.7), vec3(0.16, 0.18 * uBlink + 0.012, 0.09));',
+    '  if (eye < r.x) r = vec2(eye, 1.0);',
+    '  for (int k = 0; k < 4; k++) { float fk = float(k);',                                 // bigotes, curvos
+    '    vec3 a = vec3(0.38, -0.25 - fk * 0.05, 0.86);',
+    '    vec3 m = vec3(0.9, -0.2 - fk * 0.11, 0.7);',
+    '    vec3 z = vec3(1.42, -0.1 - fk * 0.2 + fk * fk * 0.015, 0.5);',
+    '    float w = min(sdCap(qa, a, m, 0.009), sdCap(qa, m, z, 0.007));',
+    '    if (w < r.x) r = vec2(w, 3.0);',
     '  }',
-    '  float body = sdEll(p - vec3(0.0, bodyY, -0.25), vec3(1.15, 1.0, 0.78));',
-    '  r.x = smin(r.x, body, 0.25);',
-    '  r.x = max(r.x, uEdge - p.y);',
-    '  for (int i = 0; i < 2; i++) { float s = i == 0 ? -1.0 : 1.0;',
-    '    vec3 c = vec3(s * 0.82, pawY, 0.62);',
-    '    float pw = sdEll(p - c, vec3(0.36, 0.2, 0.34));',
-    '    for (int k = 0; k < 3; k++) { float fk = float(k) - 1.0;',
-    '      pw = smin(pw, length(p - c - vec3(fk * 0.17, 0.02, 0.27)) - 0.1, 0.06); }',
-    '    pw = max(pw, uEdge - 0.16 - p.y);',
-    '    if (pw < r.x) r = vec2(pw, 4.0);',
-    '  }',
+    '  float body = sdEll(b - vec3(0.0, 0.62, -0.2), vec3(0.86, 0.55, 0.6));',              // cuello y pecho
+    '  body = smin(body, sdEll(b - vec3(0.0, 0.05, -0.15), vec3(1.12, 0.8, 0.72)), 0.3);',
+    '  body *= 1.0 - 0.012 * uBody.z * step(b.y, 1.0);',
+    '  r.x = smin(r.x, body, 0.22);',
+    '  float clipY = p.y - uEdge;',
+    '  r.x = max(r.x, -clipY);',
+    // patitas: van por su cuenta, pueden asomar por delante del borde
+    '  vec3 pp = vec3(abs(b.x), b.y - uPawOff, b.z) - vec3(0.92, 0.13, 0.68);',
+    '  float pw = sdEll(pp, vec3(0.36, 0.19, 0.36));',
+    '  for (int k = 0; k < 4; k++) { float fk = float(k) - 1.5;',
+    '    pw = smin(pw, length(pp - vec3(fk * 0.165, 0.0, 0.29)) - 0.095, 0.05); }',
+    '  pw = max(pw, -(clipY + 0.32 * uPawOk));',
+    '  if (pw < r.x) r = vec2(pw, 4.0);',
     '  return r;',
     '}',
     'vec3 nrm(vec3 p){ vec2 e = vec2(0.002, -0.002);',
     '  return normalize(e.xyy * map(p + e.xyy).x + e.yyx * map(p + e.yyx).x + e.yxy * map(p + e.yxy).x + e.xxx * map(p + e.xxx).x); }',
-    'float ln(float f, float w){ float d = abs(fract(f - 0.5) - 0.5) / max(fwidth(f), 1e-4); return 1.0 - clamp(d / w, 0.0, 1.0); }',
     'void main() {',
-    '  headR = rotX(-uLook.y) * rotY(-uLook.x);',
-    '  float rise = uRise;',
-    '  headP = vec3(0.0, mix(uEdge - 2.4, uEdge + 1.55, rise), 0.0);',
-    '  bodyY = headP.y - 1.25;',
-    '  pawY = mix(uEdge - 0.5, uEdge + 0.12, uPaw);',
-    '  vec3 ro = vec3(0.0, uYc, 9.0);',
-    '  vec3 pt = vec3(vP.x * uSpan.x, uYc + vP.y * uSpan.y, 0.0);',
-    '  vec3 rd = normalize(pt - ro);',
+    '  vec3 ro = vec3(0.0, 0.0, 9.0);',
+    '  vec3 rd = normalize(vec3(vP * uSpan, 0.0) - ro);',
     '  float t = 6.0, md = 1e3; vec2 h = vec2(1.0, -1.0);',
-    '  for (int i = 0; i < 90; i++) {',
-    '    vec3 p = ro + rd * t; h = map(p);',
+    '  for (int i = 0; i < 96; i++) {',
+    '    h = map(ro + rd * t);',
     '    md = min(md, h.x);',
-    '    if (h.x < 0.0015 || t > 12.5) break;',
+    '    if (h.x < 0.0015 || t > 12.0) break;',
     '    t += h.x * 0.9;',
     '  }',
-    '  vec3 violet = vec3(0.55, 0.36, 0.98), light = vec3(0.86, 0.8, 1.0), deep = vec3(0.16, 0.08, 0.38);',
+    '  vec3 sig = vec3(0.55, 0.36, 0.98), glow = vec3(0.86, 0.78, 1.0), deep = vec3(0.13, 0.07, 0.3);',
+    '  float holoOn = step(0.001, uHolo);',
+    '  float line = uEdge + mix(3.0, -0.45, uHolo);',
     '  if (h.x > 0.0015) {',
-    '    float glow = exp(-md * 9.0) * 0.35 * max(rise, uPaw);',
-    '    gl_FragColor = vec4(violet * glow, glow);',
+    '    float halo = exp(-md * 10.0) * 0.28 * (1.0 - holoOn * smoothstep(0.3, 0.9, uHolo));',
+    '    gl_FragColor = vec4(sig * halo, halo);',
     '    return;',
     '  }',
     '  vec3 p = ro + rd * t, n = nrm(p), v = -rd;',
-    '  vec3 q = headR * (p - headP);',
-    '  vec3 L = normalize(vec3(-0.4 + uLook.x, 0.7 - uLook.y, 0.8));',
+    '  vec3 q = toHead(toBody(p));',
+    '  vec3 L = normalize(vec3(-0.5, 0.75, 0.75));',
     '  float dif = clamp(dot(n, L), 0.0, 1.0);',
-    '  float fres = pow(1.0 - clamp(dot(n, v), 0.0, 1.0), 2.4);',
-    '  float spec = pow(clamp(dot(n, normalize(L + v)), 0.0, 1.0), 40.0);',
-    '  vec3 g = h.y > 3.5 ? p * 1.0 : q;',
-    '  float grid = max(ln(g.x * 9.0, 0.8), ln(g.y * 9.0, 0.8));',
-    '  float fine = max(ln(g.x * 36.0, 0.6), ln(g.y * 36.0, 0.6));',
-    '  float fur = ln((g.y + 0.35 * sin(g.x * 3.0)) * 22.0 + sin(g.x * 41.0) * 0.4, 0.7);',
-    '  vec3 c;',
-    '  if (h.y > 0.5 && h.y < 1.5) {',            // ojo
-    '    c = deep * 0.35 + light * pow(spec, 2.0) * 2.5 + violet * fres * 0.6;',
-    '    vec2 hl = q.xy - vec2(sign(q.x) * 0.42 - 0.05 + uLook.x * 0.04, 0.2 - uLook.y * 0.04);',
-    '    c += light * smoothstep(0.045, 0.025, length(hl)) * 1.4;',
-    '  } else if (h.y > 1.5 && h.y < 2.5) {',     // nariz
-    '    c = deep * 0.6 + violet * dif * 0.35 + light * spec * 1.8 + violet * fres;',
-    '  } else if (h.y > 2.5 && h.y < 3.5) {',     // bigotes
-    '    c = light * 0.95;',
-    '  } else {',
-    '    float muzzle = smoothstep(0.62, 0.3, length((q - vec3(0.0, -0.33, 0.7)) * vec3(1.0, 1.25, 1.0)));',
-    '    c = deep * (0.3 + 0.4 * dif) + violet * (0.12 + 0.62 * dif) * (0.65 + 0.7 * muzzle) + light * muzzle * 0.12;',
-    '    c += light * grid * 0.34 + violet * fine * 0.14 + light * fur * 0.12 * dif;',
-    '    c += mix(violet, light, 0.55) * fres * 1.1 + light * spec * 0.4;',
-    '    float mouth = abs(q.y - (-0.5 + 0.35 * q.x * q.x)) ;',
-    '    c = mix(c, deep * 0.4, smoothstep(0.03, 0.012, mouth) * step(abs(q.x), 0.28) * step(0.6, q.z));',
+    '  float back = clamp(dot(n, normalize(vec3(0.7, 0.3, -0.6))), 0.0, 1.0);',
+    '  float frc = pow(1.0 - clamp(dot(n, v), 0.0, 1.0), 2.0);',
+    '  float spec = pow(clamp(dot(n, normalize(L + v)), 0.0, 1.0), 48.0);',
+    '  float lum;',
+    '  if (h.y > 0.5 && h.y < 1.5) lum = 0.04;',
+    '  else if (h.y > 1.5 && h.y < 2.5) lum = 0.1 + 0.25 * dif;',
+    '  else if (h.y > 2.5 && h.y < 3.5) lum = 0.9;',
+    '  else if (h.y > 4.5) lum = 0.55 + 0.45 * dif;',
+    '  else lum = 0.16 + 0.58 * dif + 0.05 * back;',
+    // pelaje: rayitas muy finas que siguen la forma, sin cuadrícula marcada
+    '  float fur = sin(q.y * 110.0 + sin(q.x * 9.0) * 3.0 + sin(q.z * 7.0) * 2.0) * 0.5 + 0.5;',
+    '  if (h.y < 0.5 || h.y > 3.5) lum *= 0.97 + 0.03 * fur;',
+    '  if (h.y > 4.5) {',                                                // puntitos de los bigotes
+    '    vec2 dp = vec2(abs(q.x), q.y) - vec2(0.26, -0.27);',
+    '    float dots = smoothstep(0.03, 0.018, length(vec2(mod(dp.x, 0.09) - 0.045, mod(dp.y, 0.08) - 0.04)));',
+    '    lum *= 1.0 - 0.3 * dots * step(abs(dp.x), 0.14) * step(abs(dp.y), 0.1);',
     '  }',
-    '  float scan = exp(-pow((p.y - mod(uTime * 1.1, 6.0) + 2.5 - uEdge) * 4.0, 2.0));',
-    '  c += light * scan * 0.25;',
-    '  c *= 0.93 + 0.07 * sin(gl_FragCoord.y * 1.4 + uTime * 5.0);',
-    '  gl_FragColor = vec4(c, 1.0);',
+    '  float wave = smoothstep(0.75, 1.0, sin(p.y * 7.0 - uTime * 2.4));',
+    '  vec3 c = sig * (0.22 + lum * 0.95) + mix(sig, glow, 0.4) * (frc * 1.1 + wave * 0.22);',
+    '  if (h.y > 0.5 && h.y < 1.5) {',                                   // ojos: brillo que sigue la mirada
+    '    vec2 hl = vec2(abs(q.x), q.y) - vec2(0.36 - sign(q.x) * uEye.x * 0.03, 0.19 - uEye.y * 0.03 - 0.0);',
+    '    c = deep * 0.5 + glow * (smoothstep(0.05, 0.03, length(hl)) * 1.3 + spec * 0.8) + sig * frc * 0.5;',
+    '  }',
+    '  if (h.y > 1.5 && h.y < 2.5) c += glow * spec * 1.2;',
+    '  if (h.y > 2.5 && h.y < 3.5) c = glow * 0.95;',
+    '  float mY = -0.4 - 0.5 * q.x * q.x;',
+    '  float mline = smoothstep(0.022, 0.008, abs(q.y - mY)) * step(abs(q.x), 0.2) * step(0.62, q.z) * step(h.y, 0.5);',
+    '  c = mix(c, deep * 0.6, mline);',
+    '  float a = 1.0;',
+    '  if (h.y < 0.5 && p.y < uEdge + 0.006) c = deep * 0.7 + sig * 0.08;',   // corte del cuerpo contra el borde
+    // salida tipo holograma: arriba de la línea queda un fantasma que se apaga
+    '  float above = p.y - line;',
+    '  if (holoOn > 0.5 && above > 0.0) {',
+    '    float ga = (1.0 - smoothstep(0.0, 1.4, above)) * (1.0 - smoothstep(0.78, 1.0, uHolo));',
+    '    float fine = smoothstep(0.86, 1.0, sin(p.y * 160.0 - uTime * 10.0));',
+    '    float g = clamp(frc * 1.25 + fine * 0.22 + 0.05, 0.0, 1.0);',
+    '    c = sig * (0.75 + g * 0.9) + glow * frc * frc * 0.2;',
+    '    a = ga * g;',
+    '    if (a < 0.01) discard;',
+    '  }',
+    '  float edge = holoOn * (1.0 - smoothstep(0.0, 0.035, abs(above)));',
+    '  c = mix(c, mix(sig * 1.35, glow, 0.45), edge);',
+    '  a = max(a, edge);',
+    '  gl_FragColor = vec4(c * a, a);',
     '}'
   ].join('\n');
 
@@ -162,98 +194,153 @@
   var aP = gl.getAttribLocation(prog, 'aP');
   gl.enableVertexAttribArray(aP);
   gl.vertexAttribPointer(aP, 2, gl.FLOAT, false, 0, 0);
-  ['uSpan', 'uYc', 'uEdge', 'uRise', 'uPaw', 'uLook', 'uTime', 'uBlink'].forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
+  ['uSpan', 'uEdge', 'uBase', 'uPawOff', 'uPawOk', 'uRot', 'uBody', 'uSquash', 'uHolo', 'uTime', 'uBlink', 'uEye']
+    .forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
 
-  // ── tamaño: el canvas se apoya sobre el borde superior de la foto ──
-  var OVER = 22;                       // px del canvas que bajan sobre la foto (patitas)
-  var SPAN_Y = 1.85;                   // media altura visible, en unidades del mundo
-  var cssH = 1;
+  // ── tamaño: ancho según la foto, el canvas baja un poco sobre el borde (patitas) ──
+  var SPAN_Y = 1.95;                    // media altura visible, en unidades del mundo
   function resize() {
-    var r = canvas.getBoundingClientRect();
+    var pw = photo.getBoundingClientRect().width;
+    var w = Math.round(Math.min(300, Math.max(190, pw * 0.56)));
+    var hgt = Math.round(w * 0.88), over = Math.round(w * 0.115);
+    canvas.style.width = w + 'px';
+    canvas.style.height = hgt + 'px';
+    canvas.style.bottom = 'calc(100% - ' + over + 'px)';
     var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    canvas.width = Math.max(1, Math.round(r.width * dpr));
-    canvas.height = Math.max(1, Math.round(r.height * dpr));
-    cssH = r.height || 1;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(hgt * dpr);
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.uniform2f(U.uSpan, SPAN_Y * r.width / cssH, SPAN_Y);
-    gl.uniform1f(U.uYc, 0.0);
-    gl.uniform1f(U.uEdge, -SPAN_Y + 2 * SPAN_Y * (OVER / cssH));
-    kick();
+    gl.uniform2f(U.uSpan, SPAN_Y * w / hgt, SPAN_Y);
+    gl.uniform1f(U.uEdge, -SPAN_Y + 2 * SPAN_Y * (over / hgt));
+    draw(performance.now());
   }
-  if (window.ResizeObserver) new ResizeObserver(resize).observe(canvas);
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(photo);
   else window.addEventListener('resize', resize);
 
   // ── estado ──
-  var want = false, rise = 0, paw = 0, look = { x: 0, y: 0 }, aim = { x: 0, y: 0 };
-  var raf = 0, last = performance.now(), t0 = last, nextBlink = 2500, blinkT = -1;
-  function show(on) {
-    if (want === on) return;
-    want = on;
-    canvas.classList.toggle('is-out', on);
-    if (reduce) { rise = paw = on ? 1 : 0; }
+  var hover = false, out = 0;          // out: 1 mientras tiene que estar afuera
+  var M = 0, S = 0;                    // subida (resorte) y su velocidad
+  var holo = -1, holoM = 0;            // salida: progreso del desarme (-1 = no)
+  var E = { x: 0, y: 0 }, H = { x: 0, y: 0 }, T = { x: 0, y: 0.3 }, idleT = { x: 0, y: 0.3 }, nextIdle = 0;
+  var nodAt = -1, nod = 0, calm = 1, graceT = 0;
+  var raf = 0, last = performance.now(), active = false, nextBlink = 0, blinkT = -1;
+
+  function setHover(on) {
+    hover = on;
+    clearTimeout(graceT);
+    if (on) { out = 1; nodAt = performance.now() + 900; }
+    else graceT = setTimeout(function () { if (!hover) { out = 0; kick(); } }, reduce ? 0 : 450);
     kick();
   }
   function onPointer(e) {
     var r = canvas.getBoundingClientRect();
-    var cx = r.left + r.width / 2, cy = r.top + r.height * 0.45;
-    aim.x = Math.max(-1, Math.min(1, (e.clientX - cx) / (window.innerWidth * 0.3)));
-    aim.y = Math.max(-1, Math.min(1, (e.clientY - cy) / (window.innerHeight * 0.4)));
-    if (want) kick();
+    var cx = r.left + r.width / 2, cy = r.top + r.height * 0.55;
+    T.x = Math.max(-1, Math.min(1, (e.clientX - cx) / 400));
+    T.y = Math.max(-1, Math.min(1, (e.clientY - cy) / 300));
   }
   if (finePointer) {
-    photo.addEventListener('pointerenter', function () { show(true); });
-    col.addEventListener('pointerleave', function () { show(false); });
+    photo.addEventListener('pointerenter', function () { setHover(true); });
+    photo.addEventListener('pointerleave', function () { setHover(false); });
     if (!reduce) window.addEventListener('pointermove', onPointer, { passive: true });
   } else {
-    // táctil: se asoma cuando la foto está bien a la vista; tocarla la hace mirar al dedo
-    new IntersectionObserver(function (es) { show(es[0].intersectionRatio > 0.55); },
+    new IntersectionObserver(function (es) { setHover(es[0].intersectionRatio > 0.55); },
       { threshold: [0, 0.55, 0.8] }).observe(photo);
     if (!reduce) {
-      photo.addEventListener('pointerdown', onPointer);
+      photo.addEventListener('pointerdown', function (e) { onPointer(e); pointerSeen = true; });
       photo.addEventListener('pointermove', onPointer);
     }
   }
-  var visible = false;
-  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; kick(); }, { rootMargin: '100px' }).observe(col);
+  var pointerSeen = finePointer;
+  new IntersectionObserver(function (es) {
+    active = es[0].isIntersecting;
+    if (active) kick(); else { cancelAnimationFrame(raf); raf = 0; }
+  }, { rootMargin: '100px' }).observe(col);
   document.addEventListener('visibilitychange', kick);
 
-  function kick() { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame); }
-  function ease(x) { return x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x); }
-  function back(x) { x = Math.max(0, Math.min(1, x)); var c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); }
+  function idle() { return !out && holo < 0 && M === 0; }
+  function kick() {
+    if (raf || !active || document.hidden) return;
+    last = performance.now();
+    raf = requestAnimationFrame(frame);
+  }
+  function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
+  function sstep(a, b, x) { x = clamp((x - a) / (b - a), 0, 1); return x * x * (3 - 2 * x); }
+
   function frame(now) {
     raf = 0;
-    var dt = Math.min((now - last) / 1000, 0.05); last = now;
-    var t = (now - t0) / 1000;
-    if (!reduce) {
-      rise += ((want ? 1 : 0) - rise) * Math.min(1, dt * (want ? 4.5 : 6));
-      paw += ((want && rise > 0.45 ? 1 : 0) - paw) * Math.min(1, dt * (want ? 7 : 9));
-      // si no hay mouse (táctil sin tocar), mira alrededor despacio
-      var tx = aim.x, ty = aim.y;
-      if (!finePointer && !want) { tx = 0; ty = 0; }
-      look.x += (tx * 0.7 - look.x) * Math.min(1, dt * 6);
-      look.y += (ty * 0.4 - look.y) * Math.min(1, dt * 6);
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (reduce) {
+      M = out ? 1 : 0; S = 0; holo = -1;
+    } else if (out) {
+      if (holo >= 0 && holo < 0.85) M = 1;           // volvió antes de desarmarse: sigue ahí
+      holo = -1;
+      S += (17 * (1 - M) - 6.2 * S) * dt;            // resorte: se pasa un poco y rebota
+      M += S * dt;
+    } else if (M > 0 || holo >= 0) {
+      if (holo < 0) { holo = 0; holoM = M; }
+      holo += dt; S = 0;
+      M = holoM;
+      if (holo / 1.6 >= 1) { M = 0; holo = -1; }
     }
-    // parpadeo cada tanto
+    draw(now, dt);
+    if (!idle() && active && !document.hidden) raf = requestAnimationFrame(frame);
+  }
+
+  function draw(now, dt) {
+    dt = dt || 0;
+    var i = clamp(1.8 * M, 0, 1.03), n = i * i * (3 - 2 * Math.min(i, 1));
+    // mirada: sigue al puntero cuando está encima; si no, mira alrededor de a ratos
+    if (now > nextIdle) {
+      nextIdle = now + 1400 + Math.random() * 2600;
+      idleT.x = (Math.random() - 0.5) * 0.5; idleT.y = 0.25 + Math.random() * 0.35;
+    }
+    var follow = hover && pointerSeen && !reduce;
+    var tx = (follow ? T.x : idleT.x) + 0.02 * Math.sin(now / 700);
+    var ty = (follow ? 0.8 * T.y + 0.3 : idleT.y) + 0.015 * Math.sin(now / 900);
+    if (reduce) { tx = 0; ty = 0.3; E.x = 0; E.y = 0.3; }
+    else {
+      H.x += (60 * (tx - E.x) - 9 * H.x) * dt; H.y += (60 * (ty - E.y) - 9 * H.y) * dt;
+      E.x += H.x * dt; E.y += H.y * dt;
+    }
+    calm += ((out ? 0 : 1) - calm) * Math.min(1, 3 * dt);
+    if (nodAt > 0 && now > nodAt) { nod = 1; nodAt = -1; }
+    nod = Math.max(0, nod - 1.4 * dt);
+    var o = reduce ? 0 : Math.sin((1 - nod) * Math.PI * 2) * nod * 0.16;
+    var pitch = (0.42 * E.y + o) * (1 - 0.4 * calm) + 0.05 * calm;
+    var yaw = 0.6 * E.x;
+    var roll = -0.12 * E.x + (reduce ? 0 : 0.04 * Math.sin(now / 1800 + 1));
+    // rotación YXZ; el shader necesita la inversa (transpuesta)
+    var cy = Math.cos(yaw), sy = Math.sin(yaw), cx = Math.cos(pitch), sx = Math.sin(pitch), cz = Math.cos(roll), sz = Math.sin(roll);
+    var m = [
+      cy * cz + sy * sx * sz, cx * sz, -sy * cz + cy * sx * sz,
+      -cy * sz + sy * sx * cz, cx * cz, sy * sz + cy * sx * cz,
+      sy * cx, -sx, cy * cx
+    ];
+    // m está en filas; pasar la transpuesta en orden de columnas = m tal cual en filas
+    gl.uniformMatrix3fv(U.uRot, false, new Float32Array([m[0], m[3], m[6], m[1], m[4], m[7], m[2], m[5], m[8]]));
+    gl.uniform1f(U.uBase, -3.0 * (1 - M));
+    gl.uniform1f(U.uPawOff, 3.0 * (Math.min(n, 1) - M));
+    gl.uniform1f(U.uPawOk, sstep(0.75, 0.98, i));
+    var breath = reduce ? 0 : Math.sin(now / 900);
+    gl.uniform3f(U.uBody, 0.075 * E.x * M, -0.06 * E.x * M, breath);
+    gl.uniform2f(U.uSquash, 1 - 0.008 * Math.max(0, S), 1 + 0.014 * Math.max(0, S));
+    gl.uniform1f(U.uHolo, holo >= 0 ? 0.98 * sstep(0, 1, Math.min(1, holo / 1.6)) + 0.02 : 0);
+    gl.uniform1f(U.uTime, reduce ? 0 : now / 1000);
+    gl.uniform2f(U.uEye, E.x, E.y - 0.3);
     var blink = 1;
     if (!reduce) {
-      if (blinkT < 0 && now - t0 > nextBlink) { blinkT = 0; }
+      if (blinkT < 0 && now > nextBlink) { blinkT = 0; }
       if (blinkT >= 0) {
         blinkT += dt;
         blink = Math.abs(1 - blinkT / 0.08);
-        if (blinkT > 0.16) { blinkT = -1; blink = 1; nextBlink = now - t0 + 2500 + Math.random() * 3000; }
+        if (blinkT > 0.16) { blinkT = -1; blink = 1; nextBlink = now + 2500 + Math.random() * 3000; }
       }
     }
-    var r = reduce ? rise : back(rise);
-    gl.uniform1f(U.uRise, r);
-    gl.uniform1f(U.uPaw, reduce ? paw : back(paw));
-    gl.uniform2f(U.uLook, look.x + (reduce ? 0 : Math.sin(t * 1.3) * 0.03 * rise), look.y);
-    gl.uniform1f(U.uTime, reduce ? 0 : t);
-    gl.uniform1f(U.uBlink, Math.min(1, Math.max(0, blink)));
+    gl.uniform1f(U.uBlink, clamp(blink, 0, 1));
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    if (rise > 0.002 || paw > 0.002) gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    var moving = !reduce && (Math.abs((want ? 1 : 0) - rise) > 0.002 || Math.abs((want ? 1 : 0) - paw) > 0.002 || want);
-    if (moving && visible && !document.hidden) raf = requestAnimationFrame(frame);
+    if (M > 0.001 || holo >= 0) gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
+  nextBlink = performance.now() + 2500;
   resize();
 })();
