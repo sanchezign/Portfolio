@@ -433,37 +433,49 @@
       content: ''; position: absolute; inset: 0; pointer-events: none;
       background: linear-gradient(180deg, rgba(10,10,15,0) 65%, rgba(10,10,15,0.55) 100%);
     }
-    /* Retrato 3D holográfico (js/portrait-holo.js) */
-    .about-photo.ph-on {
-      background:
-        linear-gradient(rgba(124,106,247,0.07) 1px, transparent 1px) 0 0 / 28px 28px,
-        linear-gradient(90deg, rgba(124,106,247,0.07) 1px, transparent 1px) 0 0 / 28px 28px,
-        radial-gradient(70% 55% at 50% 38%, #1d1740 0%, #0b0a12 72%);
+    /* Retrato circuito (js/portrait-circuit.js) */
+    .about-photo.pc-on { background: radial-gradient(120% 90% at 60% 35%, #15122a 0%, #0b0a12 70%); }
+    /* modo circuito: la foto solo se ve dentro de la lente que sigue al mouse */
+    .about-photo.pc-on img {
+      -webkit-mask-image: radial-gradient(circle calc(var(--pc-r, 0px) + 0.1px) at var(--pc-x, 50%) var(--pc-y, 50%), #000 72%, transparent 100%);
+      mask-image: radial-gradient(circle calc(var(--pc-r, 0px) + 0.1px) at var(--pc-x, 50%) var(--pc-y, 50%), #000 72%, transparent 100%);
     }
-    .about-photo.ph-on img { opacity: 0; transition: opacity 0.6s ease; }
-    .about-photo.ph-on.ph-photo img { opacity: 1; }
-    .ph-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; transition: opacity 0.6s ease;
-      filter: drop-shadow(0 0 6px rgba(139,92,246,0.55)) drop-shadow(0 0 22px rgba(124,106,247,0.35)); }
-    .about-photo:not(.ph-on) .ph-canvas, .about-photo.ph-photo .ph-canvas { opacity: 0; }
-    .ph-hud, .ph-toggle { display: none; }
-    .about-photo.ph-on .ph-hud { display: block; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    .about-photo.pc-on.pc-photo img { -webkit-mask-image: none; mask-image: none; }
+    .pc-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; transition: opacity 0.6s ease; touch-action: pan-y; }
+    /* modo foto: el circuito solo se ve dentro de la lente */
+    .about-photo.pc-photo .pc-canvas {
+      -webkit-mask-image: radial-gradient(circle calc(var(--pc-r, 0px) + 0.1px) at var(--pc-x, 50%) var(--pc-y, 50%), #000 58%, transparent 100%);
+      mask-image: radial-gradient(circle calc(var(--pc-r, 0px) + 0.1px) at var(--pc-x, 50%) var(--pc-y, 50%), #000 58%, transparent 100%);
+    }
+    .pc-hud, .pc-toggle { display: none; }
+    .about-photo.pc-on .pc-hud { display: block; position: absolute; inset: 0; z-index: 2; pointer-events: none;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
-      font-size: 0.62rem; letter-spacing: 0.08em; color: var(--text3); text-transform: uppercase; }
-    .about-photo.ph-photo .ph-label, .about-photo.ph-photo .ph-readout { opacity: 0; }
-    .ph-corner { position: absolute; width: 12px; height: 12px; border: 0 solid rgba(196,181,253,0.55); }
-    .ph-tl { top: 12px; left: 12px; border-top-width: 1px; border-left-width: 1px; }
-    .ph-tr { top: 12px; right: 12px; border-top-width: 1px; border-right-width: 1px; }
-    .ph-bl { bottom: 12px; left: 12px; border-bottom-width: 1px; border-left-width: 1px; }
-    .ph-br { bottom: 12px; right: 12px; border-bottom-width: 1px; border-right-width: 1px; }
-    .ph-label { position: absolute; top: 20px; left: 30px; color: var(--accent3); }
-    .ph-readout { position: absolute; top: 20px; right: 30px; white-space: pre; font-variant-numeric: tabular-nums; }
-    @media (max-width: 520px) { .ph-readout { display: none; } .ph-canvas { filter: drop-shadow(0 0 8px rgba(139,92,246,0.5)); } }
-    .about-photo.ph-on .ph-toggle { display: block; position: absolute; bottom: 14px; left: 26px; z-index: 3;
+      font-size: 0.62rem; letter-spacing: 0.08em; color: var(--text3); text-transform: uppercase; transition: opacity 0.4s ease; }
+    .about-photo.pc-photo .pc-hud > :not(.pc-corner):not(.pc-reading) { opacity: 0; }
+    .pc-corner { position: absolute; width: 12px; height: 12px; border: 0 solid rgba(196,181,253,0.55); }
+    .pc-tl { top: 12px; left: 12px; border-top-width: 1px; border-left-width: 1px; }
+    .pc-tr { top: 12px; right: 12px; border-top-width: 1px; border-right-width: 1px; }
+    .pc-bl { bottom: 12px; left: 12px; border-bottom-width: 1px; border-left-width: 1px; }
+    .pc-br { bottom: 12px; right: 12px; border-bottom-width: 1px; border-right-width: 1px; }
+    .pc-label { position: absolute; top: 20px; left: 30px; color: var(--accent3); }
+    .pc-readout { position: absolute; top: 20px; right: 30px; }
+    .pc-readout i { font-style: normal; }
+    .pc-readout b { font-weight: 400; color: var(--text); }
+    @media (max-width: 520px) { .pc-readout { display: none; } }
+    .pc-reading { position: absolute; top: 0; left: 0; white-space: nowrap; color: var(--text); opacity: 0; will-change: transform;
+      background: rgba(10,10,15,0.72); padding: 0.15rem 0.35rem; border-radius: 4px; }
+    .about-photo.pc-on .pc-toggle { display: block; position: absolute; bottom: 14px; left: 26px; z-index: 3;
       font: inherit; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
       font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent3);
       background: rgba(10,10,15,0.6); border: 1px solid rgba(196,181,253,0.3); border-radius: 6px; padding: 0.35rem 0.6rem; cursor: pointer; }
-    .ph-toggle:hover { border-color: var(--accent2); color: var(--text); }
-    .ph-toggle:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+    .pc-toggle:hover { border-color: var(--accent2); color: var(--text); }
+    .pc-toggle:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+    @media (hover: hover) and (pointer: fine) { .about-photo.pc-on { cursor: crosshair; } }
+    /* Nutria holográfica que se asoma sobre la foto (js/photo-otter.js) */
+    .otter-canvas { position: absolute; left: 50%; bottom: calc(100% - 22px); width: 72%; aspect-ratio: 25 / 18;
+      transform: translateX(-50%); z-index: 3; pointer-events: none;
+      filter: drop-shadow(0 0 6px rgba(139,92,246,0.6)) drop-shadow(0 0 18px rgba(124,106,247,0.35)); }
+    @media (max-width: 520px) { .otter-canvas { width: 82%; filter: drop-shadow(0 0 8px rgba(139,92,246,0.55)); } }
     .about-photo-ph {
       display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
       color: var(--text3);
@@ -1227,9 +1239,8 @@
 
         <div class="project-card" data-category="fullstack">
           <div class="project-img" style="position:relative;overflow:hidden;">
-            <img src="img/pura-vida-hero.webp" width="1877" height="862" loading="lazy" decoding="async" alt="Inicio del sitio de Pura Vida Paisajismo: Espacios pensados para compartir" data-alt-en="Pura Vida Paisajismo home page: Espacios pensados para compartir" data-alt-es="Inicio del sitio de Pura Vida Paisajismo: Espacios pensados para compartir" style="width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 0.4s;">
+            <img src="img/pura-vida-paisajismo-hd.webp" width="1280" height="800" loading="lazy" decoding="async" alt="Captura de Pura Vida Paisajismo" data-alt-en="Screenshot of Pura Vida Paisajismo" data-alt-es="Captura de Pura Vida Paisajismo" style="width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;">
             <a class="project-img-link" href="https://puravidapaisajismo.com" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"></a>
-            <span style="position:absolute;top:0.75rem;left:0.75rem;display:inline-flex;align-items:center;gap:0.4rem;background:rgba(10,10,15,0.9);border:1px solid rgba(34,197,94,0.45);border-radius:100px;padding:0.25rem 0.7rem;font-size:0.72rem;font-weight:600;color:#fff;backdrop-filter:blur(8px);"><span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,0.25);"></span><span data-en="Real client · live" data-es="Cliente real · en producción">Cliente real · en producción</span></span>
             <span style="position:absolute;bottom:0.75rem;left:0.75rem;background:rgba(10,10,15,0.9);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:0.2rem 0.65rem;font-size:0.7rem;color:#22c55e;backdrop-filter:blur(8px);">Full Stack</span>
           </div>
           <div class="project-body">
@@ -1239,10 +1250,6 @@
               <span class="hl"><strong data-en="Client" data-es="Cliente">Cliente</strong> <em data-en="live in production" data-es="real en producción">real en producción</em></span>
               <span class="hl"><strong>3D</strong> <em data-en="design your garden in the browser" data-es="armá tu jardín en el navegador">armá tu jardín en el navegador</em></span>
               <span class="hl"><strong data-en="AI chat" data-es="Chat con IA">Chat con IA</strong> <em data-en="answers visitors 24/7" data-es="responde consultas 24/7">responde consultas 24/7</em></span>
-              <!-- Métricas reales (analytics): cuando haya números, descomentar y completar. Ej.:
-              <span class="hl"><strong>1.2k</strong> <em data-en="visits / month" data-es="visitas / mes">visitas / mes</em></span>
-              <span class="hl"><strong>40+</strong> <em data-en="quotes via WhatsApp" data-es="pedidos de presupuesto por WhatsApp">pedidos de presupuesto por WhatsApp</em></span>
-              -->
             </div>
             <div class="project-stack"><span>Astro</span><span>TypeScript</span><span>Tailwind CSS</span><span>Three.js</span><span>Cloudflare Workers</span><span>Workers AI</span></div>
             <div class="project-links">
@@ -1680,7 +1687,7 @@
       <div class="reveal">
         <div class="section-label" data-en="Education" data-es="Formación">Formación</div>
         <h2 class="section-title" data-en="Education and certifications" data-es="Formación y certificaciones">Formación y certificaciones</h2>
-        <p style="color:var(--text2); margin-top:0.5rem; font-size:0.95rem;"><span data-en="Full Stack career with a Top 10 distinction, AI training at Anthropic and university studies at Universidad ORT." data-es="Carrera Full Stack con distinción Top 10, formación en IA con Anthropic y estudios universitarios en la Universidad ORT.">Carrera Full Stack con distinción Top 10, formación en IA con Anthropic y estudios universitarios en la Universidad ORT.</span></p>
+        <p style="color:var(--text2); margin-top:0.5rem; font-size:0.95rem;"><span data-en="Full Stack career with a Top 10 distinction, AI training at Anthropic and 2 years at Universidad ORT." data-es="Carrera Full Stack con distinción Top 10, formación en IA con Anthropic y 2 años en la Universidad ORT.">Carrera Full Stack con distinción Top 10, formación en IA con Anthropic y 2 años en la Universidad ORT.</span></p>
       </div>
 
       <div class="cert-group reveal">
@@ -1730,7 +1737,7 @@
           <span class="cert-group-icon"><svg fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/><path d="M22 10v6"/></svg></span>
           <div>
             <h3 class="cert-group-title">Universidad ORT Uruguay</h3>
-            <p class="cert-group-sub" data-en="Bachelor's in Multimedia (1 year) · Systems Engineering (1 semester)" data-es="Licenciatura en Multimedia (1 año) · Ingeniería en Sistemas (1 semestre)">Licenciatura en Multimedia (1 año) · Ingeniería en Sistemas (1 semestre)</p>
+            <p class="cert-group-sub" data-en="2 years · Systems Engineering and Multimedia degree" data-es="2 años · Ingeniería en Sistemas y Licenciatura en Multimedia">2 años · Ingeniería en Sistemas y Licenciatura en Multimedia</p>
           </div>
         </div>
       </div>
@@ -2213,7 +2220,8 @@
 <script src="/js/hero-intro.js" defer></script>
 <script src="/js/exp-tracker.js" defer></script>
 <script src="/js/particles.js" defer></script>
-<script src="/js/portrait-holo.js" defer></script>
+<script src="/js/portrait-circuit.js" defer></script>
+<script src="/js/photo-otter.js" defer></script>
 <script src="/chat/widget.js" defer></script>
 </body>
 </html>
