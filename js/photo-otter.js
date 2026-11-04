@@ -3,9 +3,8 @@
      un resorte (se pasa un poco y rebota), las patitas llegan primero al borde y, al rato,
      hace un gesto con la cabeza.
    - Afuera: la cabeza sigue al mouse con un resorte suave y respira.
-   - Salida: al sacar el mouse (con medio segundo de gracia), no se esconde: se desarma como
-     holograma, con una línea de luz que baja y deja la parte de arriba como un fantasma que se
-     apaga.
+   - Salida: al sacar el mouse (con medio segundo de gracia), no se esconde: da un pulso de
+     luz y después se apaga de a poco, de arriba hacia abajo, titilando como holograma.
    - En pantallas táctiles se asoma cuando la foto está bien a la vista y mira al dedo.
    - Con prefers-reduced-motion aparece y desaparece sin animación y no sigue el mouse.
    Se dibuja con WebGL en un shader (formas suaves con raymarching), sin dependencias.
@@ -38,7 +37,8 @@
     'uniform mat3 uRot;      // giro de la cabeza (inversa)',
     'uniform vec3 uBody;     // x = corrimiento, y = inclinación, z = respiración',
     'uniform vec2 uSquash;',
-    'uniform float uHolo;    // 0 = sólida; 0..1 = desarmándose',
+    'uniform float uHolo;    // 0 = sólida; 0..1 = apagándose',
+    'uniform float uPulse;   // pulso de luz antes de apagarse',
     'uniform float uTime;',
     'uniform float uBlink;',
     'uniform vec2 uEye;      // brillo de los ojos, sigue la mirada',
@@ -112,9 +112,9 @@
     '  }',
     '  vec3 sig = vec3(0.55, 0.36, 0.98), glow = vec3(0.86, 0.78, 1.0), deep = vec3(0.13, 0.07, 0.3);',
     '  float holoOn = step(0.001, uHolo);',
-    '  float line = uEdge + mix(3.0, -0.45, uHolo);',
+    '  float line = uEdge + mix(2.9, -0.6, uHolo);',
     '  if (h.x > 0.0015) {',
-    '    float halo = exp(-md * 10.0) * 0.28 * (1.0 - holoOn * smoothstep(0.3, 0.9, uHolo));',
+    '    float halo = exp(-md * 10.0) * (0.28 + 0.5 * uPulse) * (1.0 - holoOn * smoothstep(0.2, 0.8, uHolo));',
     '    gl_FragColor = vec4(sig * halo, halo);',
     '    return;',
     '  }',
@@ -152,19 +152,19 @@
     '  c = mix(c, deep * 0.6, mline);',
     '  float a = 1.0;',
     '  if (h.y < 0.5 && p.y < uEdge + 0.006) c = deep * 0.7 + sig * 0.08;',   // corte del cuerpo contra el borde
-    // salida tipo holograma: arriba de la línea queda un fantasma que se apaga
+    // salida: primero un pulso de luz y después se apaga de a poco, de arriba hacia abajo,
+    // con un borde suave que titila como holograma
+    '  c = mix(c, glow * 1.25, uPulse * 0.75);',
     '  float above = p.y - line;',
-    '  if (holoOn > 0.5 && above > 0.0) {',
-    '    float ga = (1.0 - smoothstep(0.0, 1.4, above)) * (1.0 - smoothstep(0.78, 1.0, uHolo));',
-    '    float fine = smoothstep(0.86, 1.0, sin(p.y * 160.0 - uTime * 10.0));',
-    '    float g = clamp(frc * 1.25 + fine * 0.22 + 0.05, 0.0, 1.0);',
-    '    c = sig * (0.75 + g * 0.9) + glow * frc * frc * 0.2;',
-    '    a = ga * g;',
+    '  if (holoOn > 0.5) {',
+    '    float band = floor(p.y * 38.0);',
+    '    float jit = (fract(sin(band * 91.7 + floor(uTime * 24.0) * 13.1) * 43758.5) - 0.5) * 0.35;',
+    '    float k = smoothstep(-0.15, 0.75, above + jit);',
+    '    float fringe = (1.0 - smoothstep(0.0, 0.5, abs(above + jit - 0.12))) * (1.0 - smoothstep(0.85, 1.0, uHolo));',
+    '    c = mix(c, mix(sig * 1.3, glow, 0.5), fringe * 0.6);',
+    '    a = 1.0 - k;',
     '    if (a < 0.01) discard;',
     '  }',
-    '  float edge = holoOn * (1.0 - smoothstep(0.0, 0.035, abs(above)));',
-    '  c = mix(c, mix(sig * 1.35, glow, 0.45), edge);',
-    '  a = max(a, edge);',
     '  gl_FragColor = vec4(c * a, a);',
     '}'
   ].join('\n');
@@ -194,7 +194,7 @@
   var aP = gl.getAttribLocation(prog, 'aP');
   gl.enableVertexAttribArray(aP);
   gl.vertexAttribPointer(aP, 2, gl.FLOAT, false, 0, 0);
-  ['uSpan', 'uEdge', 'uBase', 'uPawOff', 'uPawOk', 'uRot', 'uBody', 'uSquash', 'uHolo', 'uTime', 'uBlink', 'uEye']
+  ['uSpan', 'uEdge', 'uBase', 'uPawOff', 'uPawOk', 'uRot', 'uBody', 'uSquash', 'uHolo', 'uPulse', 'uTime', 'uBlink', 'uEye']
     .forEach(function (n) { U[n] = gl.getUniformLocation(prog, n); });
 
   // ── tamaño: ancho según la foto, el canvas baja un poco sobre el borde (patitas) ──
@@ -220,7 +220,7 @@
   // ── estado ──
   var hover = false, out = 0;          // out: 1 mientras tiene que estar afuera
   var M = 0, S = 0;                    // subida (resorte) y su velocidad
-  var holo = -1, holoM = 0;            // salida: progreso del desarme (-1 = no)
+  var holo = -1, holoM = 0, OUT_T = 1.9; // salida: segundos desde que empezó (-1 = no)
   var E = { x: 0, y: 0 }, H = { x: 0, y: 0 }, T = { x: 0, y: 0.3 }, idleT = { x: 0, y: 0.3 }, nextIdle = 0;
   var nodAt = -1, nod = 0, calm = 1, graceT = 0;
   var raf = 0, last = performance.now(), active = false, nextBlink = 0, blinkT = -1;
@@ -272,7 +272,7 @@
     if (reduce) {
       M = out ? 1 : 0; S = 0; holo = -1;
     } else if (out) {
-      if (holo >= 0 && holo < 0.85) M = 1;           // volvió antes de desarmarse: sigue ahí
+      if (holo >= 0 && holo < OUT_T * 0.85) M = 1;   // volvió antes de apagarse: sigue ahí
       holo = -1;
       S += (17 * (1 - M) - 6.2 * S) * dt;            // resorte: se pasa un poco y rebota
       M += S * dt;
@@ -280,7 +280,7 @@
       if (holo < 0) { holo = 0; holoM = M; }
       holo += dt; S = 0;
       M = holoM;
-      if (holo / 1.6 >= 1) { M = 0; holo = -1; }
+      if (holo >= OUT_T) { M = 0; holo = -1; }
     }
     draw(now, dt);
     if (!idle() && active && !document.hidden) raf = requestAnimationFrame(frame);
@@ -324,7 +324,11 @@
     var breath = reduce ? 0 : Math.sin(now / 900);
     gl.uniform3f(U.uBody, 0.075 * E.x * M, -0.06 * E.x * M, breath);
     gl.uniform2f(U.uSquash, 1 - 0.008 * Math.max(0, S), 1 + 0.014 * Math.max(0, S));
-    gl.uniform1f(U.uHolo, holo >= 0 ? 0.98 * sstep(0, 1, Math.min(1, holo / 1.6)) + 0.02 : 0);
+    // salida: pulso (0 a 0,45 s) y después se apaga de a poco (hasta OUT_T)
+    var pulse = holo >= 0 ? Math.sin(Math.PI * clamp(holo / 0.45, 0, 1)) : 0;
+    var fade = holo >= 0 ? clamp((holo - 0.3) / (OUT_T - 0.3), 0, 1) : 0;
+    gl.uniform1f(U.uPulse, pulse);
+    gl.uniform1f(U.uHolo, holo >= 0 && holo > 0.3 ? 0.02 + 0.98 * sstep(0, 1, fade) : 0);
     gl.uniform1f(U.uTime, reduce ? 0 : now / 1000);
     gl.uniform2f(U.uEye, E.x, E.y - 0.3);
     var blink = 1;
