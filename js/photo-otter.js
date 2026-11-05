@@ -1,5 +1,5 @@
-/* Nutria holográfica que se asoma sobre la foto de "Sobre mí" (Apolo, la nutria de Otters Labs,
-   en violeta). Modelo: img/otter/otter-mesh.bin + img/otter/otter-tex.webp, generados con
+/* Nutria holográfica violeta que se asoma sobre la foto de "Sobre mí".
+   Modelo: img/otter/otter-mesh.bin + img/otter/otter-tex.webp, generados con
    tools/otter-pack.py a partir del .glb original.
    - Entrada: al pasar el mouse por la foto sube con un resorte; las patitas llegan primero al
      borde y al rato hace un gesto con la cabeza.

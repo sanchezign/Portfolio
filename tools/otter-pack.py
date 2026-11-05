@@ -1,9 +1,9 @@
-"""Convierte el modelo de la nutria (apolo.glb de otterslabs.dev) en los archivos que usa
+"""Convierte el modelo 3D de la nutria (.glb) en los archivos que usa
 js/photo-otter.js:
   img/otter/otter-mesh.bin  posiciones int16, normales int8, uv uint16 e índices uint16
   img/otter/otter-tex.webp  RG = normal map, B = luminancia del color base
 
-Uso:  python3 tools/otter-pack.py apolo.glb img/otter
+Uso:  python3 tools/otter-pack.py nutria.glb img/otter
 Requiere: numpy, pillow.
 """
 import struct, json, io, sys
