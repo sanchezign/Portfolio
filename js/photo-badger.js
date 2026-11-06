@@ -114,12 +114,14 @@
   var canvas, gl, prog, U = {}, nIdx = 0, ready = false, loading = false;
 
   // ── tamaño: como en el original, ancho según la tarjeta y unos px sobre el borde ──
-  var FOV = 17.5 * Math.PI / 180, DIST = 3.1, EDGE = 54;
+  // HR: alto/ancho del canvas. El FOV crece con HR para que el tejón mantenga su tamaño y gane aire arriba
+  var HR = 1.0, DIST = 3.1, EDGE = 54;
+  var FOV = 2 * Math.atan(Math.tan(8.75 * Math.PI / 180) * HR / 0.88);
   function resize() {
     if (!ready) return;
     var pw = photo.getBoundingClientRect().width;
     var w = Math.round(Math.min(360, Math.max(240, 0.62 * pw)));
-    var h = Math.round(0.88 * w), over = Math.round(w * (EDGE / 300) * 10) / 10;
+    var h = Math.round(HR * w), over = Math.round(w * (EDGE / 300) * 10) / 10;
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     canvas.style.bottom = 'calc(100% - ' + over + 'px)';
@@ -128,7 +130,7 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
     var aspect = w / h;
     var hh = DIST * Math.tan(FOV / 2);
-    var camY = hh - 2 * hh * (EDGE / 264);     // el borde (y = 0) queda a EDGE/264 del fondo (lugar para las garras)
+    var camY = hh - 2 * hh * (EDGE / (300 * HR));   // el borde (y = 0) queda EDGE px (sobre 300 de ancho) arriba del fondo, lugar para las garras
     var f = 1 / Math.tan(FOV / 2), near = 0.1, far = 50, nf = 1 / (near - far);
     gl.uniformMatrix4fv(U.uProj, false, new Float32Array([f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (far + near) * nf, -1, 0, 0, 2 * far * near * nf, 0]));
     gl.uniform3f(U.uCam, 0, camY, DIST);

@@ -42,14 +42,18 @@ print('malla', len(verts), len(faces), m.bounds)
 # ── retoques de forma: hocico más largo y cabeza más grande ──
 def sst(x, a, b):
     t = np.clip((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t)
-HEAD_PIV, HEAD_GROW, SNOUT = np.array([0, 0.24, 0.0], np.float32), 0.14, 0.09
+HEAD_PIV, HEAD_GROW, SNOUT, HEAD_LIFT = np.array([0, 0.24, 0.0], np.float32), 0.14, 0.09, 0.08
 def deform(p):
     p = p.copy()
     x, y, z = p[:, 0], p[:, 1], p[:, 2]
     ws = sst(z, 0.14, 0.30) * (1 - sst(np.abs(x), 0.10, 0.20)) * sst(y, 0.17, 0.24) * (1 - sst(y, 0.50, 0.58))
     p[:, 2] += SNOUT * ws
     hw = sst(y, 0.17, 0.31) * sst(z, -0.30, -0.05) * (1 - sst(np.abs(x), 0.26, 0.40))
-    return HEAD_PIV + (p - HEAD_PIV) * (1 + HEAD_GROW * hw)[:, None]
+    p = HEAD_PIV + (p - HEAD_PIV) * (1 + HEAD_GROW * hw)[:, None]
+    # sube la cabeza para que la mandíbula de abajo no quede tapada por el borde de la foto
+    lift = sst(y, 0.10, 0.24) * sst(z, -0.30, -0.05) * (1 - sst(np.abs(x), 0.26, 0.40))
+    p[:, 1] += HEAD_LIFT * lift
+    return p
 verts_o, vn_o = verts, vn
 verts = deform(verts_o).astype(np.float32)
 vn = trimesh.Trimesh(verts, faces, process=False).vertex_normals.astype(np.float32)
