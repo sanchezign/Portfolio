@@ -19,6 +19,7 @@ SRC, REF, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 CUT_Z = 0.55       # descarta el cuerpo de atrás (en unidades del .glb)
 SCALE = 2.1        # ancho final ≈ 0,9 como el modelo anterior
 TEX = 1024
+BUMP = float(sys.argv[4]) if len(sys.argv) > 4 else 14.0  # fuerza del relieve del normal map
 STRIP = 32
 
 m = trimesh.load(SRC).to_geometry()
@@ -123,7 +124,42 @@ for _ in range(8):
     new = (~got) & (cnt > 0); tex_a[new] = acc[new] / cnt[new]; got |= new
 tex_a[~got] = 0.2
 tex_a[TEX - STRIP:] = 0.95
-rgb = np.dstack([np.full_like(tex_a, 128), np.full_like(tex_a, 128), tex_a * 255])
+# ── normal map: relieve fino sacado del dibujo (pelo, contorno de ojos, nariz y boca) ──
+# altura = detalle de la luminancia (pasa altos); su gradiente en la imagen se lleva al espacio de la textura
+def blur(a, r):
+    k = np.exp(-0.5 * (np.arange(-3 * r, 3 * r + 1) / r) ** 2); k /= k.sum()
+    a = np.apply_along_axis(lambda c: np.convolve(c, k, 'same'), 0, a)
+    return np.apply_along_axis(lambda c: np.convolve(c, k, 'same'), 1, a)
+lum_m = lum_img * alpha
+hgt = blur(lum_m, 0.8) - blur(lum_m, 4.0)
+gw, gu = np.gradient(hgt)                                  # d/dfila, d/dcolumna
+def samp(a, u, w):
+    H, W = a.shape
+    u = np.clip(u, 0, W - 1.001); w = np.clip(w, 0, H - 1.001)
+    x0, y0 = u.astype(int), w.astype(int); fx, fy = u - x0, w - y0
+    return (a[y0, x0] * (1 - fx) * (1 - fy) + a[y0, x0 + 1] * fx * (1 - fy) + a[y0 + 1, x0] * (1 - fx) * fy + a[y0 + 1, x0 + 1] * fx * fy)
+iu, iw = project(p)
+dhu, dhw = samp(gu, iu, iw), samp(gw, iu, iw)
+tri_uv = uv[idx] * TEX                                     # (nT, 3, 2) en texeles
+pu, pw_ = project(P3o[idx.ravel()]); tri_im = np.stack([pu, pw_], -1).reshape(-1, 3, 2)
+A = np.stack([tri_uv[:, 1] - tri_uv[:, 0], tri_uv[:, 2] - tri_uv[:, 0]], -1)   # columnas: aristas en textura
+B = np.stack([tri_im[:, 1] - tri_im[:, 0], tri_im[:, 2] - tri_im[:, 0]], -1)   # columnas: aristas en imagen
+detA = A[:, 0, 0] * A[:, 1, 1] - A[:, 0, 1] * A[:, 1, 0]
+detA = np.where(np.abs(detA) < 1e-9, 1e-9, detA)
+Ainv = np.stack([np.stack([A[:, 1, 1], -A[:, 0, 1]], -1), np.stack([-A[:, 1, 0], A[:, 0, 0]], -1)], -2) / detA[:, None, None]
+J = B @ Ainv                                               # d(imagen)/d(textura)
+Jt = J[TT]
+dht_x = Jt[:, 0, 0] * dhu + Jt[:, 1, 0] * dhw            # dh/d(u textura)
+dht_y = Jt[:, 0, 1] * dhu + Jt[:, 1, 1] * dhw            # dh/d(v textura)
+fn = np.cross(P3o[tri[:, 1]] - P3o[tri[:, 0]], P3o[tri[:, 2]] - P3o[tri[:, 0]])
+facing = np.clip(fn[:, 2] / np.maximum(np.linalg.norm(fn, axis=1), 1e-12), 0, 1)
+k = BUMP * sst(facing, 0.25, 0.6)
+nx, ny = -dht_x * k, -dht_y * k
+nl = np.sqrt(nx * nx + ny * ny + 1)
+nr = np.full((TEX, TEX), 0.5, np.float32); ng = np.full((TEX, TEX), 0.5, np.float32)
+nr[Q[:, 1], Q[:, 0]] = 0.5 + 0.5 * nx / nl; ng[Q[:, 1], Q[:, 0]] = 0.5 + 0.5 * ny / nl
+nr[TEX - STRIP:] = 0.5; ng[TEX - STRIP:] = 0.5
+rgb = np.dstack([nr * 255, ng * 255, tex_a * 255])
 Image.fromarray(np.round(rgb).clip(0, 255).astype(np.uint8)).save(OUT + '/badger-tex.webp', 'WEBP', quality=90, method=6)
 
 # ── colmillos y garras: tubos curvos que se suman a la malla ──
@@ -165,9 +201,9 @@ for u in (209.0, 264.0):                               # colmillos de arriba (po
 for u in (224.0, 252.0):                               # colmillos de abajo: salen de la mandíbula hacia arriba
     x, y = img_to_model(u, 284.0)
     z0 = surf_z(x, y) - 0.002
-    L = 0.065
-    pts = np.array([[x, y - 0.012, z0 - 0.01], [x, y, z0], [x, y + L * 0.5, z0 + 0.01], [x, y + L, z0 + 0.006]])
-    extra.append(tube(deform(pts.astype(np.float32)), [0.014, 0.013, 0.0085, 0.001]) + (False,))
+    L = 0.036
+    pts = np.array([[x, y - 0.01, z0 - 0.008], [x, y, z0], [x, y + L * 0.5, z0 + 0.006], [x, y + L, z0 + 0.003]])
+    extra.append(tube(deform(pts.astype(np.float32)), [0.0095, 0.0088, 0.0058, 0.0008]) + (False,))
 PAWY = 0.05
 for sgn in (-1, 1):                                    # garras: 4 por pata, curvas, en abanico y colgando sobre el borde
     pv = verts_o[(verts_o[:, 1] < 0.1) & (verts_o[:, 2] > 0.15) & (sgn * verts_o[:, 0] > 0.06)]
