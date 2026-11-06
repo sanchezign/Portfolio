@@ -1,8 +1,8 @@
-/* Nutria holográfica violeta que se asoma sobre la foto de "Sobre mí".
-   Modelo: img/otter/otter-mesh.bin + img/otter/otter-tex.webp, generados con
-   tools/otter-pack.py a partir del .glb original.
-   - Entrada: al pasar el mouse por la foto sube con un resorte; las patitas llegan primero al
-     borde y al rato hace un gesto con la cabeza.
+/* Tejón de la miel holográfico violeta que se asoma sobre la foto de "Sobre mí".
+   Modelo: img/badger/badger-mesh.bin + img/badger/badger-tex.webp, armados por código con
+   tools/badger-build.py (formas suaves → malla, color y relieve horneados en la textura).
+   - Entrada: al pasar el mouse por la foto sube con un resorte; las patas con garras llegan
+     primero al borde y al rato hace un gesto con la cabeza.
    - Afuera: la cabeza sigue al mouse (con resorte) y respira; sin mouse, mira alrededor.
    - Salida: medio segundo de gracia y se apaga como holograma: una línea de luz baja y lo de
      arriba queda como un fantasma que se desvanece.
@@ -13,7 +13,7 @@
   var photo = document.querySelector('.about-photo');
   var col = photo && photo.parentNode;
   if (!col || !window.requestAnimationFrame || !window.IntersectionObserver || !window.fetch) return;
-  if (/[?&]nutria=off\b/.test(location.search)) return;
+  if (/[?&]tejon=off\b/.test(location.search)) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
@@ -142,7 +142,7 @@
   }
   function setup(bin, img) {
     canvas = document.createElement('canvas');
-    canvas.className = 'otter-canvas';
+    canvas.className = 'badger-canvas';
     canvas.setAttribute('aria-hidden', 'true');
     gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: true });
     if (!gl || !gl.getExtension('OES_standard_derivatives')) return;
@@ -204,13 +204,13 @@
     loading = true;
     var img = new Image();
     var imgReady = new Promise(function (res, rej) { img.onload = res; img.onerror = rej; });
-    img.src = '/img/otter/otter-tex.webp';
-    Promise.all([fetch('/img/otter/otter-mesh.bin').then(function (r) {
+    img.src = '/img/badger/badger-tex.webp';
+    Promise.all([fetch('/img/badger/badger-mesh.bin').then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.arrayBuffer();
     }), imgReady]).then(function (rs) {
-      try { setup(rs[0], img); } catch (err) { if (window.console) console.warn('[nutria]', err); }
-    }).catch(function (err) { if (window.console) console.warn('[nutria]', err); });
+      try { setup(rs[0], img); } catch (err) { if (window.console) console.warn('[tejon]', err); }
+    }).catch(function (err) { if (window.console) console.warn('[tejon]', err); });
   }
   new IntersectionObserver(function (es, io) {
     if (es[0].isIntersecting) { io.disconnect(); load(); }
