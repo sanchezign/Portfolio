@@ -1,6 +1,7 @@
 /* Tejón de la miel holográfico violeta que se asoma sobre la foto de "Sobre mí".
-   Modelo: img/badger/badger-mesh.bin + img/badger/badger-tex.webp, armados por código con
-   tools/badger-build.py (formas suaves → malla, color y relieve horneados en la textura).
+   Modelo: img/badger/badger-mesh.bin + img/badger/badger-tex.webp, generados con
+   tools/badger-pack.py a partir del .glb del tejón (forma generada desde una imagen de
+   referencia, pintada proyectando esa imagen de frente).
    - Entrada: al pasar el mouse por la foto sube con un resorte; las patas con garras llegan
      primero al borde y al rato hace un gesto con la cabeza.
    - Afuera: la cabeza sigue al mouse (con resorte) y respira; sin mouse, mira alrededor.
@@ -26,11 +27,11 @@
     'uniform mat3 uRot; uniform mat4 uGroup; uniform mat4 uProj; uniform vec3 uCam;',
     'uniform float uBreath; uniform float uPawOff;',
     'varying vec3 vN; varying vec3 vW; varying vec2 vUv; varying float vPaw;',
-    'const vec3 PIV = vec3(0.0, 0.22, -0.02);',
+    'const vec3 PIV = vec3(0.0, 0.30, -0.05);',
     'void main() {',
     '  vec3 p = mix(uMin, uMax, aPos * 0.5 + 0.5);',          // posición cuantizada a la caja
     '  vec3 n = normalize(aNor);',
-    '  float w = smoothstep(0.17, 0.31, p.y);',                 // peso de la cabeza
+    '  float w = smoothstep(0.17, 0.31, p.y) * smoothstep(-0.30, -0.05, p.z) * (1.0 - smoothstep(0.26, 0.40, abs(p.x)));',  // peso de la cabeza
     '  float body = (1.0 - w) * smoothstep(0.03, 0.16, p.y);',
     '  vec3 t = p;',
     '  t.xz *= 1.0 + uBreath * 0.018 * body;',
@@ -38,9 +39,9 @@
     '  t = mix(t, uRot * (t - PIV) + PIV, w);',
     '  n = normalize(mix(n, uRot * n, w));',
     '  float ax = abs(p.x);',
-    '  float pm = smoothstep(0.215, 0.25, ax) * (1.0 - smoothstep(0.13, 0.2, p.y));',
+    '  float pm = smoothstep(0.05, 0.09, ax) * smoothstep(0.08, 0.14, p.z) * (1.0 - smoothstep(0.10, 0.15, p.y));',
     '  t.y += uPawOff * pm;',
-    '  vPaw = (1.0 - step(0.17, p.y)) * max(step(0.235, ax) * step(0.08, p.z), step(0.36, ax) * step(-0.1, p.z));',
+    '  vPaw = (1.0 - step(0.13, p.y)) * step(0.06, ax) * step(0.10, p.z);',
     '  t.y -= 0.075;',
     '  vec4 wp = uGroup * vec4(t, 1.0);',
     '  vW = wp.xyz; vN = normalize(mat3(uGroup) * n); vUv = aUv;',
