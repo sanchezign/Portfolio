@@ -162,6 +162,12 @@ for u in (209.0, 264.0):                               # colmillos de arriba (po
     zt = max(z0 + 0.004, surf_z(x, y - L) + 0.01)
     pts = np.array([[x, y + 0.012, z0 - 0.01], [x, y, z0], [x, y - L * 0.5, (z0 + zt) / 2 + 0.004], [x, y - L, zt - 0.004]])
     extra.append(tube(deform(pts.astype(np.float32)), [0.012, 0.011, 0.007, 0.0008]) + (False,))
+for u in (224.0, 252.0):                               # colmillos de abajo: salen de la mandíbula hacia arriba
+    x, y = img_to_model(u, 284.0)
+    z0 = surf_z(x, y) - 0.002
+    L = 0.065
+    pts = np.array([[x, y - 0.012, z0 - 0.01], [x, y, z0], [x, y + L * 0.5, z0 + 0.01], [x, y + L, z0 + 0.006]])
+    extra.append(tube(deform(pts.astype(np.float32)), [0.014, 0.013, 0.0085, 0.001]) + (False,))
 PAWY = 0.05
 for sgn in (-1, 1):                                    # garras: 4 por pata, curvas, en abanico y colgando sobre el borde
     pv = verts_o[(verts_o[:, 1] < 0.1) & (verts_o[:, 2] > 0.15) & (sgn * verts_o[:, 0] > 0.06)]
