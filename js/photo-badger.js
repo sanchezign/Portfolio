@@ -1,8 +1,9 @@
-/* Nutria holográfica violeta que se asoma sobre la foto de "Sobre mí".
-   Modelo: img/otter/otter-mesh.bin + img/otter/otter-tex.webp, generados con
-   tools/otter-pack.py a partir del .glb original.
-   - Entrada: al pasar el mouse por la foto sube con un resorte; las patitas llegan primero al
-     borde y al rato hace un gesto con la cabeza.
+/* Tejón de la miel holográfico violeta que se asoma sobre la foto de "Sobre mí".
+   Modelo: img/badger/badger-mesh.bin + img/badger/badger-tex.webp, generados con
+   tools/badger-pack.py a partir del .glb del tejón (forma generada desde una imagen de
+   referencia, pintada proyectando esa imagen de frente).
+   - Entrada: al pasar el mouse por la foto sube con un resorte; las patas con garras llegan
+     primero al borde y al rato hace un gesto con la cabeza.
    - Afuera: la cabeza sigue al mouse (con resorte) y respira; sin mouse, mira alrededor.
    - Salida: medio segundo de gracia y se apaga como holograma: una línea de luz baja y lo de
      arriba queda como un fantasma que se desvanece.
@@ -13,7 +14,7 @@
   var photo = document.querySelector('.about-photo');
   var col = photo && photo.parentNode;
   if (!col || !window.requestAnimationFrame || !window.IntersectionObserver || !window.fetch) return;
-  if (/[?&]nutria=off\b/.test(location.search)) return;
+  if (/[?&]tejon=off\b/.test(location.search)) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
@@ -21,16 +22,16 @@
   var SIGNAL = [0.545, 0.361, 0.965], GLOW = [0.769, 0.710, 0.992];
 
   var VS = [
-    'attribute vec3 aPos; attribute vec3 aNor; attribute vec2 aUv;',
+    'attribute vec3 aPos; attribute vec4 aNor; attribute vec2 aUv;',
     'uniform vec3 uMin; uniform vec3 uMax;',
     'uniform mat3 uRot; uniform mat4 uGroup; uniform mat4 uProj; uniform vec3 uCam;',
     'uniform float uBreath; uniform float uPawOff;',
     'varying vec3 vN; varying vec3 vW; varying vec2 vUv; varying float vPaw;',
-    'const vec3 PIV = vec3(0.0, 0.22, -0.02);',
+    'const vec3 PIV = vec3(0.0, 0.30, -0.05);',
     'void main() {',
     '  vec3 p = mix(uMin, uMax, aPos * 0.5 + 0.5);',          // posición cuantizada a la caja
-    '  vec3 n = normalize(aNor);',
-    '  float w = smoothstep(0.17, 0.31, p.y);',                 // peso de la cabeza
+    '  vec3 n = normalize(aNor.xyz);',
+    '  float w = smoothstep(0.17, 0.31, p.y) * smoothstep(-0.30, -0.05, p.z) * (1.0 - smoothstep(0.26, 0.40, abs(p.x)));',  // peso de la cabeza
     '  float body = (1.0 - w) * smoothstep(0.03, 0.16, p.y);',
     '  vec3 t = p;',
     '  t.xz *= 1.0 + uBreath * 0.018 * body;',
@@ -38,9 +39,9 @@
     '  t = mix(t, uRot * (t - PIV) + PIV, w);',
     '  n = normalize(mix(n, uRot * n, w));',
     '  float ax = abs(p.x);',
-    '  float pm = smoothstep(0.215, 0.25, ax) * (1.0 - smoothstep(0.13, 0.2, p.y));',
+    '  float pm = smoothstep(0.05, 0.09, ax) * smoothstep(0.08, 0.14, p.z) * (1.0 - smoothstep(0.10, 0.15, p.y));',
     '  t.y += uPawOff * pm;',
-    '  vPaw = (1.0 - step(0.17, p.y)) * max(step(0.235, ax) * step(0.08, p.z), step(0.36, ax) * step(-0.1, p.z));',
+    '  vPaw = (1.0 - step(0.13, p.y)) * step(0.06, ax) * step(0.10, p.z) * (1.0 + step(0.5, aNor.w));',  // 2 = garra
     '  t.y -= 0.075;',
     '  vec4 wp = uGroup * vec4(t, 1.0);',
     '  vW = wp.xyz; vN = normalize(mat3(uGroup) * n); vUv = aUv;',
@@ -63,7 +64,7 @@
     '  return normalize(mat3(Tg * sc, Bg * sc, n) * mapN);',
     '}',
     'void main() {',
-    '  bool pawZone = vPaw > 0.5 && vW.y > uEdge - 0.11 * uPawOk;',
+    '  bool pawZone = vPaw > 0.5 && vW.y > uEdge - (vPaw > 1.5 ? 0.2 : 0.11) * uPawOk;',
     '  float clipA = pawZone ? 1.0 : smoothstep(uEdge - 0.0045, uEdge + 0.0015, vW.y);',
     '  if (clipA <= 0.0) discard;',
     '  float line = mix(0.86, -0.16, uHolo);',
@@ -113,12 +114,14 @@
   var canvas, gl, prog, U = {}, nIdx = 0, ready = false, loading = false;
 
   // ── tamaño: como en el original, ancho según la tarjeta y unos px sobre el borde ──
-  var FOV = 17.5 * Math.PI / 180, DIST = 3.1;
+  // HR: alto/ancho del canvas. El FOV crece con HR para que el tejón mantenga su tamaño y gane aire arriba
+  var HR = 1.0, DIST = 3.1, EDGE = 54;
+  var FOV = 2 * Math.atan(Math.tan(8.75 * Math.PI / 180) * HR / 0.88);
   function resize() {
     if (!ready) return;
     var pw = photo.getBoundingClientRect().width;
-    var w = Math.round(Math.min(300, Math.max(200, 0.45 * pw)));
-    var h = Math.round(0.88 * w), over = Math.round(w * (34 / 300) * 10) / 10;
+    var w = Math.round(Math.min(325, Math.max(215, 0.56 * pw)));
+    var h = Math.round(HR * w), over = Math.round(w * (EDGE / 300) * 10) / 10;
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     canvas.style.bottom = 'calc(100% - ' + over + 'px)';
@@ -127,7 +130,7 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
     var aspect = w / h;
     var hh = DIST * Math.tan(FOV / 2);
-    var camY = hh - 2 * hh * (34 / 264);       // el borde (y = 0) queda a 34/264 del fondo
+    var camY = hh - 2 * hh * (EDGE / (300 * HR));   // el borde (y = 0) queda EDGE px (sobre 300 de ancho) arriba del fondo, lugar para las garras
     var f = 1 / Math.tan(FOV / 2), near = 0.1, far = 50, nf = 1 / (near - far);
     gl.uniformMatrix4fv(U.uProj, false, new Float32Array([f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (far + near) * nf, -1, 0, 0, 2 * far * near * nf, 0]));
     gl.uniform3f(U.uCam, 0, camY, DIST);
@@ -142,7 +145,7 @@
   }
   function setup(bin, img) {
     canvas = document.createElement('canvas');
-    canvas.className = 'otter-canvas';
+    canvas.className = 'badger-canvas';
     canvas.setAttribute('aria-hidden', 'true');
     gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: true });
     if (!gl || !gl.getExtension('OES_standard_derivatives')) return;
@@ -154,7 +157,7 @@
     gl.useProgram(prog);
 
     // formato: 8 floats (vértices, índices, caja min, caja max), posiciones int16 x3,
-    // normales int8 x4, uv uint16 x2, índices uint16
+    // normales int8 x4 (la cuarta marca las garras), uv uint16 x2, índices uint16
     var hdr = new Float32Array(bin, 0, 8);
     var nV = hdr[0], nI = hdr[1], o = 32;
     var posBytes = nV * 6;
@@ -167,7 +170,7 @@
       gl.vertexAttribPointer(l, size, type, true, stride, 0);
     }
     attr('aPos', new Int16Array(bin, o, nV * 3), 3, gl.SHORT, 0); o += posBytes + ((4 - posBytes % 4) % 4);
-    attr('aNor', new Int8Array(bin, o, nV * 4), 3, gl.BYTE, 4); o += nV * 4;
+    attr('aNor', new Int8Array(bin, o, nV * 4), 4, gl.BYTE, 4); o += nV * 4;  // w: 1 = garra
     attr('aUv', new Uint16Array(bin, o, nV * 2), 2, gl.UNSIGNED_SHORT, 0); o += nV * 4;
     var ib = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib);
@@ -204,13 +207,13 @@
     loading = true;
     var img = new Image();
     var imgReady = new Promise(function (res, rej) { img.onload = res; img.onerror = rej; });
-    img.src = '/img/otter/otter-tex.webp';
-    Promise.all([fetch('/img/otter/otter-mesh.bin').then(function (r) {
+    img.src = '/img/badger/badger-tex.webp';
+    Promise.all([fetch('/img/badger/badger-mesh.bin').then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.arrayBuffer();
     }), imgReady]).then(function (rs) {
-      try { setup(rs[0], img); } catch (err) { if (window.console) console.warn('[nutria]', err); }
-    }).catch(function (err) { if (window.console) console.warn('[nutria]', err); });
+      try { setup(rs[0], img); } catch (err) { if (window.console) console.warn('[tejon]', err); }
+    }).catch(function (err) { if (window.console) console.warn('[tejon]', err); });
   }
   new IntersectionObserver(function (es, io) {
     if (es[0].isIntersecting) { io.disconnect(); load(); }
