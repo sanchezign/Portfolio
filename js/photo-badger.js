@@ -118,7 +118,7 @@
   function resize() {
     if (!ready) return;
     var pw = photo.getBoundingClientRect().width;
-    var w = Math.round(Math.min(420, Math.max(260, 0.72 * pw)));
+    var w = Math.round(Math.min(360, Math.max(240, 0.62 * pw)));
     var h = Math.round(0.88 * w), over = Math.round(w * (EDGE / 300) * 10) / 10;
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
