@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <script>if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))document.documentElement.classList.add('hero-anim')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ignacio Sánchez Greppi | Full Stack Developer &amp; AI Automation</title>
-  <meta name="description" content="Full Stack Developer specialized in AI automation, based in Montevideo. Node.js, TypeScript, React, Next.js, Claude and n8n.">
+  <title>Ignacio Sánchez Greppi | Full Stack Software Engineer &amp; AI Automation</title>
+  <meta name="description" content="Full Stack Software Engineer based in Montevideo. React, Next.js, Node.js and TypeScript, plus AI agents and automation with Claude and n8n.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='1' y='1' width='62' height='62' rx='13' fill='%23171328' stroke='%237c6af7' stroke-opacity='.45' stroke-width='2'/%3E%3Csvg x='11' y='16.4' width='42' height='31.1' viewBox='0 0 393 291'%3E%3Cpath fill='white' fill-rule='evenodd' d='M234 6.5C166.5 12.6 129.3 46.1 132.5 97.9C133.5 115 139.7 134.3 143.8 133.2C144.7 133 169.7 126.7 199.3 119.4C228.8 112 253 105.7 253 105.4C253 105.1 249.2 103.9 244.6 102.6C215.4 94.5 215.3 71.9 244.5 66.5C270.8 61.7 291.2 70.9 293.7 88.8C294 91.2 294.6 93.7 295 94.4C295.6 95.3 339.4 85.1 372.2 76.4L375.9 75.4 373.9 68.2C361.9 24.9 305.5 0 234 6.5M0 89.4C0 152 0.3 168.4 1.3 168.5C2 168.5 22 163.7 45.8 157.7L89 147 89 78.7L89 10.4 44.5 10.4L0 10.4 0 89.4M241 138.6C201.7 148.4 168.9 156.7 168 157C166.3 157.6 173.6 162.5 180.9 165.6C193.1 170.8 215.1 177.1 240.3 182.5C259.3 186.5 276.1 191 282.1 193.6C292.5 198 296.5 206.6 292.6 215.9C289.3 223.9 270.1 228.5 248.5 226.5C221.6 224.1 214.3 218.3 211.5 197.2L210.9 192.4 169.5 192.4L128 192.4 128 199.2C128 213.8 132.3 230.7 139.2 243.2C155.9 273.5 196.9 289.5 259 289.8C326.2 290.2 368.1 267.9 380.4 225.2C392.7 182.4 379.3 148.4 343 130C334.1 125.5 319.5 120.4 315.7 120.5C313.9 120.6 280.3 128.7 241 138.6M44.5 187.8L0.5 198.9 0.3 242.2L0 285.4 44.5 285.4L89 285.4 89 230.9C89 201 88.9 176.5 88.8 176.5C88.6 176.6 68.7 181.6 44.5 187.8'/%3E%3C/svg%3E%3C/svg%3E">
   <link rel="canonical" href="https://www.sanchezign.dev/">
   <meta property="og:type" content="website">
@@ -15,8 +15,8 @@
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Ignacio Sánchez Greppi",
-    "jobTitle": "Full Stack Developer · AI Automation",
-    "description": "Full Stack Developer specialized in AI automation, based in Montevideo. Node.js, TypeScript, React, Next.js, Claude and n8n.",
+    "jobTitle": "Full Stack Software Engineer",
+    "description": "Full Stack Software Engineer based in Montevideo. React, Next.js, Node.js and TypeScript, plus AI agents and automation with Claude and n8n.",
     "url": "https://www.sanchezign.dev/",
     "image": "https://www.sanchezign.dev/img/profile.webp",
     "email": "mailto:isanchez.workmail@gmail.com",
@@ -27,8 +27,8 @@
     "sameAs": ["https://www.linkedin.com/in/sanchezign/", "https://github.com/sanchezign"]
   }
   </script>
-  <meta property="og:title" content="Ignacio Sánchez Greppi | Full Stack Developer &amp; AI Automation">
-  <meta property="og:description" content="Full Stack Developer specialized in AI automation, based in Montevideo. Node.js, TypeScript, React, Next.js, Claude and n8n.">
+  <meta property="og:title" content="Ignacio Sánchez Greppi | Full Stack Software Engineer &amp; AI Automation">
+  <meta property="og:description" content="Full Stack Software Engineer based in Montevideo. React, Next.js, Node.js and TypeScript, plus AI agents and automation with Claude and n8n.">
   <meta property="og:image" content="https://www.sanchezign.dev/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -1048,6 +1048,11 @@
     @keyframes heroFailsafe { to { opacity: 1; } }
     .hero-anim .hero-left .w { display: inline-block; white-space: nowrap; }
     .hero-anim .hero-left .ch { will-change: opacity; }
+    /* En pantallas angostas el rol va en dos líneas: "Full Stack Software Engineer" / "AI Agents & Automation".
+       La 5.ª palabra es el "·": pasa a bloque vacío para forzar el salto y no se ve. */
+    @media (max-width: 720px) {
+      .hero-anim .hero-role .w:nth-child(5) { display: block; height: 0; overflow: hidden; }
+    }
     .hero-anim .hero-title .ch { display: inline-block; will-change: opacity, transform, filter; }
     .hero-anim .hero-title .name-highlight { background: none; -webkit-text-fill-color: currentColor; }
     .hero-anim .hero-title .name-highlight .ch {
@@ -1100,7 +1105,7 @@
 
   <!-- NAV -->
   <nav class="main-nav">
-    <a href="#" class="nav-logo" aria-label="Ignacio Sánchez — inicio" data-aria-en="Ignacio Sánchez — home" data-aria-es="Ignacio Sánchez — inicio"><svg class="logo-mark" viewBox="0 0 393 291" aria-hidden="true"><use href="#logo-is"/></svg><span class="nav-id" aria-hidden="true"><span class="nav-id-name">Ignacio Sánchez</span><span class="nav-id-role">Full Stack Developer</span></span></a>
+    <a href="#" class="nav-logo" aria-label="Ignacio Sánchez — inicio" data-aria-en="Ignacio Sánchez — home" data-aria-es="Ignacio Sánchez — inicio"><svg class="logo-mark" viewBox="0 0 393 291" aria-hidden="true"><use href="#logo-is"/></svg><span class="nav-id" aria-hidden="true"><span class="nav-id-name">Ignacio Sánchez</span><span class="nav-id-role">Full Stack Software Engineer</span></span></a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#projects" data-en="Projects" data-es="Proyectos">Proyectos</a></li>
       <li><a href="#about" data-en="About" data-es="Sobre mí">Sobre mí</a></li>
@@ -1131,7 +1136,7 @@
           <span data-en="Hi, I'm" data-es="Hola, soy">Hola, soy</span><br>
           <span class="name-highlight">Ignacio<br>Sánchez</span>
         </h1>
-        <p class="hero-role">Full Stack Developer · AI Automation</p>
+        <p class="hero-role">Full Stack Software Engineer · AI Agents &amp; Automation</p>
         <p class="hero-sub" data-en="I design and build complete websites and web applications. Since 2023, I've guided each client from the first idea until it's live and running, and built AI agents that automate tasks for real businesses." data-es="Diseño y desarrollo sitios y aplicaciones web completos. Desde 2023 acompaño a cada cliente desde la primera idea hasta que está online y funcionando, y construyo agentes de IA que automatizan tareas de negocios reales.">
           Diseño y desarrollo sitios y aplicaciones web completos. Desde 2023 acompaño a cada cliente desde la primera idea hasta que está online y funcionando, y construyo agentes de IA que automatizan tareas de negocios reales.
         </p>
@@ -1546,7 +1551,7 @@
           <div class="section-label" data-en="About me" data-es="Sobre mí">Sobre mí</div>
           <h2 class="section-title" data-en="I build with purpose and precision" data-es="Desarrollo con propósito y precisión">Desarrollo con propósito y precisión</h2>
           <p class="about-text">
-            <span data-en="I'm Ignacio Sánchez Greppi, a Full Stack Developer in Montevideo specialized in web development and AI automation. I work with Node.js, TypeScript, React and Next.js, choosing the tools that best fit each project." data-es="Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.">Soy Ignacio Sánchez Greppi, Full Stack Developer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.</span>
+            <span data-en="I'm Ignacio Sánchez Greppi, a Full Stack Software Engineer in Montevideo specialized in web development and AI automation. I work with Node.js, TypeScript, React and Next.js, choosing the tools that best fit each project." data-es="Soy Ignacio Sánchez Greppi, Full Stack Software Engineer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.">Soy Ignacio Sánchez Greppi, Full Stack Software Engineer en Montevideo, especializado en desarrollo web y automatización con IA. Trabajo con Node.js, TypeScript, React y Next.js, y elijo las herramientas que mejor se adaptan a cada proyecto.</span>
           </p>
           <p class="about-text">
             <span data-en="Since 2023 I have built for clients like Golden Pets and Pura Vida Paisajismo. My most complete project is SmartOps Agent, an AI agent backed by more than 2,100 automated tests and CI/CD, and today I offer similar solutions for businesses through Workana." data-es="Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Paisajismo. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 2.100 tests automatizados y CI/CD, y hoy ofrezco soluciones similares para negocios a través de Workana.">Desde 2023 desarrollo para clientes como Golden Pets y Pura Vida Paisajismo. Mi proyecto más completo es SmartOps Agent, un agente de IA respaldado por más de 2.100 tests automatizados y CI/CD, y hoy ofrezco soluciones similares para negocios a través de Workana.</span>
