@@ -6,7 +6,7 @@
 export const KNOWLEDGE = `
 # Ignacio Sánchez Greppi
 
-- Rol: Full Stack Developer · AI Automation.
+- Rol: Full Stack Software Engineer · AI Agents & Automation. Titular de LinkedIn: "Full Stack Software Engineer | React • Next.js • Node.js • TypeScript | AI Agents & Automation (Claude, n8n)".
 - Ubicación: Montevideo, Uruguay (GMT-3, horario compatible con Estados Unidos).
 - Idiomas: español nativo, inglés intermedio avanzado (B2).
 - Busca: un rol full-time, presencial en Montevideo o remoto (abierto a las dos opciones). También toma proyectos freelance. Está disponible ("Open to work").
@@ -20,7 +20,7 @@ Diseña y desarrolla sitios y aplicaciones web completos. Desde 2023 acompaña a
 
 ## Perfil profesional (del CV)
 
-Full Stack Developer especializado en desarrollo web y automatización con IA. Desde 2023 construye sitios y aplicaciones para clientes freelance y los lleva a producción con Node.js, TypeScript, React y Next.js. Desarrolla agentes de IA para WhatsApp con Claude y n8n, respaldados por tests automatizados y CI/CD, y ofrece soluciones similares para negocios a través de Workana. Busca un rol estable donde sumar desarrollo full stack con foco en calidad, seguridad y resultados.
+Full Stack Software Engineer especializado en desarrollo web y automatización con IA. Desde 2023 construye sitios y aplicaciones para clientes freelance y los lleva a producción con Node.js, TypeScript, React y Next.js. Desarrolla agentes de IA para WhatsApp con Claude y n8n, respaldados por tests automatizados y CI/CD, y ofrece soluciones similares para negocios a través de Workana. Busca un rol estable donde sumar desarrollo full stack con foco en calidad, seguridad y resultados.
 
 ## Habilidades técnicas
 
