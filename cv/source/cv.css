@@ -12,6 +12,7 @@ b { font-weight: 600; color: var(--ink); }
 header { border-bottom: 1.2pt solid var(--accent); padding-bottom: 7pt; margin-bottom: 4pt; }
 h1 { font-size: 21pt; font-weight: 700; color: var(--ink); letter-spacing: -0.3pt; line-height: 1.15; }
 .role { font-size: 10.5pt; font-weight: 500; color: var(--accent); margin: 1pt 0 5pt; }
+.contact + .contact { margin-top: 3pt; }
 .contact { font-size: 8pt; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2pt 11pt; }
 
 section { margin-top: 9pt; }
