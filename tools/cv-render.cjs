@@ -1,5 +1,5 @@
 // Genera los PDF del CV desde cv/source/*.html con Playwright (Chromium).
-// Uso: node tools/cv-render.js   (necesita la fuente Inter instalada en el sistema)
+// Uso: node tools/cv-render.cjs   (necesita la fuente Inter instalada en el sistema)
 const path = require('path');
 const { chromium } = require('playwright');
 const jobs = [['cv-es.html', 'CV_Ignacio_Sanchez_ES.pdf'], ['cv-en.html', 'CV_Ignacio_Sanchez_EN.pdf']];
