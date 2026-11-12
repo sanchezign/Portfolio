@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>CV Ignacio Sánchez Greppi</title>
+<link rel="stylesheet" href="cv.css">
+</head>
+<body>
+<header>
+  <h1>Ignacio Sánchez Greppi</h1>
+  <p class="role">Full Stack Software Engineer | AI Agents &amp; Automation</p>
+  <p class="contact">
+    <span>Montevideo, Uruguay</span>
+    <span>isanchez.workmail@gmail.com</span>
+    <a href="https://linkedin.com/in/sanchezign">linkedin.com/in/sanchezign</a>
+    <a href="https://github.com/sanchezign">github.com/sanchezign</a>
+    <a href="https://www.sanchezign.dev">www.sanchezign.dev</a>
+  </p>
+</header>
+
+<section>
+  <h2>Perfil profesional</h2>
+  <p>Full Stack Software Engineer especializado en desarrollo web y automatización con IA. Desde 2023 desarrollo sitios para clientes reales, con 3 proyectos encargados y en producción, desde el diseño hasta el deploy y el mantenimiento, con React, Next.js, Astro, Node.js y TypeScript. También construyo agentes de IA para WhatsApp con Claude y n8n, respaldados por tests automatizados y CI/CD, y ofrezco automatizaciones a medida para negocios a través de Workana. Busco un rol estable donde sumar desarrollo full stack con foco en calidad, seguridad y resultados.</p>
+</section>
+
+<section>
+  <h2>Habilidades técnicas</h2>
+  <dl class="skills">
+    <dt>Lenguajes</dt><dd>JavaScript, TypeScript, SQL, HTML5, CSS3</dd>
+    <dt>Frontend</dt><dd>React, Next.js, Astro, Vite, Tailwind CSS, Three.js, shadcn/ui, TanStack Query, SASS, Bootstrap</dd>
+    <dt>Backend</dt><dd>Node.js, Express, APIs REST, GraphQL, Prisma, Zod, JWT, Passport.js, Socket.io</dd>
+    <dt>IA y automatización</dt><dd>Claude API (Anthropic SDK), agentes de IA, n8n, Workers AI, salida estructurada, defensa contra prompt injection, Whisper, WhatsApp Business Cloud API, Model Context Protocol (MCP), Claude Code</dd>
+    <dt>Bases de datos</dt><dd>PostgreSQL, MongoDB, MySQL, Firebase</dd>
+    <dt>Testing</dt><dd>Vitest, Playwright, Jest, Mocha, Chai, Supertest, Postman, mutation testing, accesibilidad con axe</dd>
+    <dt>DevOps</dt><dd>Docker, Docker Compose, GitHub Actions (CI/CD), Git, GitHub, Cloudflare Workers, Vercel, Netlify, Oracle Cloud, Caddy</dd>
+    <dt>Metodologías y diseño</dt><dd>Scrum, Kanban, Jira, Trello, Figma, identidad de marca</dd>
+  </dl>
+</section>
+
+<section>
+  <h2>Proyectos destacados</h2>
+
+  <article class="card">
+    <div class="row"><h3>Web Developer Freelance · Sitios para clientes</h3><span class="date">2023 – Actualidad</span></div>
+    <p class="sub">3 años, 3 clientes reales y 3 sitios en producción: diseño, desarrollo, deploy y mantenimiento</p>
+
+    <div class="client star">
+      <div class="row"><h4>Pura Vida Paisajismo</h4><span class="date">2025</span></div>
+      <p class="links">En vivo: <a href="https://puravidapaisajismo.com">puravidapaisajismo.com</a></p>
+      <ul>
+        <li><b>Jardín en 3D:</b> en el sitio de este estudio de paisajismo de Uruguay, el visitante arma su jardín desde el navegador antes de empezar la obra, y escribe por WhatsApp en un clic.</li>
+        <li><b>Asistente con IA:</b> responde consultas solo con la información del estudio, no inventa precios ni fechas, tiene límite de mensajes por visitante y modelo de respaldo, y deriva a WhatsApp con el mensaje armado.</li>
+        <li>Cada cambio se publica solo en Cloudflare Workers, con una preview automática por PR.</li>
+      </ul>
+      <p class="stack"><b>Stack:</b> Astro, TypeScript, Tailwind CSS, Three.js, Cloudflare Workers, Workers AI</p>
+    </div>
+
+    <ul class="others">
+      <li><b>Pura Vida (2024):</b> lideré el sitio de la marca de jardinería y paisajismo de inicio a fin: diseño UI, maquetación, desarrollo y deploy, con foco en identidad de marca.</li>
+      <li><b>Golden Pets (2023):</b> primer cliente: sitio responsive con catálogo de productos e integración con redes sociales (React, JavaScript, CSS).</li>
+    </ul>
+  </article>
+
+  <article class="card compact">
+    <div class="row"><h3>SmartOps Agent <span class="org">· Agente de IA para negocios que operan por WhatsApp · Proyecto propio</span></h3><span class="date">2026</span></div>
+    <p class="links">Demo: <a href="https://smartops-demo.duckdns.org">smartops-demo.duckdns.org</a> &nbsp;&nbsp; Código: <a href="https://github.com/sanchezign/smartops-agent">github.com/sanchezign/smartops-agent</a></p>
+    <p>3 agentes con n8n y Claude leen listas de precios, pedidos y consultas (texto, fotos, PDF, planillas y audios), mantienen el catálogo al día y avisan al equipo solo lo que requiere acción. Más de 2.100 tests automatizados, CI/CD con GitHub Actions y defensa contra prompt injection. <span class="stack"><b>Stack:</b> Node.js, TypeScript, PostgreSQL, Claude API, n8n, Next.js, Docker</span></p>
+  </article>
+</section>
+
+<section>
+  <h2>Experiencia profesional</h2>
+  <div class="job">
+    <div class="row"><h3>Full Stack Developer Freelance <span class="org">· Clientes directos y Workana</span></h3><span class="date">2023 – Actualidad</span></div>
+    <p class="meta">Montevideo, Uruguay · Remoto</p>
+    <ul class="tri">
+      <li><b>Clientes directos (2023 – 2025):</b> 3 sitios web encargados y en producción para Golden Pets, Pura Vida y Pura Vida Paisajismo (detalle en Proyectos destacados), con soporte y mantenimiento después del lanzamiento.</li>
+      <li><b>Workana (actualidad):</b> a partir de SmartOps Agent, ofrezco automatizaciones a medida para negocios: respuestas automáticas a consultas frecuentes, recordatorios y avisos por email o WhatsApp, carga de formularios en planillas y reportes automáticos.</li>
+    </ul>
+  </div>
+  <div class="job">
+    <div class="row"><h3>Diseñador Multimedia</h3><span class="date">Antes de 2023</span></div>
+    <p class="meta">Montevideo, Uruguay</p>
+    <ul class="tri">
+      <li>Diseño de logos e identidad visual para marcas; esta base de diseño es la que hoy aplico en interfaces y en la identidad de cada sitio que desarrollo.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Otros proyectos</h2>
+  <ul class="tri">
+    <li><b>Feria Artesanal:</b> Marketplace MERN con catálogo, autenticación JWT, carrito de compras y panel de administración. <i>React, Node.js, Express, MongoDB, JWT</i></li>
+    <li><b>API de Testing y Docker:</b> API REST con JWT, 32 tests funcionales, documentación Swagger e imagen Docker optimizada sobre Alpine. <i>Node.js, Express, Mocha, Docker</i></li>
+    <li><b>Productos Realtime:</b> Gestión de productos con actualizaciones instantáneas por WebSockets, sin recargar la página. <i>Node.js, Express, MongoDB, Socket.io</i></li>
+  </ul>
+  <p class="more">Más proyectos, con código y demos, en <a href="https://www.sanchezign.dev">www.sanchezign.dev</a></p>
+</section>
+
+<div class="cols">
+  <section>
+    <h2>Formación</h2>
+    <div class="edu">
+      <div class="row"><h3>Carrera Full Stack Developer</h3><span class="date">2024 – 2026</span></div>
+      <p class="inst">Coderhouse</p>
+      <p>Distinción Top 10: entre los 10 mejores estudiantes. 6 cursos: Desarrollo Web, JavaScript, React JS, Backend I (Desarrollo Avanzado), Backend II (Diseño y Arquitectura) y Backend III (Testing y Escalabilidad).</p>
+    </div>
+    <div class="edu">
+      <h3 class="light">Estudios universitarios</h3>
+      <p class="inst">Universidad ORT Uruguay</p>
+      <p>Licenciatura en Multimedia (1 año cursado) e Ingeniería en Sistemas (1 semestre cursado).</p>
+    </div>
+    <h2>Certificaciones</h2>
+    <ul class="tri">
+      <li><b>Claude Academy (Anthropic), 2026:</b> Claude Code 101 · Claude Code in Action · Model Context Protocol: Advanced Topics</li>
+      <li><b>Coderhouse, 2026:</b> Ciclo de Desarrollo de Software y Planificación de Pruebas · Metodología Ágil: Curso Intensivo · Passport Avanzado: Autenticación de Nivel Empresarial · Workflows como Código: Git y Control de Versiones · Maestría en Migraciones y Consulta de Datos con Entity Framework (SQL, migraciones)</li>
+      <li><b>Agesic, 2025:</b> Marco de Ciberseguridad v4.2</li>
+    </ul>
+  </section>
+  <section class="langs">
+    <h2>Idiomas</h2>
+    <p><b>Español</b><br><span class="muted">Nativo</span></p>
+    <p><b>Inglés</b><br><span class="muted">Intermedio avanzado (B2)</span></p>
+  </section>
+</div>
+</body>
+</html>

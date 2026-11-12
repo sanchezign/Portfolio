@@ -1,0 +1,73 @@
+@page { size: A4; margin: 15mm 14.5mm 14mm; }
+:root {
+  --ink: #1b2430; --body: #2c3644; --muted: #5b6574; --accent: #1f5f8b;
+  --rule: #d3d9de; --card: #eef3f7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font-family: "Inter", sans-serif; font-size: 8.6pt; line-height: 1.5; color: var(--body); }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+b { font-weight: 600; color: var(--ink); }
+
+header { border-bottom: 1.2pt solid var(--accent); padding-bottom: 7pt; margin-bottom: 4pt; }
+h1 { font-size: 21pt; font-weight: 700; color: var(--ink); letter-spacing: -0.3pt; line-height: 1.15; }
+.role { font-size: 10.5pt; font-weight: 500; color: var(--accent); margin: 1pt 0 5pt; }
+.contact { font-size: 8pt; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2pt 11pt; }
+
+section { margin-top: 9pt; }
+section.break { break-before: page; margin-top: 0; }
+h2 {
+  font-size: 8.3pt; font-weight: 700; color: var(--accent); text-transform: uppercase;
+  letter-spacing: 1.4pt; display: flex; align-items: center; gap: 8pt; margin-bottom: 5pt;
+}
+h2::after { content: ""; flex: 1; border-top: 0.6pt solid var(--rule); }
+
+.skills { display: grid; grid-template-columns: 31mm 1fr; row-gap: 2.5pt; }
+.skills dt { font-weight: 600; color: var(--ink); }
+
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 10pt; }
+.date { font-size: 8pt; color: var(--muted); white-space: nowrap; }
+h3 { font-size: 9.6pt; font-weight: 700; color: var(--ink); }
+h3.light { font-weight: 500; }
+h3 .org { font-weight: 400; color: var(--muted); }
+h4 { font-size: 9.2pt; font-weight: 700; color: var(--ink); }
+
+.card h3 .org { font-size: 8pt; }
+.card {
+  background: var(--card); border-left: 2.4pt solid var(--accent); border-radius: 2pt;
+  padding: 7pt 10pt 7pt 10pt; margin-bottom: 7pt; break-inside: avoid;
+}
+.sub { font-size: 8pt; color: var(--muted); margin-top: 1pt; }
+.links { font-size: 8pt; color: var(--muted); margin: 2pt 0 3pt; }
+.links a { font-weight: 600; }
+.card ul { padding-left: 11pt; margin: 2pt 0 3pt; }
+.card li { margin-bottom: 1.5pt; }
+.card li::marker { color: var(--accent); }
+.stack { font-size: 8pt; color: var(--muted); }
+.stack b { color: var(--ink); }
+
+.client.star {
+  background: #fff; border: 0.6pt solid #d6e1ea; border-radius: 3pt;
+  padding: 6pt 9pt; margin: 6pt 0 5pt;
+}
+.client .links { margin-bottom: 2pt; }
+.others { margin-top: 2pt !important; }
+
+ul.tri { list-style: none; }
+ul.tri li { position: relative; padding-left: 11pt; margin-bottom: 2pt; }
+ul.tri li::before { content: "▸"; position: absolute; left: 1pt; top: 0; color: var(--accent); font-size: 7pt; line-height: 1.9; }
+ul.tri i { color: var(--muted); }
+
+.job { margin-bottom: 6pt; break-inside: avoid; }
+section > h2 { break-after: avoid; }
+.meta { font-size: 8pt; color: var(--muted); margin-bottom: 2pt; }
+.more { font-size: 8pt; color: var(--muted); margin-top: 2pt; }
+
+.cols { display: grid; grid-template-columns: 1fr 49mm; gap: 0 12mm; margin-top: 9pt; }
+.cols > section { margin-top: 0; }
+.cols h2 + * { }
+.cols section > h2:not(:first-child) { margin-top: 9pt; }
+.edu { margin-bottom: 6pt; }
+.inst { color: var(--accent); font-weight: 600; margin-bottom: 2pt; }
+.langs p { margin-bottom: 5pt; }
+.muted { color: var(--muted); }
